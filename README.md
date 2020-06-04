@@ -1,6 +1,6 @@
 # CMPS
 
-- `demo_get_ccf.Rmd` is a demo that compares `get_ccf()`, `get_ccf2()`, and `get_ccf3()`. And my suggestion on how we cam modify and use `get_ccf()`
+- `demo_get_ccf.Rmd` is a demo that compares `get_ccf()`, `get_ccf2()`, and `get_ccf3()`. And my suggestion on how we can modify and use `get_ccf()`
 
 - `func_collection.R` has all functions I currently have
 
