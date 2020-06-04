@@ -1,0 +1,230 @@
+---
+title: "Demo_get_ccf"
+author: "Will Ju"
+date: "6/4/2020"
+output: html_document
+---
+
+This is a demo to see how we can modify and utilize get_ccf
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(x3ptools)
+library(randomForest)
+library(bulletxtrctr)
+library(assertthat)
+library(pracma)
+```
+
+Following codes are obtained from the case study section of Chapter 3.
+
+Codes for plotting are all commented out
+
+### Code from Case Study
+
+```{r}
+# bullet 1
+urllist1 <- c("https://tsapps.nist.gov/NRBTD/Studies/BulletMeasurement/DownloadMeasurement/cd204983-465b-4ec3-9da8-cba515a779ff", 
+              "https://tsapps.nist.gov/NRBTD/Studies/BulletMeasurement/DownloadMeasurement/0e72228c-5e39-4a42-8c4e-3da41a11f32c", 
+              "https://tsapps.nist.gov/NRBTD/Studies/BulletMeasurement/DownloadMeasurement/b9d6e187-2de7-44e8-9b88-c83c29a8129d", 
+              "https://tsapps.nist.gov/NRBTD/Studies/BulletMeasurement/DownloadMeasurement/fda92f6a-71ba-4735-ade0-02942d14d1e9", 
+              "https://tsapps.nist.gov/NRBTD/Studies/BulletMeasurement/DownloadMeasurement/8fa798b4-c5bb-40e2-acf4-d9296865e8d4", 
+              "https://tsapps.nist.gov/NRBTD/Studies/BulletMeasurement/DownloadMeasurement/81e817e5-15d8-409f-b5bd-d67c525941fe")
+# bullet 2
+urllist2 <- c("https://tsapps.nist.gov/NRBTD/Studies/BulletMeasurement/DownloadMeasurement/288341e0-0fdf-4b0c-bd26-b31ac8c43f72", 
+              "https://tsapps.nist.gov/NRBTD/Studies/BulletMeasurement/DownloadMeasurement/c97ada55-3a35-44fd-adf3-ac27dd202522", 
+              "https://tsapps.nist.gov/NRBTD/Studies/BulletMeasurement/DownloadMeasurement/8a1805d9-9d01-4427-8873-aef4a0bd323a", 
+              "https://tsapps.nist.gov/NRBTD/Studies/BulletMeasurement/DownloadMeasurement/a116e448-18e1-4500-859c-38a5f5cc38fd", 
+              "https://tsapps.nist.gov/NRBTD/Studies/BulletMeasurement/DownloadMeasurement/0b7182d3-1275-456e-a9b4-ae378105e4af", 
+              "https://tsapps.nist.gov/NRBTD/Studies/BulletMeasurement/DownloadMeasurement/86934fcd-7317-4c74-86ae-f167dbc2f434")
+
+b1 <- read_bullet(urllist = urllist1)
+b2 <- read_bullet(urllist = urllist2)
+
+b1$bullet <- 1
+b2$bullet <- 2
+b1$land <- 1:6
+b2$land <- 1:6
+bullets <- rbind(b1, b2)
+
+bullets <- bullets %>% mutate(x3p = x3p %>% purrr::map(.f = x3p_m_to_mum)) %>% 
+  mutate(x3p = x3p %>% purrr::map(.f = function(x) x %>% rotate_x3p(angle = -90) %>% 
+                                    y_flip_x3p()))
+
+bullets <- bullets %>% mutate(crosscut = x3p %>% purrr::map_dbl(.f = x3p_crosscut_optimize))
+
+bullets <- bullets %>% mutate(ccdata = purrr::map2(.x = x3p, .y = crosscut, 
+                                                   .f = x3p_crosscut))
+
+# crosscuts <- bullets %>% tidyr::unnest(ccdata)
+
+# ggplot(data = crosscuts, aes(x = x, y = value)) + 
+#   geom_line() + 
+#   facet_grid(bullet ~ land, labeller = "label_both") + 
+#   theme_bw() + 
+#   theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1, size = rel(0.9)))
+
+bullets <- bullets %>% mutate(grooves = ccdata %>% purrr::map(.f = cc_locate_grooves, 
+                                                              method = "middle", adjust = 30, return_plot = TRUE))
+
+# do.call(gridExtra::grid.arrange, lapply(bullets$grooves, `[[`, 2))
+
+
+
+# obtain the signiture
+bullets <- bullets %>% mutate(sigs = purrr::map2(.x = ccdata, .y = grooves, 
+                                                 .f = function(x, y) {
+                                                   cc_get_signature(ccdata = x, grooves = y, span1 = 0.75, span2 = 0.03)
+                                                 }))
+
+# signatures <- bullets %>% select(source, sigs) %>% tidyr::unnest()
+# bullet_info <- bullets %>% select(source, bullet, land)
+
+# signatures %>% filter(!is.na(sig), !is.na(raw_sig)) %>%
+#   left_join(bullet_info, by = "source") %>% 
+#   ggplot(aes(x = x)) + 
+#   geom_line(aes(y = raw_sig), colour = "grey70") + 
+#   geom_line(aes(y = sig), colour = "grey30") + 
+#   facet_grid(bullet ~ land, labeller = "label_both") + 
+#   ylab("value") + ylim(c(-5, 5)) + theme_bw()
+
+bullets$bulletland <- paste0(bullets$bullet, "-", bullets$land)
+
+land1 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+land2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
+land1$bullet <- "first-land"
+land2$bullet <- "second-land"
+aligned <- sig_align(land1$sig, land2$sig)
+```
+
+## Demo Starts Here
+
+#### load functions
+
+```{r}
+get_ccf2 <- function(x, y, idx){
+  # compute the cross correlation
+  # x - a short segment
+  # y - the comparison signature
+  # idx - the index of x
+  
+  x <- as.vector(unlist(x))
+  y <- as.vector(unlist(y))
+  
+  min.overlap = length(x[!is.na(x)])
+  
+  nx <- length(x)
+  ny <- length(y)
+  assert_that(is.numeric(x), is.numeric(y))
+  assert_that(nx > 0, ny > 0, nx <= ny)
+  xx <- c(rep(NA, ny - min.overlap), x, rep(NA, ny - min.overlap))
+  yy <- c(y, rep(NA, length(xx) - ny))
+  lag.max <- length(yy) - length(y)
+  
+  # start from lag.max to 0
+  # used to be: 
+  # lags <- 0:lag.max
+  lags <- lag.max:0
+  
+  cors <- sapply(lags, function(lag) {
+    cor(xx, lag(yy, lag), use = "pairwise.complete")
+  })
+  ns <- sapply(lags, function(lag) {
+    dim(na.omit(cbind(xx, lag(yy, lag))))[1]
+  })
+  cors[ns < min.overlap] <- NA
+  
+  # adjust for the index
+  # used to be:
+  # lag <- lags - (ny - min.overlap)
+  lag <- (ny - min.overlap) - lags - (idx[1] - 1)
+  return(list(lag = lag, ccf = cors))
+}
+
+get_ccf3 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))) 
+{
+  # requires x to be the longer signature
+  x <- as.vector(unlist(x))
+  y <- as.vector(unlist(y))
+  nx <- length(x)
+  ny <- length(y)
+  assert_that(is.numeric(x), is.numeric(y))
+  assert_that(nx > 0, ny > 0, nx >= ny) # this is the only change, used to be: nx <= ny
+  xx <- c(rep(NA, ny - min.overlap), x, rep(NA, ny - min.overlap))
+  yy <- c(y, rep(NA, length(xx) - ny))
+  lag.max <- length(yy) - length(y)
+  lags <- 0:lag.max
+  cors <- sapply(lags, function(lag) {
+    cor(xx, lag(yy, lag), use = "pairwise.complete")
+  })
+  ns <- sapply(lags, function(lag) {
+    dim(na.omit(cbind(xx, lag(yy, lag))))[1]
+  })
+  cors[ns < min.overlap] <- NA
+  lag <- lags - (ny - min.overlap)
+  return(list(lag = lag, ccf = cors))
+}
+
+get_segs <- function(x, n){
+  # divide a signature into segments
+  # x - the signature to be divided
+  # n - the desired nubemr of segment 
+  
+  segs <- split(x, ceiling(seq_along(x)/(length(x)/n))) 
+  index <- split(1:length(x), ceiling(seq_along(x)/(length(x)/n)))
+  return(list(segs = segs, index = index, x = x))
+}
+```
+
+we divide the first signature into 25 segments
+```{r}
+segments <- get_segs(aligned$lands$sig1, 25)
+y <- aligned$lands$sig2
+```
+
+
+then investigate segment 15
+```{r}
+nseg <- 15
+```
+
+#### get_ccf():
+
+`get_ccf()` requires nx <= ny.
+
+The result from `get_ccf()`:
+
+```{r}
+ccr <- get_ccf(segments$segs[[nseg]], y, min.overlap = length(segments$segs[[nseg]]))
+plot(ccr$lag, ccr$ccf, type = 'l')
+```
+
+
+#### get_ccf2():
+
+The desired result obtained by `get_ccf2()`:
+
+```{r}
+ccr2 <- get_ccf2(segments$segs[[nseg]], y, segments$index[[nseg]])
+plot(ccr2$lag, ccr2$ccf, type = 'l')
+```
+
+#### the result obtained by get_ccf3():
+
+`get_ccf3()` requires x to be the longer signature; other than that, the implementation of `get_ccf3()` is the same as that of `get_ccf()`
+
+```{r}
+ccr3 <- get_ccf3(y, segments$segs[[nseg]], min.overlap = length(segments$segs[[nseg]]))
+plot(ccr3$lag, ccr3$ccf, type = 'l')
+```
+
+We can see that the x-axis is different, we need to adjust the resulting lags
+
+```{r}
+# adjust lags
+plot(ccr3$lag - segments$index[[nseg]][1] + 1, ccr3$ccf, type = 'l')
+```
+
+I can adjust the lags outside the `get_ccf()` function. So I would suggest that we slightly modify `get_ccf()` to have `get_ccf3()`, and I can use this function for the rest of the algorithm. 
+
