@@ -7,3 +7,5 @@
 - `current_working.R` has codes that I'm working with right now, including `findpeaks()` and `sig_get_peaks()`
 
 - `CMPS_basic.R` has codes that I started with, but it's not important at this point.
+
+- `past_codes.R` serves as a backup for out-of-date codes
