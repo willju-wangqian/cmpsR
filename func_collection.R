@@ -64,12 +64,12 @@ get_segs <- function(x, n){
   return(list(segs = segs, index = index, x = x))
 }
 
-get_seg_level <- function(segments, nseg, level = 1){
+get_seg_scale <- function(segments, nseg, scale = 1){
   # obtain a longer segment, centered at the current segment
   # cannot exceed 1 or the max index of x
   # segments - the collection of all segments, obtained by get_segs()
   # nseg - the index of the segment to be augmented
-  # level - the augment level
+  # scale - the augment scale
   
   x <- segments$x
   idx <- segments$index[[nseg]]
@@ -78,9 +78,53 @@ get_seg_level <- function(segments, nseg, level = 1){
   unitt <- max(idx) - ct
   ############# ???
   # cut at the max or min
-  min.idx <- max(ct - unitt * level, 1)
-  max.idx <- min(ct + unitt * level, length(x))
+  min.idx <- max(ct - unitt * scale, 1)
+  max.idx <- min(ct + unitt * scale, length(x))
   
   return(list(aug_seg=x[min.idx:max.idx], aug_idx=min.idx:max.idx))
 }
+
+get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
+  # obtain the position of peaks of the cross correlation curve between 
+  # the chosen segment and the comparison profile
+  
+  # comp - the comparison profile
+  # segments - the collection of all basis segments of the reference profile;
+  # generated from get_segs();
+  # seg_scale - integer; the length or scale of a segment will be increased
+  # to this number (seg_scale) times the length of the basis segment; 
+  # nseg - which segment will be investigated;
+  # npeaks - the number of peaks to be identified
+  
+  if(seg_scale == 1) {
+    # compute for the basis segment
+    ccr <- get_ccf3(comp, segments$segs[[nseg]], min.overlap = length(segments$segs[[nseg]]))
+    tmp_pos <- segments$index[[nseg]][1]
+  } else{
+    # find the increased segment, then compute
+    tt <- get_seg_scale(segments, nseg, scale = seg_scale)
+    ccr <- get_ccf3(comp, tt$aug_seg, min.overlap = length(tt$aug_seg))
+    tmp_pos <- tt$aug_idx[1]
+  }
+  
+  # get all peaks
+  rr <- sig_get_peaks(ccr$ccf, smoothfactor = 1, window = F, striae = F)
+  
+  # adjust the position
+  adj_pos <- ccr$lag - tmp_pos + 1
+  
+  # get the position of peaks
+  peak_pos <- sort(rr$peaks[order(rr$peaks.heights,decreasing = T)][1:npeaks] - tmp_pos)
+  peak_height <- rr$dframe$smoothed[peak_pos + tmp_pos]
+  return(list(ccr = ccr, ccrpeaks = rr, adj.pos = adj_pos, 
+              peaks.pos = peak_pos, peaks.heights = peak_height))
+}
+
+
+
+
+
+
+
+
 

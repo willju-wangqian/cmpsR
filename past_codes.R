@@ -1,9 +1,15 @@
-# loading packages
+###############################
+# Jun. 6th
+###############################
+
+# This is a demo to see how we can modify and utilize get_ccf
+
 library(tidyverse)
 library(x3ptools)
 library(randomForest)
 library(bulletxtrctr)
 library(assertthat)
+library(pracma)
 
 # Following codes are obtained from the case study section of Chapter 3
 # codes for plotting are all commented out
@@ -42,9 +48,8 @@ bullets <- bullets %>% mutate(crosscut = x3p %>% purrr::map_dbl(.f = x3p_crosscu
 bullets <- bullets %>% mutate(ccdata = purrr::map2(.x = x3p, .y = crosscut, 
                                                    .f = x3p_crosscut))
 
-# codes for plotting
-
 # crosscuts <- bullets %>% tidyr::unnest(ccdata)
+
 # ggplot(data = crosscuts, aes(x = x, y = value)) + 
 #   geom_line() + 
 #   facet_grid(bullet ~ land, labeller = "label_both") + 
@@ -54,7 +59,6 @@ bullets <- bullets %>% mutate(ccdata = purrr::map2(.x = x3p, .y = crosscut,
 bullets <- bullets %>% mutate(grooves = ccdata %>% purrr::map(.f = cc_locate_grooves, 
                                                               method = "middle", adjust = 30, return_plot = TRUE))
 
-# codes for plotting
 # do.call(gridExtra::grid.arrange, lapply(bullets$grooves, `[[`, 2))
 
 
@@ -65,9 +69,9 @@ bullets <- bullets %>% mutate(sigs = purrr::map2(.x = ccdata, .y = grooves,
                                                    cc_get_signature(ccdata = x, grooves = y, span1 = 0.75, span2 = 0.03)
                                                  }))
 
-# codes for plotting
 # signatures <- bullets %>% select(source, sigs) %>% tidyr::unnest()
 # bullet_info <- bullets %>% select(source, bullet, land)
+
 # signatures %>% filter(!is.na(sig), !is.na(raw_sig)) %>%
 #   left_join(bullet_info, by = "source") %>% 
 #   ggplot(aes(x = x)) + 
@@ -86,30 +90,57 @@ aligned <- sig_align(land1$sig, land2$sig)
 
 
 ##############################################################
-# CMPS Algorithm
+# demo starts here
+# please load all functions in func_collection.R first
+
 segments <- get_segs(aligned$lands$sig1, 25)
 y <- aligned$lands$sig2
 
-nseg <- 9
-seg_scale_max <- 3
+nseg <- 15
+
+ccr <- get_ccf3(y, segments$segs[[nseg]], min.overlap = length(segments$segs[[nseg]]))
+fp <- findpeaks(ccr$ccf[!is.na(ccr$ccf)], npeaks = 5,
+                threshold = 0, sortstr = T, nups = 0, ndowns = 1)
+pos1 <- ccr$lag - segments$index[[nseg]][1] + 1
+
+# level 2
+tt <- get_seg_level(segments, nseg, level = 2)
+ccr2 <- get_ccf3(y, tt$aug_seg, min.overlap = length(tt$aug_seg))
+fp2 <- findpeaks(ccr2$ccf[!is.na(ccr2$ccf)], npeaks = 5, 
+                 threshold = 0, sortstr = T, nups = 0, ndowns = 1)
+pos2 <- ccr2$lag - tt$aug_idx[1] + 1
+
+# level 3
+tt3 <- get_seg_level(segments, nseg, level = 3)
+ccr3 <- get_ccf3(y, tt3$aug_seg, min.overlap = length(tt3$aug_seg))
+fp3 <- findpeaks(ccr3$ccf[!is.na(ccr3$ccf)], npeaks = 5, 
+                 threshold = 0, sortstr = T, nups = 0, ndowns = 1)
+pos3 <- ccr3$lag - tt3$aug_idx[1] + 1
+
+sort(pos1[!is.na(ccr$ccf)][fp[,2]])
+sort(pos2[!is.na(ccr2$ccf)][fp2[,2]])
+sort(pos3[!is.na(ccr3$ccf)][fp3[,2]])
+
+plot(pos1, ccr$ccf, type = 'l') 
+plot(pos2, ccr2$ccf, type = 'l')
+plot(pos3, ccr3$ccf, type = 'l')
+
+rr <- sig_get_peaks(ccr2$ccf, smoothfactor = 1, window = F, striae = F)
+rr$extrema[order(rr$peaks)[1:5]]
+
+rr$dframe$x[order(rr$dframe$smoothed[rr$peaks])[1:5]]
+
+########
+# this one works
+rr$peaks[order(rr$peaks.heights,decreasing = T)][1:5] - tt$aug_idx[1]
+
+rr
+sort(ccr$lag[!is.na(ccr$ccf)][fp[,2]])
+rr$peaks
+
+corrr <- get_ccf3(y, segments$segs[[nseg]], min.overlap = length(segments$segs[[nseg]]))
+corrr$lag
+plot(corrr$lag - segments$index[[nseg]][1], corrr$ccf, type = 'l')
 
 
-ccr <- lapply(1:seg_scale_max, function(seg_scale) {
-  get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg)
-})
-ccr[[1]]$peaks.pos
-ccr[[2]]$peaks.pos
-ccr[[3]]$peaks.pos
-
-plot(ccr[[1]]$adj.pos, ccr[[1]]$ccr$ccf, type = 'l')
-plot(ccr[[2]]$adj.pos, ccr[[2]]$ccr$ccf, type = 'l')
-plot(ccr[[3]]$adj.pos, ccr[[3]]$ccr$ccf, type = 'l')
-
-ccr[[3]]$peaks.heights
-
-
-
-
-
-
-
+head(lag(y, 10), 10)
