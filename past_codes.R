@@ -144,3 +144,48 @@ plot(corrr$lag - segments$index[[nseg]][1], corrr$ccf, type = 'l')
 
 
 head(lag(y, 10), 10)
+
+
+
+
+###############################
+# Jun. 7th
+###############################
+ccr <- lapply(1:seg_scale_max, function(seg_scale) {
+  get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+})
+ccp <- get_ccp(ccr)
+ccp
+
+ccr[[1]]$peaks.pos
+ccr[[2]]$peaks.pos
+ccr[[3]]$peaks.pos
+
+ccr[[2]]$ccr
+
+plot(ccr[[1]]$adj.pos, ccr[[1]]$ccr$ccf, type = 'l')
+plot(ccr[[2]]$adj.pos, ccr[[2]]$ccr$ccf, type = 'l')
+plot(ccr[[3]]$adj.pos, ccr[[3]]$ccr$ccf, type = 'l')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

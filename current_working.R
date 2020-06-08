@@ -5,6 +5,8 @@ library(randomForest)
 library(bulletxtrctr)
 library(assertthat)
 
+source("func_collection.R")
+
 # Following codes are obtained from the case study section of Chapter 3
 # codes for plotting are all commented out
 
@@ -87,25 +89,53 @@ aligned <- sig_align(land1$sig, land2$sig)
 
 ##############################################################
 # CMPS Algorithm
-segments <- get_segs(aligned$lands$sig1, 25)
+nseg <- 25
+
+segments <- get_segs(aligned$lands$sig1, nseg)
 y <- aligned$lands$sig2
 
-nseg <- 9
 seg_scale_max <- 3
+npeaks.set <- c(5, 3, 1)
 
-
-ccr <- lapply(1:seg_scale_max, function(seg_scale) {
-  get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg)
+system.time({
+  ccp.list <- lapply(1:nseg, function(nseg) {
+    ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+      get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+    })
+    
+    get_ccp(ccr.list)
+  })
 })
-ccr[[1]]$peaks.pos
-ccr[[2]]$peaks.pos
-ccr[[3]]$peaks.pos
 
-plot(ccr[[1]]$adj.pos, ccr[[1]]$ccr$ccf, type = 'l')
-plot(ccr[[2]]$adj.pos, ccr[[2]]$ccr$ccf, type = 'l')
-plot(ccr[[3]]$adj.pos, ccr[[3]]$ccr$ccf, type = 'l')
+# ccp.list <- lapply(1:nseg, function(nseg) {
+#   ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+#     get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+#   })
+#   
+#   get_ccp(ccr.list)
+# })
 
-ccr[[3]]$peaks.heights
+ccp.list.one <- lapply(1:nseg, function(nseg) {
+  ccr <- get_ccr_peaks(y, segments, seg_scale = 1, nseg = nseg, npeaks = 5)
+  ccr$peaks.pos
+})
+
+
+# get_CMPS()
+# input: peak positions
+# output: the maximum number of segments ...
+
+# 
+
+
+
+
+
+
+
+
+
+
 
 
 

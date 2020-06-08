@@ -58,6 +58,7 @@ get_segs <- function(x, n){
   # divide a signature into segments
   # x - the signature to be divided
   # n - the desired nubemr of segment 
+  ############################################################################\
   
   segs <- split(x, ceiling(seq_along(x)/(length(x)/n))) 
   index <- split(1:length(x), ceiling(seq_along(x)/(length(x)/n)))
@@ -70,6 +71,7 @@ get_seg_scale <- function(segments, nseg, scale = 1){
   # segments - the collection of all segments, obtained by get_segs()
   # nseg - the index of the segment to be augmented
   # scale - the augment scale
+  ############################################################################
   
   x <- segments$x
   idx <- segments$index[[nseg]]
@@ -95,15 +97,18 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
   # to this number (seg_scale) times the length of the basis segment; 
   # nseg - which segment will be investigated;
   # npeaks - the number of peaks to be identified
+  ############################################################################
   
   if(seg_scale == 1) {
     # compute for the basis segment
-    ccr <- get_ccf3(comp, segments$segs[[nseg]], min.overlap = length(segments$segs[[nseg]]))
+    ccr <- get_ccf3(comp, segments$segs[[nseg]], 
+                    min.overlap = length(segments$segs[[nseg]][!is.na(segments$segs[[nseg]])]))
     tmp_pos <- segments$index[[nseg]][1]
   } else{
     # find the increased segment, then compute
     tt <- get_seg_scale(segments, nseg, scale = seg_scale)
-    ccr <- get_ccf3(comp, tt$aug_seg, min.overlap = length(tt$aug_seg))
+    ccr <- get_ccf3(comp, tt$aug_seg, 
+                    min.overlap = length(tt$aug_seg[!is.na(tt$aug_seg)]))
     tmp_pos <- tt$aug_idx[1]
   }
   
@@ -116,11 +121,35 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
   # get the position of peaks
   peak_pos <- sort(rr$peaks[order(rr$peaks.heights,decreasing = T)][1:npeaks] - tmp_pos)
   peak_height <- rr$dframe$smoothed[peak_pos + tmp_pos]
-  return(list(ccr = ccr, ccrpeaks = rr, adj.pos = adj_pos, 
+  return(list(ccr = ccr, ccrpeaks = rr, adj.pos = adj_pos,
               peaks.pos = peak_pos, peaks.heights = peak_height))
 }
 
-
+get_ccp <- function(ccr.list, Tx = 25){
+  # identify at most one consistent correlation peak (ccp) for each basis segment
+  
+  # ccr.list - a list of cross correlation results obtained by get_ccr_peaks()
+  # for the same basis segment with different segment scale
+  
+  # Tx- the tolerance zone will be +/- Tx
+  
+  # return the ccp if identified, NULL otherwise.
+  ###############################################################################
+  
+  # the number of different scales we have
+  seg_level <- length(ccr.list)
+  basis <- ccr.list[[seg_level]]$peaks.pos
+  
+  # for the purpose of debugging
+  if(length(basis) != 1) {print("the length of the highest level should be 1.")}
+  
+  
+  ccp <- lapply(1:(seg_level-1), function(level) {
+    ccr[[level]]$peaks.pos[abs(ccr[[level]]$peaks.pos - basis) < Tx]
+  })
+  ccp <- unlist(c(ccp, basis))
+  if(length(ccp) == seg_level) {return(basis)} else {return(NULL)}
+}
 
 
 
