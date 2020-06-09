@@ -86,7 +86,8 @@ get_seg_scale <- function(segments, nseg, scale = 1){
   return(list(aug_seg=x[min.idx:max.idx], aug_idx=min.idx:max.idx))
 }
 
-get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
+get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5, 
+                          window = FALSE, striae = FALSE, plot = TRUE){
   # obtain the position of peaks of the cross correlation curve between 
   # the chosen segment and the comparison profile
   
@@ -113,7 +114,8 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
   }
   
   # get all peaks
-  rr <- sig_get_peaks(ccr$ccf, smoothfactor = 1, window = F, striae = F)
+  rr <- sig_get_peaks(ccr$ccf, smoothfactor = 1, 
+                      window = window, striae = striae, plot = plot)
   
   # adjust the position
   adj_pos <- ccr$lag - tmp_pos + 1
@@ -138,6 +140,9 @@ get_ccp <- function(ccr.list, Tx = 25){
   
   # the number of different scales we have
   seg_level <- length(ccr.list)
+  
+  # the highest level has only one position, 
+  # set it as a basis
   basis <- ccr.list[[seg_level]]$peaks.pos
   
   # for the purpose of debugging
@@ -151,7 +156,40 @@ get_ccp <- function(ccr.list, Tx = 25){
   if(length(ccp) == seg_level) {return(basis)} else {return(NULL)}
 }
 
-
+get_CMPS <- function(input.ccp, Tx = 25, order = T) {
+  # obtain the CMPS score
+  
+  # input.ccp - a list of positions for (consistent) correlation peaks,
+  # each element corresponds to one basis segment
+  # Tx - the tolerance zone will be +/- Tx
+  # order - boolean, whether or not to order positions based on CMPS score
+  #######################################################
+  tt <- unlist(input.ccp)
+  
+  pos.df <- data.frame(position = seq(min(tt), max(tt)))
+  
+  pos.df$cmps <- sapply(1:nrow(pos.df), function(i) {
+    ccp.count <- sapply(1:length(input.ccp), function(j) {
+      # if any one of the peaks belongs to the interval 
+      # centered at this position, count 1
+      any(abs(pos.df$position[i] - input.ccp[[j]]) <= Tx)
+    })
+    
+    sum(ccp.count)
+  })
+  
+  # obtain the CMPS score
+  CMPS <- pos.df[order(pos.df$cmps, decreasing = T)[1], ]$cmps  
+  
+  if(order) {
+    pos.df <- pos.df[order(pos.df$cmps, decreasing = T), ]
+  }
+  
+  # recommended position for counting the CMPS score
+  rec.position <- floor(median(pos.df[pos.df$cmps == CMPS, ]$position))
+  
+  return(list(CMPS.score = CMPS, rec.position = rec.position, pos.df = pos.df))
+}
 
 
 
