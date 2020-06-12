@@ -169,7 +169,44 @@ plot(ccr[[3]]$adj.pos, ccr[[3]]$ccr$ccf, type = 'l')
 
 
 
+######################
+# Jun. 8th
+# mul <- 2:4
+# mul2 <- 3:1
 
+# vec.list <- lapply(1:3, function(round) {
+#   init.bound <- seq(min(tt), max(tt), by = mul[round] * Tx + 1)
+#   
+#   init <- data.frame(low=init.bound, 
+#                      up = init.bound + mul[round] * Tx, 
+#                      count = 0)
+#   # put those positions into non-overlapping intervals
+#   pos.bool <- sapply(tt, function(pos) {
+#     rr <- pos >= init$low & pos <= init$up
+#     if(sum(rr) != 1) {print("The intervals are overlapping!")}
+#     rr
+#   })
+#   
+#   # special case: there is only one row
+#   if(is.null(dim(pos.bool))) {
+#     init$count <- sum(pos.bool)
+#     # init.selected <- init
+#   } else {
+#     init$count <- apply(pos.bool, 1, sum)
+#   }
+# 
+#   init.selected <- init[order(init$count, decreasing = T)[1:mul2[round]], ]
+#   init.selected <- tidyr::drop_na(init.selected)
+#   
+#   vec <- lapply(1:nrow(init.selected), function(row.idx) {
+#     seq(init.selected$low[row.idx], init.selected$up[row.idx])
+#   })
+#   
+#   do.call(c, vec)
+# })
+# 
+# vec.final <- dplyr::intersect(dplyr::intersect(vec.list[[1]], vec.list[[2]]), vec.list[[3]])
+# vec.final
 
 
 

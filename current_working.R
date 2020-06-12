@@ -107,69 +107,140 @@ system.time({
   })
 })
 
-# ccp.list <- lapply(1:nseg, function(nseg) {
-#   ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
-#     get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
-#   })
-#   
-#   get_ccp(ccr.list)
-# })
 
 ccp.list.one <- lapply(1:nseg, function(nseg) {
   ccr <- get_ccr_peaks(y, segments, seg_scale = 1, nseg = nseg, npeaks = 5)
   ccr$peaks.pos
 })
 
-cmps <- get_CMPS(ccp.list.one, Tx = 5)
+cmps <- get_CMPS(ccp.list, Tx = 25)
 cmps$pos.df %>% head()
 cmps$rec.position
 
-# mul <- 2:4
-# mul2 <- 3:1
+extract_feature_cmps <- function(x, y, nseg = 25, seg_scale_max = 3, Tx = 25, npeaks.set = c(5, 3, 1),
+                                 full_result = FALSE) {
+  if (length(npeaks.set) != seg_scale_max) { 
+    print("Need to specify the number of peaks for each segment scale.")
+    return(NULL)
+  }
+  
+  segments <- get_segs(x, nseg)
+  
+  if (seg_scale_max == 1) {
+    ccp.list <- lapply(1:nseg, function(nseg) {
+      ccr <- get_ccr_peaks(y, segments, seg_scale = seg_scale_max, 
+                           nseg = nseg, npeaks = npeaks.set[seg_scale_max])
+      ccr$peaks.pos
+    })
+  } else if(seg_scale_max > 1) {
+    ccp.list <- lapply(1:nseg, function(nseg) {
+      ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+        get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+      })
+      
+      get_ccp(ccr.list, Tx = Tx)
+    })
+  } else {
+    print("seg_scale_max is invalid. Please use a positive integer instead.")
+    return(NULL)
+  }
+  
+  cmps <- get_CMPS(ccp.list, Tx = Tx)
+  if(full_result) { return(cmps) } 
+  else { return(cmps$CMPS.score) }
+}
 
-# vec.list <- lapply(1:3, function(round) {
-#   init.bound <- seq(min(tt), max(tt), by = mul[round] * Tx + 1)
+land1.name <- unique(bullets$bulletland)[1:6]
+land2.name <- unique(bullets$bulletland)[7:12]
+
+extract_feature_cmps(aligned$lands$sig1, aligned$lands$sig2)
+
+comparisons.cmps <- data.frame(expand.grid(land1 = land1.name, land2 = land2.name), stringsAsFactors = FALSE)
+
+comparisons.cmps <- comparisons.cmps %>% mutate(aligned = purrr::map2(.x = land1, .y = land2, 
+                                                            .f = function(xx, yy) {
+                                                              land1 <- bullets$sigs[bullets$bulletland == xx][[1]]
+                                                              land2 <- bullets$sigs[bullets$bulletland == yy][[1]]
+                                                              land1$bullet <- "first-land"
+                                                              land2$bullet <- "second-land"
+                                                              
+                                                              sig_align(land1$sig, land2$sig)
+                                                            }))
+
+
+cmps.collect <- rep(-1, 36)
+
+for(i in 1:36) {
+  s <- paste("comparing ", comparisons.cmps$land1[i], " and ", comparisons.cmps$land2[i], ", loop ", i, sep = '')
+  print(s)
+  cmps.collect[i] <- extract_feature_cmps(comparisons.cmps$aligned[[i]]$lands$sig1, comparisons.cmps$aligned[[i]]$lands$sig2)
+}
+
+
+
+comparisons.cmps %>% select(land1, land2) %>% slice(6)
+comparisons.cmps %>% select(land1, land2) %>% slice(14)
+
+comparisons.cmps$cmps <- cmps.collect
+comparisons.cmps %>% select(land1, land2, cmps)
+
+# system.time({
 #   
-#   init <- data.frame(low=init.bound, 
-#                      up = init.bound + mul[round] * Tx, 
-#                      count = 0)
-#   # put those positions into non-overlapping intervals
-#   pos.bool <- sapply(tt, function(pos) {
-#     rr <- pos >= init$low & pos <= init$up
-#     if(sum(rr) != 1) {print("The intervals are overlapping!")}
-#     rr
-#   })
-#   
-#   # special case: there is only one row
-#   if(is.null(dim(pos.bool))) {
-#     init$count <- sum(pos.bool)
-#     # init.selected <- init
-#   } else {
-#     init$count <- apply(pos.bool, 1, sum)
-#   }
+#   comparisons.cmps <- comparisons.cmps %>% 
+#   mutate(cmps.score = aligned %>% purrr::map_dbl(.f = function(a) {
+#     extract_feature_cmps(a$lands$sig1, a$lands$sig2)
+#   }))
 # 
-#   init.selected <- init[order(init$count, decreasing = T)[1:mul2[round]], ]
-#   init.selected <- tidyr::drop_na(init.selected)
-#   
-#   vec <- lapply(1:nrow(init.selected), function(row.idx) {
-#     seq(init.selected$low[row.idx], init.selected$up[row.idx])
-#   })
-#   
-#   do.call(c, vec)
 # })
-# 
-# vec.final <- dplyr::intersect(dplyr::intersect(vec.list[[1]], vec.list[[2]]), vec.list[[3]])
-# vec.final
 
-
-  
-  
-
-
-
-
-
-
+# [1] "comparing 1-1 and 2-1, loop 1"
+# [1] "comparing 1-2 and 2-1, loop 2"
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "comparing 1-3 and 2-1, loop 3"
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "comparing 1-4 and 2-1, loop 4"
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "comparing 1-5 and 2-1, loop 5"
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "comparing 1-6 and 2-1, loop 6"
+# [1] "comparing 1-1 and 2-2, loop 7"
+# [1] "comparing 1-2 and 2-2, loop 8"
+# [1] "the length of the highest level should be 1."
+# [1] "comparing 1-3 and 2-2, loop 9"
+# [1] "comparing 1-4 and 2-2, loop 10"
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "comparing 1-5 and 2-2, loop 11"
+# [1] "comparing 1-6 and 2-2, loop 12"
+# [1] "comparing 1-1 and 2-3, loop 13"
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "comparing 1-2 and 2-3, loop 14"
+# [1] "comparing 1-3 and 2-3, loop 15"
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "comparing 1-4 and 2-3, loop 16"
+# [1] "comparing 1-5 and 2-3, loop 17"
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "comparing 1-6 and 2-3, loop 18"
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
+# [1] "comparing 1-1 and 2-4, loop 19"
+# [1] "the length of the highest level should be 1."
+# [1] "comparing 1-2 and 2-4, loop 20"
+# [1] "the length of the highest level should be 1."
+# [1] "the length of the highest level should be 1."
 
 
 
