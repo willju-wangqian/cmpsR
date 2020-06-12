@@ -150,7 +150,7 @@ get_ccp <- function(ccr.list, Tx = 25){
   
   
   ccp <- lapply(1:(seg_level-1), function(level) {
-    ccr[[level]]$peaks.pos[abs(ccr[[level]]$peaks.pos - basis) < Tx]
+    ccr.list[[level]]$peaks.pos[abs(ccr.list[[level]]$peaks.pos - basis) < Tx]
   })
   ccp <- unlist(c(ccp, basis))
   if(length(ccp) == seg_level) {return(basis)} else {return(NULL)}

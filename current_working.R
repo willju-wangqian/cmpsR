@@ -113,7 +113,7 @@ ccp.list.one <- lapply(1:nseg, function(nseg) {
   ccr$peaks.pos
 })
 
-cmps <- get_CMPS(ccp.list, Tx = 25)
+cmps <- get_CMPS(ccp.list.one, Tx = 25)
 cmps$pos.df %>% head()
 cmps$rec.position
 
