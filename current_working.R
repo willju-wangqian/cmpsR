@@ -4,6 +4,7 @@ library(x3ptools)
 library(randomForest)
 library(bulletxtrctr)
 library(assertthat)
+library(zoo)
 
 source("func_collection.R")
 
@@ -183,6 +184,7 @@ comparisons.cmps %>% select(land1, land2) %>% slice(14)
 
 comparisons.cmps$cmps <- cmps.collect
 comparisons.cmps %>% select(land1, land2, cmps)
+
 
 # system.time({
 #   
