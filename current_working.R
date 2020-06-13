@@ -108,6 +108,23 @@ system.time({
   })
 })
 
+system.time({
+  ccp.list <- lapply(1:nseg, function(nseg) {
+    ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+      get_ccr_peaks2(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+    })
+    
+    get_ccp(ccr.list)
+  })
+})
+
+system.time({
+  ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+    get_ccr_peaks2(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+  })
+})
+
+get_ccp(ccr.list)
 
 ccp.list.one <- lapply(1:nseg, function(nseg) {
   ccr <- get_ccr_peaks(y, segments, seg_scale = 1, nseg = nseg, npeaks = 5)
