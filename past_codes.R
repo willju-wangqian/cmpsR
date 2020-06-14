@@ -48,8 +48,9 @@ bullets <- bullets %>% mutate(crosscut = x3p %>% purrr::map_dbl(.f = x3p_crosscu
 bullets <- bullets %>% mutate(ccdata = purrr::map2(.x = x3p, .y = crosscut, 
                                                    .f = x3p_crosscut))
 
-# crosscuts <- bullets %>% tidyr::unnest(ccdata)
+# codes for plotting
 
+# crosscuts <- bullets %>% tidyr::unnest(ccdata)
 # ggplot(data = crosscuts, aes(x = x, y = value)) + 
 #   geom_line() + 
 #   facet_grid(bullet ~ land, labeller = "label_both") + 
@@ -69,9 +70,9 @@ bullets <- bullets %>% mutate(sigs = purrr::map2(.x = ccdata, .y = grooves,
                                                    cc_get_signature(ccdata = x, grooves = y, span1 = 0.75, span2 = 0.03)
                                                  }))
 
+# codes for plotting
 # signatures <- bullets %>% select(source, sigs) %>% tidyr::unnest()
 # bullet_info <- bullets %>% select(source, bullet, land)
-
 # signatures %>% filter(!is.na(sig), !is.na(raw_sig)) %>%
 #   left_join(bullet_info, by = "source") %>% 
 #   ggplot(aes(x = x)) + 
@@ -253,7 +254,37 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5,
 }
 
 
-
+get_ccf2 <- function(x, y, idx){
+  # compute the cross correlation
+  # x - a short segment
+  # y - the comparison signature
+  # idx - the index of x
+  
+  x <- as.vector(unlist(x))
+  y <- as.vector(unlist(y))
+  
+  min.overlap = length(x[!is.na(x)])
+  
+  nx <- length(x)
+  ny <- length(y)
+  assert_that(is.numeric(x), is.numeric(y))
+  assert_that(nx > 0, ny > 0, nx <= ny)
+  xx <- c(rep(NA, ny - min.overlap), x, rep(NA, ny - min.overlap))
+  yy <- c(y, rep(NA, length(xx) - ny))
+  lag.max <- length(yy) - length(y)
+  lags <- lag.max:0
+  # lags <- 0:lag.max
+  cors <- sapply(lags, function(lag) {
+    cor(xx, lag(yy, lag), use = "pairwise.complete")
+  })
+  ns <- sapply(lags, function(lag) {
+    dim(na.omit(cbind(xx, lag(yy, lag))))[1]
+  })
+  cors[ns < min.overlap] <- NA
+  # lag <- lags - (ny - min.overlap)
+  lag <- (ny - min.overlap) - lags - (idx[1] - 1)
+  return(list(lag = lag, ccf = cors))
+}
 
 
 

@@ -9,7 +9,6 @@ library(zoo)
 source("func_collection.R")
 
 # Following codes are obtained from the case study section of Chapter 3
-# codes for plotting are all commented out
 
 # Case Study
 # bullet 1
@@ -45,15 +44,6 @@ bullets <- bullets %>% mutate(crosscut = x3p %>% purrr::map_dbl(.f = x3p_crosscu
 bullets <- bullets %>% mutate(ccdata = purrr::map2(.x = x3p, .y = crosscut, 
                                                    .f = x3p_crosscut))
 
-# codes for plotting
-
-# crosscuts <- bullets %>% tidyr::unnest(ccdata)
-# ggplot(data = crosscuts, aes(x = x, y = value)) + 
-#   geom_line() + 
-#   facet_grid(bullet ~ land, labeller = "label_both") + 
-#   theme_bw() + 
-#   theme(axis.text.x = element_text(angle = 30, hjust = 1, vjust = 1, size = rel(0.9)))
-
 bullets <- bullets %>% mutate(grooves = ccdata %>% purrr::map(.f = cc_locate_grooves, 
                                                               method = "middle", adjust = 30, return_plot = TRUE))
 
@@ -68,16 +58,7 @@ bullets <- bullets %>% mutate(sigs = purrr::map2(.x = ccdata, .y = grooves,
                                                    cc_get_signature(ccdata = x, grooves = y, span1 = 0.75, span2 = 0.03)
                                                  }))
 
-# codes for plotting
-# signatures <- bullets %>% select(source, sigs) %>% tidyr::unnest()
-# bullet_info <- bullets %>% select(source, bullet, land)
-# signatures %>% filter(!is.na(sig), !is.na(raw_sig)) %>%
-#   left_join(bullet_info, by = "source") %>% 
-#   ggplot(aes(x = x)) + 
-#   geom_line(aes(y = raw_sig), colour = "grey70") + 
-#   geom_line(aes(y = sig), colour = "grey30") + 
-#   facet_grid(bullet ~ land, labeller = "label_both") + 
-#   ylab("value") + ylim(c(-5, 5)) + theme_bw()
+
 
 bullets$bulletland <- paste0(bullets$bullet, "-", bullets$land)
 
@@ -98,31 +79,9 @@ y <- aligned$lands$sig2
 seg_scale_max <- 3
 npeaks.set <- c(5, 3, 1)
 
-system.time({
-  ccp.list <- lapply(1:nseg, function(nseg) {
-    ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
-      get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
-    })
-    
-    get_ccp(ccr.list)
+ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+    get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
   })
-})
-
-system.time({
-  ccp.list <- lapply(1:nseg, function(nseg) {
-    ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
-      get_ccr_peaks2(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
-    })
-    
-    get_ccp(ccr.list)
-  })
-})
-
-system.time({
-  ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
-    get_ccr_peaks2(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
-  })
-})
 
 get_ccp(ccr.list)
 
@@ -131,7 +90,9 @@ ccp.list.one <- lapply(1:nseg, function(nseg) {
   ccr$peaks.pos
 })
 
+
 cmps <- get_CMPS(ccp.list.one, Tx = 25)
+
 cmps$pos.df %>% head()
 cmps$rec.position
 
@@ -141,7 +102,7 @@ extract_feature_cmps <- function(x, y, nseg = 25, seg_scale_max = 3, Tx = 25, np
     print("Need to specify the number of peaks for each segment scale.")
     return(NULL)
   }
-  
+
   segments <- get_segs(x, nseg)
   
   if (seg_scale_max == 1) {
@@ -162,8 +123,9 @@ extract_feature_cmps <- function(x, y, nseg = 25, seg_scale_max = 3, Tx = 25, np
     print("seg_scale_max is invalid. Please use a positive integer instead.")
     return(NULL)
   }
-  
+
   cmps <- get_CMPS(ccp.list, Tx = Tx)
+
   if(full_result) { return(cmps) } 
   else { return(cmps$CMPS.score) }
 }
@@ -171,9 +133,10 @@ extract_feature_cmps <- function(x, y, nseg = 25, seg_scale_max = 3, Tx = 25, np
 land1.name <- unique(bullets$bulletland)[1:6]
 land2.name <- unique(bullets$bulletland)[7:12]
 
-system.time({
-  extract_feature_cmps(aligned$lands$sig1, aligned$lands$sig2)
-})
+extract_feature_cmps(aligned$lands$sig1, aligned$lands$sig2, seg_scale_max = 1, npeaks.set = c(5))
+
+extract_feature_cmps(aligned$lands$sig1, aligned$lands$sig2)
+
 
 comparisons.cmps <- data.frame(expand.grid(land1 = land1.name, land2 = land2.name), stringsAsFactors = FALSE)
 

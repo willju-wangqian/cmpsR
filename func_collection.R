@@ -1,35 +1,3 @@
-get_ccf2 <- function(x, y, idx){
-  # compute the cross correlation
-  # x - a short segment
-  # y - the comparison signature
-  # idx - the index of x
-  
-  x <- as.vector(unlist(x))
-  y <- as.vector(unlist(y))
-  
-  min.overlap = length(x[!is.na(x)])
-  
-  nx <- length(x)
-  ny <- length(y)
-  assert_that(is.numeric(x), is.numeric(y))
-  assert_that(nx > 0, ny > 0, nx <= ny)
-  xx <- c(rep(NA, ny - min.overlap), x, rep(NA, ny - min.overlap))
-  yy <- c(y, rep(NA, length(xx) - ny))
-  lag.max <- length(yy) - length(y)
-  lags <- lag.max:0
-  # lags <- 0:lag.max
-  cors <- sapply(lags, function(lag) {
-    cor(xx, lag(yy, lag), use = "pairwise.complete")
-  })
-  ns <- sapply(lags, function(lag) {
-    dim(na.omit(cbind(xx, lag(yy, lag))))[1]
-  })
-  cors[ns < min.overlap] <- NA
-  # lag <- lags - (ny - min.overlap)
-  lag <- (ny - min.overlap) - lags - (idx[1] - 1)
-  return(list(lag = lag, ccf = cors))
-}
-
 get_ccf3 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))) 
 {
   # requires x to be the longer signature
