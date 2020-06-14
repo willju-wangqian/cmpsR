@@ -123,7 +123,7 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
   # adjust the position
   adj_pos <- ccr$lag - tmp_pos + 1
   
-  return(list(ccr = ccr, ccrpeaks = rr, adj.pos = adj_pos,
+  return(list(ccr = ccr, adj.pos = adj_pos,
               peaks.pos = peak_pos, peaks.heights = peak_height))
 }
 
