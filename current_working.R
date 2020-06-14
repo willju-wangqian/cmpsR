@@ -171,7 +171,9 @@ extract_feature_cmps <- function(x, y, nseg = 25, seg_scale_max = 3, Tx = 25, np
 land1.name <- unique(bullets$bulletland)[1:6]
 land2.name <- unique(bullets$bulletland)[7:12]
 
-extract_feature_cmps(aligned$lands$sig1, aligned$lands$sig2)
+system.time({
+  extract_feature_cmps(aligned$lands$sig1, aligned$lands$sig2)
+})
 
 comparisons.cmps <- data.frame(expand.grid(land1 = land1.name, land2 = land2.name), stringsAsFactors = FALSE)
 
@@ -201,67 +203,5 @@ comparisons.cmps %>% select(land1, land2) %>% slice(14)
 
 comparisons.cmps$cmps <- cmps.collect
 comparisons.cmps %>% select(land1, land2, cmps)
-
-
-# system.time({
-#   
-#   comparisons.cmps <- comparisons.cmps %>% 
-#   mutate(cmps.score = aligned %>% purrr::map_dbl(.f = function(a) {
-#     extract_feature_cmps(a$lands$sig1, a$lands$sig2)
-#   }))
-# 
-# })
-
-# [1] "comparing 1-1 and 2-1, loop 1"
-# [1] "comparing 1-2 and 2-1, loop 2"
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "comparing 1-3 and 2-1, loop 3"
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "comparing 1-4 and 2-1, loop 4"
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "comparing 1-5 and 2-1, loop 5"
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "comparing 1-6 and 2-1, loop 6"
-# [1] "comparing 1-1 and 2-2, loop 7"
-# [1] "comparing 1-2 and 2-2, loop 8"
-# [1] "the length of the highest level should be 1."
-# [1] "comparing 1-3 and 2-2, loop 9"
-# [1] "comparing 1-4 and 2-2, loop 10"
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "comparing 1-5 and 2-2, loop 11"
-# [1] "comparing 1-6 and 2-2, loop 12"
-# [1] "comparing 1-1 and 2-3, loop 13"
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "comparing 1-2 and 2-3, loop 14"
-# [1] "comparing 1-3 and 2-3, loop 15"
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "comparing 1-4 and 2-3, loop 16"
-# [1] "comparing 1-5 and 2-3, loop 17"
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "comparing 1-6 and 2-3, loop 18"
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-# [1] "comparing 1-1 and 2-4, loop 19"
-# [1] "the length of the highest level should be 1."
-# [1] "comparing 1-2 and 2-4, loop 20"
-# [1] "the length of the highest level should be 1."
-# [1] "the length of the highest level should be 1."
-
-
-
 
 

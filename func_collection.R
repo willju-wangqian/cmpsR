@@ -43,12 +43,42 @@ get_ccf3 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))
   yy <- c(y, rep(NA, length(xx) - ny))
   lag.max <- length(yy) - length(y)
   lags <- 0:lag.max
+  
   cors <- sapply(lags, function(lag) {
     cor(xx, lag(yy, lag), use = "pairwise.complete")
   })
   ns <- sapply(lags, function(lag) {
     dim(na.omit(cbind(xx, lag(yy, lag))))[1]
   })
+  
+  cors[ns < min.overlap] <- NA
+  lag <- lags - (ny - min.overlap)
+  return(list(lag = lag, ccf = cors))
+}
+
+get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))) 
+{
+  # requires x to be the longer signature
+  x <- as.vector(unlist(x))
+  y <- as.vector(unlist(y))
+  nx <- length(x)
+  ny <- length(y)
+  assert_that(is.numeric(x), is.numeric(y))
+  assert_that(nx > 0, ny > 0, nx >= ny) # this is the only change
+  xx <- c(rep(NA, ny - min.overlap), x, rep(NA, ny - min.overlap))
+  yy <- c(y, rep(NA, length(xx) - ny))
+  lag.max <- length(yy) - length(y)
+  lags <- 0:lag.max
+  
+  cors <- sapply(lags, function(lag) {
+    cor(xx, lag(yy, lag), use = "pairwise.complete")
+  })
+  
+  # running time improved with this chunk
+  ns <- sapply(lags, function(lag) {
+    sum(complete.cases(xx, lag(yy, lag)))
+  })
+  
   cors[ns < min.overlap] <- NA
   lag <- lags - (ny - min.overlap)
   return(list(lag = lag, ccf = cors))
@@ -86,8 +116,7 @@ get_seg_scale <- function(segments, nseg, scale = 1){
   return(list(aug_seg=x[min.idx:max.idx], aug_idx=min.idx:max.idx))
 }
 
-get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5, 
-                          window = FALSE, striae = FALSE, plot = TRUE){
+get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
   # obtain the position of peaks of the cross correlation curve between 
   # the chosen segment and the comparison profile
   
@@ -102,27 +131,30 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5,
   
   if(seg_scale == 1) {
     # compute for the basis segment
-    ccr <- get_ccf3(comp, segments$segs[[nseg]], 
+    ccr <- get_ccf4(comp, segments$segs[[nseg]], 
                     min.overlap = length(segments$segs[[nseg]][!is.na(segments$segs[[nseg]])]))
     tmp_pos <- segments$index[[nseg]][1]
   } else{
     # find the increased segment, then compute
     tt <- get_seg_scale(segments, nseg, scale = seg_scale)
-    ccr <- get_ccf3(comp, tt$aug_seg, 
+    ccr <- get_ccf4(comp, tt$aug_seg, 
                     min.overlap = length(tt$aug_seg[!is.na(tt$aug_seg)]))
     tmp_pos <- tt$aug_idx[1]
   }
   
-  # get all peaks
-  rr <- sig_get_peaks(ccr$ccf, smoothfactor = 1, 
-                      window = window, striae = striae, plot = plot)
+  # get all peaks and peak.heights
+  find_maxs <- rollapply(ccr$ccf, 3, function(x) max(x) == x[2], 
+                         fill = list(NA, NA, NA))
+  peaks <- which(find_maxs)
+  peaks.heights <- ccr$ccf[peaks]
+  
+  # get the position of peaks
+  peak_pos <- sort(peaks[order(peaks.heights, decreasing = T)][1:npeaks] - tmp_pos)
+  peak_height <- ccr$ccf[peak_pos + tmp_pos]
   
   # adjust the position
   adj_pos <- ccr$lag - tmp_pos + 1
   
-  # get the position of peaks
-  peak_pos <- sort(rr$peaks[order(rr$peaks.heights,decreasing = T)][1:npeaks] - tmp_pos)
-  peak_height <- rr$dframe$smoothed[peak_pos + tmp_pos]
   return(list(ccr = ccr, ccrpeaks = rr, adj.pos = adj_pos,
               peaks.pos = peak_pos, peaks.heights = peak_height))
 }

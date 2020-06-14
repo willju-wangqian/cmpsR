@@ -208,7 +208,49 @@ plot(ccr[[3]]$adj.pos, ccr[[3]]$ccr$ccf, type = 'l')
 # vec.final <- dplyr::intersect(dplyr::intersect(vec.list[[1]], vec.list[[2]]), vec.list[[3]])
 # vec.final
 
-
+##############################
+# Jun. 14
+# past version of get_ccr_peaks()
+get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5, 
+                          window = FALSE, striae = FALSE, plot = TRUE){
+  # obtain the position of peaks of the cross correlation curve between 
+  # the chosen segment and the comparison profile
+  
+  # comp - the comparison profile
+  # segments - the collection of all basis segments of the reference profile;
+  # generated from get_segs();
+  # seg_scale - integer; the length or scale of a segment will be increased
+  # to this number (seg_scale) times the length of the basis segment; 
+  # nseg - which segment will be investigated;
+  # npeaks - the number of peaks to be identified
+  ############################################################################
+  
+  if(seg_scale == 1) {
+    # compute for the basis segment
+    ccr <- get_ccf3(comp, segments$segs[[nseg]], 
+                    min.overlap = length(segments$segs[[nseg]][!is.na(segments$segs[[nseg]])]))
+    tmp_pos <- segments$index[[nseg]][1]
+  } else{
+    # find the increased segment, then compute
+    tt <- get_seg_scale(segments, nseg, scale = seg_scale)
+    ccr <- get_ccf3(comp, tt$aug_seg, 
+                    min.overlap = length(tt$aug_seg[!is.na(tt$aug_seg)]))
+    tmp_pos <- tt$aug_idx[1]
+  }
+  
+  # get all peaks
+  rr <- sig_get_peaks(ccr$ccf, smoothfactor = 1, 
+                      window = window, striae = striae, plot = plot)
+  
+  # adjust the position
+  adj_pos <- ccr$lag - tmp_pos + 1
+  
+  # get the position of peaks
+  peak_pos <- sort(rr$peaks[order(rr$peaks.heights,decreasing = T)][1:npeaks] - tmp_pos)
+  peak_height <- rr$dframe$smoothed[peak_pos + tmp_pos]
+  return(list(ccr = ccr, ccrpeaks = rr, adj.pos = adj_pos,
+              peaks.pos = peak_pos, peaks.heights = peak_height))
+}
 
 
 
