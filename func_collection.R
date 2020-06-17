@@ -145,9 +145,11 @@ get_ccp <- function(ccr.list, Tx = 25){
   # set it as a basis
   basis <- ccr.list[[seg_level]]$peaks.pos
   
+  # if the entire basis segment is NA 
+  if(length(basis) == 0 & all(is.na(ccr.list[[seg_level]]$ccr$ccf))) { return(NULL) }
+  
   # for the purpose of debugging
   if(length(basis) != 1) {print("the length of the highest level should be 1.")}
-  
   
   ccp <- lapply(1:(seg_level-1), function(level) {
     ccr.list[[level]]$peaks.pos[abs(ccr.list[[level]]$peaks.pos - basis) <= Tx]

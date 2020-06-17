@@ -1,13 +1,45 @@
-land1 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
-land2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
-land1$bullet <- "first-land"
-land2$bullet <- "second-land"
-aligned <- sig_align(land1$sig, land2$sig)
+i <- 33
+
+x <- comparisons.cmps$aligned[[i]]$lands$sig1
+y <- comparisons.cmps$aligned[[i]]$lands$sig2
 
 nseg <- 25
 
-segments <- get_segs(aligned$lands$sig1, nseg)
-y <- aligned$lands$sig2
+segments <- get_segs(x, nseg)
+
+rbind(data.frame(value = x, sig = "sig1", x = 1:length(x)), data.frame(value = y, sig = "sig2", x = 1:length(y))) %>%
+  ggplot(aes(x = x, y = value, color = sig)) + geom_line()
+
+seg_scale_max <- 3
+npeaks.set <- c(5, 3, 1)
+Tx <- 25
+
+nseg <- 2
+
+ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+  get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+})
+
+get_ccp(ccr.list, Tx = Tx)
+  
+length(ccr.list)
+
+basis <- ccr.list[[3]]$peaks.pos
+
+ccr <- ccr.list[[3]]$ccr
+
+all(is.na(ccr$ccf))
+
+nseg <- 25
+
+ccp.list <- lapply(1:nseg, function(nseg) {
+  ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+    get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+  })
+  
+  get_ccp(ccr.list, Tx = Tx)
+})
+
 
 ccr_peak <- get_ccr_peaks(y, segments, seg_scale = 3, nseg = nseg, npeaks = 1)
 
