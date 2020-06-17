@@ -287,10 +287,58 @@ get_ccf2 <- function(x, y, idx){
 }
 
 
+##############################
+# June 17
+cmps.collect <- rep(-1, 36)
+
+for(i in 1:36) {
+  s <- paste("comparing ", comparisons.cmps$land1[i], " and ", comparisons.cmps$land2[i], ", loop ", i, sep = '')
+  print(s)
+  cmps.collect[i] <- extract_feature_cmps(comparisons.cmps$aligned[[i]]$lands$sig1, comparisons.cmps$aligned[[i]]$lands$sig2)
+}
+
+land1 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+land2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
+land1$bullet <- "first-land"
+land2$bullet <- "second-land"
+aligned <- sig_align(land1$sig, land2$sig)
+
+
+#################################
+# code for testing and debugging
+nseg <- 25
+
+segments <- get_segs(aligned$lands$sig1, nseg)
+y <- aligned$lands$sig2
+
+seg_scale_max <- 3
+npeaks.set <- c(5, 3, 1)
+
+ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+  get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+})
+
+get_ccp(ccr.list)
+
+ccp.list.one <- lapply(1:nseg, function(nseg) {
+  ccr <- get_ccr_peaks(y, segments, seg_scale = 1, nseg = nseg, npeaks = 5)
+  ccr$peaks.pos
+})
+
+
+cmps <- get_CMPS(ccp.list.one, Tx = 25)
+
+cmps$pos.df %>% head()
+cmps$rec.position
 
 
 
+land1.name <- unique(bullets$bulletland)[1:6]
+land2.name <- unique(bullets$bulletland)[7:12]
 
+extract_feature_cmps(aligned$lands$sig1, aligned$lands$sig2, seg_scale_max = 1, npeaks.set = c(5))
+
+extract_feature_cmps(aligned$lands$sig1, aligned$lands$sig2)
 
 
 

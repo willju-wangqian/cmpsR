@@ -193,7 +193,51 @@ get_CMPS <- function(input.ccp, Tx = 25, order = T) {
   return(list(CMPS.score = CMPS, rec.position = rec.position, pos.df = pos.df))
 }
 
-
+extract_feature_cmps <- function(x, y, nseg = 25, seg_scale_max = 3, Tx = 25, npeaks.set = c(5, 3, 1),
+                                 full_result = FALSE) {
+  # compute CMPS score
+  
+  # x - the reference signature/profile 
+  # y - the comparison signature/profile
+  # nseg - the number of basis segments used for the algorithm
+  # seg_scale_max - the number of scales (different lengths) 
+  # used for multi segment lengths
+  # Tx - size of the tolerance zone
+  # npeaks.set - vector that contains the number of peaks for each segment scale
+  # full_result - whether or not to return the registration position used to 
+  # find the CMPS
+  #################################################################
+  if (length(npeaks.set) != seg_scale_max) { 
+    print("Need to specify the number of peaks for each segment scale.")
+    return(NULL)
+  }
+  
+  segments <- get_segs(x, nseg)
+  
+  if (seg_scale_max == 1) {
+    ccp.list <- lapply(1:nseg, function(nseg) {
+      ccr <- get_ccr_peaks(y, segments, seg_scale = seg_scale_max, 
+                           nseg = nseg, npeaks = npeaks.set[seg_scale_max])
+      ccr$peaks.pos
+    })
+  } else if(seg_scale_max > 1) {
+    ccp.list <- lapply(1:nseg, function(nseg) {
+      ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+        get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+      })
+      
+      get_ccp(ccr.list, Tx = Tx)
+    })
+  } else {
+    print("seg_scale_max is invalid. Please use a positive integer instead.")
+    return(NULL)
+  }
+  
+  cmps <- get_CMPS(ccp.list, Tx = Tx)
+  
+  if(full_result) { return(cmps) } 
+  else { return(cmps$CMPS.score) }
+}
 
 
 

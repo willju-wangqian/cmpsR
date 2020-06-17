@@ -62,80 +62,15 @@ bullets <- bullets %>% mutate(sigs = purrr::map2(.x = ccdata, .y = grooves,
 
 bullets$bulletland <- paste0(bullets$bullet, "-", bullets$land)
 
-land1 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
-land2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
-land1$bullet <- "first-land"
-land2$bullet <- "second-land"
-aligned <- sig_align(land1$sig, land2$sig)
+land1.name <- unique(bullets$bulletland)[1:6]
+land2.name <- unique(bullets$bulletland)[7:12]
+
+
 
 
 ##############################################################
 # CMPS Algorithm
-nseg <- 25
 
-segments <- get_segs(aligned$lands$sig1, nseg)
-y <- aligned$lands$sig2
-
-seg_scale_max <- 3
-npeaks.set <- c(5, 3, 1)
-
-ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
-    get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
-  })
-
-get_ccp(ccr.list)
-
-ccp.list.one <- lapply(1:nseg, function(nseg) {
-  ccr <- get_ccr_peaks(y, segments, seg_scale = 1, nseg = nseg, npeaks = 5)
-  ccr$peaks.pos
-})
-
-
-cmps <- get_CMPS(ccp.list.one, Tx = 25)
-
-cmps$pos.df %>% head()
-cmps$rec.position
-
-extract_feature_cmps <- function(x, y, nseg = 25, seg_scale_max = 3, Tx = 25, npeaks.set = c(5, 3, 1),
-                                 full_result = FALSE) {
-  if (length(npeaks.set) != seg_scale_max) { 
-    print("Need to specify the number of peaks for each segment scale.")
-    return(NULL)
-  }
-
-  segments <- get_segs(x, nseg)
-  
-  if (seg_scale_max == 1) {
-    ccp.list <- lapply(1:nseg, function(nseg) {
-      ccr <- get_ccr_peaks(y, segments, seg_scale = seg_scale_max, 
-                           nseg = nseg, npeaks = npeaks.set[seg_scale_max])
-      ccr$peaks.pos
-    })
-  } else if(seg_scale_max > 1) {
-    ccp.list <- lapply(1:nseg, function(nseg) {
-      ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
-        get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
-      })
-      
-      get_ccp(ccr.list, Tx = Tx)
-    })
-  } else {
-    print("seg_scale_max is invalid. Please use a positive integer instead.")
-    return(NULL)
-  }
-
-  cmps <- get_CMPS(ccp.list, Tx = Tx)
-
-  if(full_result) { return(cmps) } 
-  else { return(cmps$CMPS.score) }
-}
-
-land1.name <- unique(bullets$bulletland)[1:6]
-land2.name <- unique(bullets$bulletland)[7:12]
-
-extract_feature_cmps(aligned$lands$sig1, aligned$lands$sig2, seg_scale_max = 1, npeaks.set = c(5))
-
-extract_feature_cmps(aligned$lands$sig1, aligned$lands$sig2)
 
 
 comparisons.cmps <- data.frame(expand.grid(land1 = land1.name, land2 = land2.name), stringsAsFactors = FALSE)
@@ -151,20 +86,21 @@ comparisons.cmps <- comparisons.cmps %>% mutate(aligned = purrr::map2(.x = land1
                                                             }))
 
 
-cmps.collect <- rep(-1, 36)
+#########################################
+system.time({
+  comparisons.cmps <- comparisons.cmps %>% 
+    mutate(cmps = aligned %>% purrr::map_dbl(.f = function(a) {
+      extract_feature_cmps(a$lands$sig1, a$lands$sig2)
+    }))
+})
 
-for(i in 1:36) {
-  s <- paste("comparing ", comparisons.cmps$land1[i], " and ", comparisons.cmps$land2[i], ", loop ", i, sep = '')
-  print(s)
-  cmps.collect[i] <- extract_feature_cmps(comparisons.cmps$aligned[[i]]$lands$sig1, comparisons.cmps$aligned[[i]]$lands$sig2)
-}
+###
+# user  system elapsed 
+# 204.14    0.12  205.38 
 
 
-
-comparisons.cmps %>% select(land1, land2) %>% slice(6)
-comparisons.cmps %>% select(land1, land2) %>% slice(14)
-
-comparisons.cmps$cmps <- cmps.collect
 comparisons.cmps %>% select(land1, land2, cmps)
+
+
 
 
