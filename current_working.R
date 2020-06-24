@@ -62,8 +62,7 @@ bullets <- bullets %>% mutate(sigs = purrr::map2(.x = ccdata, .y = grooves,
 
 bullets$bulletland <- paste0(bullets$bullet, "-", bullets$land)
 
-land1.name <- unique(bullets$bulletland)[1:6]
-land2.name <- unique(bullets$bulletland)[7:12]
+lands <- unique(bullets$bulletland)
 
 
 
@@ -73,7 +72,7 @@ land2.name <- unique(bullets$bulletland)[7:12]
 
 
 
-comparisons.cmps <- data.frame(expand.grid(land1 = land1.name, land2 = land2.name), stringsAsFactors = FALSE)
+comparisons.cmps <- data.frame(expand.grid(land1 = lands, land2 = lands), stringsAsFactors = FALSE)
 
 comparisons.cmps <- comparisons.cmps %>% mutate(aligned = purrr::map2(.x = land1, .y = land2, 
                                                             .f = function(xx, yy) {

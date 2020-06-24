@@ -63,7 +63,7 @@ get_segs <- function(x, n){
   return(list(segs = segs, index = index, x = x))
 }
 
-get_seg_scale <- function(segments, nseg, scale = 1){
+get_seg_scale <- function(segments, nseg, scale = 2){
   # obtain a longer segment, centered at the current segment
   # cannot exceed 1 or the max index of x
   # segments - the collection of all segments, obtained by get_segs()
@@ -97,10 +97,12 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
   # npeaks - the number of peaks to be identified
   ############################################################################
   
+  # [!is.na(segments$segs[[nseg]])]
+  
   if(seg_scale == 1) {
     # compute for the basis segment
     ccr <- get_ccf4(comp, segments$segs[[nseg]], 
-                    min.overlap = length(segments$segs[[nseg]][!is.na(segments$segs[[nseg]])]))
+                    min.overlap = length(segments$segs[[nseg]]))
     tmp_pos <- segments$index[[nseg]][1]
   } else{
     # find the increased segment, then compute
