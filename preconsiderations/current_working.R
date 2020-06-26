@@ -101,5 +101,28 @@ system.time({
 comparisons.cmps %>% select(land1, land2, cmps)
 
 
+comparisons <- data.frame(expand.grid(land1 = lands[1:6], land2 = lands[7:12]), stringsAsFactors = FALSE)
 
+comparisons <- comparisons %>% mutate(aligned = purrr::map2(.x = land1, .y = land2, 
+                                                            .f = function(xx, yy) {
+                                                              land1 <- bullets$sigs[bullets$bulletland == xx][[1]]
+                                                              land2 <- bullets$sigs[bullets$bulletland == yy][[1]]
+                                                              land1$bullet <- "first-land"
+                                                              land2$bullet <- "second-land"
+                                                              
+                                                              sig_align(land1$sig, land2$sig)
+                                                            }))
+system.time({
+  comparisons <- comparisons %>% 
+    mutate(cmps = aligned %>% purrr::map(.f = function(a) {
+      extract_feature_cmps(a$lands$sig1, a$lands$sig2, full_result = T)
+    }))
+})
 
+comparisons <- comparisons %>% 
+  mutate(
+    cmps_score = sapply(comparisons$cmps, function(x) x$CMPS.score),
+    cmps_nseg = sapply(comparisons$cmps, function(x) x$nseg)
+  )
+
+cp1 <- comparisons %>% select(land1, land2, cmps_score, cmps_nseg)

@@ -52,16 +52,25 @@ get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))
   return(list(lag = lag, ccf = cors))
 }
 
-get_segs <- function(x, n){
+get_segs <- function(x, len = 50){
   # divide a signature into segments
   # x - the signature to be divided
   # n - the desired nubemr of segment 
-  ############################################################################\
+  ############################################################################
   
-  segs <- split(x, ceiling(seq_along(x)/(length(x)/n))) 
-  index <- split(1:length(x), ceiling(seq_along(x)/(length(x)/n)))
-  return(list(segs = segs, index = index, x = x))
+  idx <- 1:length(x)
+  idx[is.na(x)] <- NA
+  
+  xx <- na.trim(x)
+  idx <- na.trim(idx)
+  segs <- split(xx, ceiling(seq_along(xx)/len)) 
+  index <- split(idx, ceiling(seq_along(xx)/len))
+  
+  check_length <- sapply(segs, length) == len
+  
+  return(list(segs = segs[check_length], index = index[check_length], x = x))
 }
+
 
 get_seg_scale <- function(segments, nseg, scale = 2){
   # obtain a longer segment, centered at the current segment
@@ -195,7 +204,7 @@ get_CMPS <- function(input.ccp, Tx = 25, order = T) {
   return(list(CMPS.score = CMPS, rec.position = rec.position, pos.df = pos.df))
 }
 
-extract_feature_cmps <- function(x, y, nseg = 25, seg_scale_max = 3, Tx = 25, npeaks.set = c(5, 3, 1),
+extract_feature_cmps <- function(x, y, seg_length = 50, seg_scale_max = 3, Tx = 25, npeaks.set = c(5, 3, 1),
                                  full_result = FALSE) {
   # compute CMPS score
   
@@ -214,7 +223,8 @@ extract_feature_cmps <- function(x, y, nseg = 25, seg_scale_max = 3, Tx = 25, np
     return(NULL)
   }
   
-  segments <- get_segs(x, nseg)
+  segments <- get_segs(x, seg_length)
+  nseg <- length(segments$segs)
   
   if (seg_scale_max == 1) {
     ccp.list <- lapply(1:nseg, function(nseg) {
@@ -236,10 +246,12 @@ extract_feature_cmps <- function(x, y, nseg = 25, seg_scale_max = 3, Tx = 25, np
   }
   
   cmps <- get_CMPS(ccp.list, Tx = Tx)
+  cmps$nseg <- nseg
   
   if(full_result) { return(cmps) } 
   else { return(cmps$CMPS.score) }
 }
+
 
 
 
