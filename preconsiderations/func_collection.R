@@ -1,28 +1,3 @@
-get_ccf3 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))) 
-{
-  # requires x to be the longer signature
-  x <- as.vector(unlist(x))
-  y <- as.vector(unlist(y))
-  nx <- length(x)
-  ny <- length(y)
-  assert_that(is.numeric(x), is.numeric(y))
-  assert_that(nx > 0, ny > 0, nx >= ny) # this is the only change
-  xx <- c(rep(NA, ny - min.overlap), x, rep(NA, ny - min.overlap))
-  yy <- c(y, rep(NA, length(xx) - ny))
-  lag.max <- length(yy) - length(y)
-  lags <- 0:lag.max
-  
-  cors <- sapply(lags, function(lag) {
-    cor(xx, lag(yy, lag), use = "pairwise.complete")
-  })
-  ns <- sapply(lags, function(lag) {
-    dim(na.omit(cbind(xx, lag(yy, lag))))[1]
-  })
-  
-  cors[ns < min.overlap] <- NA
-  lag <- lags - (ny - min.overlap)
-  return(list(lag = lag, ccf = cors))
-}
 
 get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))) 
 {
