@@ -1,11 +1,51 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 # CMPS
 
-- `demo_get_ccf.Rmd` is a demo that compares `get_ccf()`, `get_ccf2()`, and `get_ccf3()`. And my suggestion on how we can modify and use `get_ccf()`
+<!-- badges: start -->
 
-- `func_collection.R` has all functions I currently have
+<!-- badges: end -->
 
-- `current_working.R` has codes that I'm working with right now, including `findpeaks()` and `sig_get_peaks()`
+The goal of CMPS is to …
 
-- `CMPS_basic.R` has codes that I started with, but it's not important at this point.
+## Installation
 
-- `past_codes.R` serves as a backup for out-of-date codes
+You can install the released version of CMPS from
+[CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("CMPS")
+```
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("willju-wangqian/CMPS")
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+``` r
+library(CMPS)
+## basic example code
+```
+
+## preconsiderations folder
+
+  - `demo_get_ccf.Rmd` is a demo that compares `get_ccf()`,
+    `get_ccf2()`, and `get_ccf3()`. And my suggestion on how we can
+    modify and use `get_ccf()`
+
+  - `func_collection.R` has all functions I currently have
+
+  - `current_working.R` has codes that I’m working with right now,
+    including `findpeaks()` and `sig_get_peaks()`
+
+  - `CMPS_basic.R` has codes that I started with, but it’s not important
+    at this point.
+
+  - `past_codes.R` serves as a backup for out-of-date codes
