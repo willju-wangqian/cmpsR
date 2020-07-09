@@ -3,10 +3,11 @@ library(tidyverse)
 library(x3ptools)
 library(randomForest)
 library(bulletxtrctr)
-library(assertthat)
-library(zoo)
+# library(CMPS)
+# library(assertthat)
+# library(zoo)
 
-source("func_collection.R")
+# source("preconsiderations/func_collection.R")
 
 # Following codes are obtained from the case study section of Chapter 3
 
@@ -69,38 +70,6 @@ lands <- unique(bullets$bulletland)
 
 ##############################################################
 # CMPS Algorithm
-
-
-
-comparisons.cmps <- data.frame(expand.grid(land1 = lands, land2 = lands), stringsAsFactors = FALSE)
-
-comparisons.cmps <- comparisons.cmps %>% mutate(aligned = purrr::map2(.x = land1, .y = land2, 
-                                                            .f = function(xx, yy) {
-                                                              land1 <- bullets$sigs[bullets$bulletland == xx][[1]]
-                                                              land2 <- bullets$sigs[bullets$bulletland == yy][[1]]
-                                                              land1$bullet <- "first-land"
-                                                              land2$bullet <- "second-land"
-                                                              
-                                                              sig_align(land1$sig, land2$sig)
-                                                            }))
-
-
-#########################################
-system.time({
-  comparisons.cmps <- comparisons.cmps %>% 
-    mutate(cmps = aligned %>% purrr::map_dbl(.f = function(a) {
-      extract_feature_cmps(a$lands$sig1, a$lands$sig2)
-    }))
-})
-
-###
-# user  system elapsed 
-# 204.14    0.12  205.38 
-
-
-comparisons.cmps %>% select(land1, land2, cmps)
-
-
 comparisons <- data.frame(expand.grid(land1 = lands[1:6], land2 = lands[7:12]), stringsAsFactors = FALSE)
 
 comparisons <- comparisons %>% mutate(aligned = purrr::map2(.x = land1, .y = land2, 
@@ -126,3 +95,69 @@ comparisons <- comparisons %>%
   )
 
 cp1 <- comparisons %>% select(land1, land2, cmps_score, cmps_nseg)
+cp1
+
+##############################################################################
+# land1 = lands, land2 = lands
+
+
+comparisons.cmps <- data.frame(expand.grid(land1 = lands, land2 = lands), stringsAsFactors = FALSE)
+
+comparisons.cmps <- comparisons.cmps %>% mutate(aligned = purrr::map2(.x = land1, .y = land2, 
+                                                            .f = function(xx, yy) {
+                                                              land1 <- bullets$sigs[bullets$bulletland == xx][[1]]
+                                                              land2 <- bullets$sigs[bullets$bulletland == yy][[1]]
+                                                              land1$bullet <- "first-land"
+                                                              land2$bullet <- "second-land"
+                                                              
+                                                              sig_align(land1$sig, land2$sig)
+                                                            }))
+
+
+#########################################
+system.time({
+  comparisons.cmps <- comparisons.cmps %>% 
+    mutate(cmps = aligned %>% purrr::map_dbl(.f = function(a) {
+      extract_feature_cmps(a$lands$sig1, a$lands$sig2)
+    }))
+})
+comparisons.cmps %>% select(land1, land2, cmps) 
+
+# #############################
+# # FOR THE PURPOSE OF DEBUGGING
+# #############################
+# 
+# extract_feature_cmps(comparisons.cmps$aligned[[26]]$lands$sig1, comparisons.cmps$aligned[[26]]$lands$sig2)
+# x <- comparisons.cmps$aligned[[26]]$lands$sig1
+# y <- comparisons.cmps$aligned[[26]]$lands$sig2
+# 
+# seg_length = 50
+# seg_scale_max = 3
+# Tx = 25
+# npeaks.set = c(5, 3, 1)
+# 
+# segments <- get_segs(x, seg_length)
+# nseg <- length(segments$segs)
+# 
+# ccp.list <- lapply(1:nseg, function(nseg) {
+#   ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+#     get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+#   })
+#   
+#   get_ccp(ccr.list, Tx = Tx)
+# })
+# cmps <- get_CMPS(ccp.list, Tx = Tx)
+# unlist(ccp.list)
+
+
+
+
+
+
+
+
+
+
+
+
+

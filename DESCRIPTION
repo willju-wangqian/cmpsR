@@ -8,7 +8,20 @@ Authors@R:
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
+Imports: 
+    assertthat (>= 0.2.0),
+    zoo
+Remotes: 
+    heike/bulletxtrctr
+Suggests:
+    purrr,
+    tidyverse,
+    x3ptools,
+    bulletxtrctr
 License: What license it uses
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Depends: 
+    R (>= 2.10)

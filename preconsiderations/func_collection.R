@@ -46,14 +46,7 @@ get_segs <- function(x, len = 50){
   return(list(segs = segs[check_length], index = index[check_length], x = x))
 }
 
-
 get_seg_scale <- function(segments, nseg, scale = 2){
-  # obtain a longer segment, centered at the current segment
-  # cannot exceed 1 or the max index of x
-  # segments - the collection of all segments, obtained by get_segs()
-  # nseg - the index of the segment to be augmented
-  # scale - the augment scale
-  ############################################################################
   
   x <- segments$x
   idx <- segments$index[[nseg]]
@@ -62,11 +55,31 @@ get_seg_scale <- function(segments, nseg, scale = 2){
   unitt <- max(idx) - ct
   ############# ???
   # cut at the max or min
-  min.idx <- max(ct - unitt * scale, 1)
-  max.idx <- min(ct + unitt * scale, length(x))
+  min.idx <- max(ct - unitt * 2^(scale-1), 1)
+  max.idx <- min(ct + unitt * 2^(scale-1), length(x))
   
   return(list(aug_seg=x[min.idx:max.idx], aug_idx=min.idx:max.idx))
 }
+# get_seg_scale <- function(segments, nseg, scale = 2){
+#   # obtain a longer segment, centered at the current segment
+#   # cannot exceed 1 or the max index of x
+#   # segments - the collection of all segments, obtained by get_segs()
+#   # nseg - the index of the segment to be augmented
+#   # scale - the augment scale
+#   ############################################################################
+#   
+#   x <- segments$x
+#   idx <- segments$index[[nseg]]
+#   
+#   ct <- floor(median(idx))
+#   unitt <- max(idx) - ct
+#   ############# ???
+#   # cut at the max or min
+#   min.idx <- max(ct - unitt * scale, 1)
+#   max.idx <- min(ct + unitt * scale, length(x))
+#   
+#   return(list(aug_seg=x[min.idx:max.idx], aug_idx=min.idx:max.idx))
+# }
 
 get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
   # obtain the position of peaks of the cross correlation curve between 
@@ -154,6 +167,10 @@ get_CMPS <- function(input.ccp, Tx = 25, order = T) {
   #######################################################
   tt <- unlist(input.ccp)
   
+  if(is.null(tt)) { 
+    return(list(CMPS.score = 0, rec.position = NULL, pos.df = NULL)) 
+  }
+  
   pos.df <- data.frame(position = seq(min(tt), max(tt)))
   
   pos.df$cmps <- sapply(1:nrow(pos.df), function(i) {
@@ -222,6 +239,8 @@ extract_feature_cmps <- function(x, y, seg_length = 50, seg_scale_max = 3, Tx = 
   
   cmps <- get_CMPS(ccp.list, Tx = Tx)
   cmps$nseg <- nseg
+  
+  print(cmps$CMPS.score)
   
   if(full_result) { return(cmps) } 
   else { return(cmps$CMPS.score) }

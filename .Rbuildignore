@@ -4,3 +4,8 @@
 ^docs$
 ^LICENSE\.md$
 ^README\.Rmd$
+^preconsiderations$
+^image$
+
+^_pkgdown\.yml$
+^pkgdown$

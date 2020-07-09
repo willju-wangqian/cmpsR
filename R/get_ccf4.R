@@ -1,14 +1,16 @@
 #' Function to calculate the cross-correlation between two sequences
-#' 
-#' some more description, x is the longer (reference) sequence
+#'
+#' This function is used for CMPS algorithm. 
 #' @param x numeric sequence of values
 #' @param y numeric sequence of values
 #' @param min.overlap integer, minimal number of values in the overlap between sequences x and y to calculate a correlation value. Set to 10 percent of the maximum length of either sequence (HH: this might be problematic for CMPS)
-#' @export
+#'
 #' @return list consisting of the lag where the maximum correlation is achieved, and the maximum correlation value.
+#' @export
 #' @importFrom assertthat assert_that
-#' @importFrom stats cor na.omit
-get_ccf3 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))) 
+#' @importFrom stats cor complete.cases
+#' @examples
+get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))) 
 {
   # requires x to be the longer signature
   x <- as.vector(unlist(x))
@@ -25,8 +27,10 @@ get_ccf3 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))
   cors <- sapply(lags, function(lag) {
     cor(xx, lag(yy, lag), use = "pairwise.complete")
   })
+  
+  # running time improved with this chunk
   ns <- sapply(lags, function(lag) {
-    dim(na.omit(cbind(xx, lag(yy, lag))))[1]
+    sum(complete.cases(xx, lag(yy, lag)))
   })
   
   cors[ns < min.overlap] <- NA
