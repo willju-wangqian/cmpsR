@@ -5,7 +5,7 @@
 \alias{bullets}
 \title{Information of two example bullets}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 12 rows and 9 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 12 rows and 3 columns.
 }
 \source{
 \url{https://sctyner.github.io/OpenForSciR/bullets.html}

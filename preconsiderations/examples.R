@@ -101,7 +101,7 @@ comparisons <- comparisons %>% mutate(
 
 comparisons <- comparisons %>% 
   mutate(cmps = aligned %>% purrr::map(.f = function(a) {
-    extract_feature_cmps(a$lands$sig1, a$lands$sig2, full_result = T)
+    extract_feature_cmps(a$lands$sig1, a$lands$sig2, full_result = TRUE)
   }))
 
 comparisons <- comparisons %>% 
@@ -122,3 +122,17 @@ if (xx>5) {
 tt <- extract_feature_cmps(land2_3$sig, land1_2$sig, seg_scale_max = 3, 
                                                  npeaks.set = c(5,6,1), full_result = T)
 tt$CMPS.score
+
+
+
+
+
+
+
+
+
+tt <- get_seg_scale(segments, nseg, scale = 2)
+comp <- y
+get_ccf4(comp, tt$aug_seg, min.overlap = length(tt$aug_seg[!is.na(tt$aug_seg)]))
+get_ccf3(comp, tt$aug_seg, min.overlap = 50)
+

@@ -50,77 +50,29 @@ land12 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
 x <- land23$sig
 y <- land12$sig
 
-cmps <- extract_feature_cmps(x, y, full_result = T)
+cmps <- extract_feature_cmps(x, y, full_result = TRUE)
 cmps
 #> $CMPS.score
-#> [1] 0
+#> [1] 14
 #> 
 #> $rec.position
-#> NULL
+#> [1] -5
 #> 
 #> $pos.df
-#> NULL
+#>   position cmps
+#> 1       -9   14
+#> 2       -8   14
+#> 3       -7   14
+#> 4       -6   14
+#> 5       -5   14
+#> 6       -4   14
+#> 7       -3   14
+#> 8       -2   14
+#> 9       -1   14
 #> 
 #> $nseg
 #> [1] 22
 ```
-
-    #> - Session info ---------------------------------------------------------------
-    #>  setting  value                       
-    #>  version  R version 3.6.3 (2020-02-29)
-    #>  os       Windows 10 x64              
-    #>  system   x86_64, mingw32             
-    #>  ui       RTerm                       
-    #>  language (EN)                        
-    #>  collate  English_United States.1252  
-    #>  ctype    English_United States.1252  
-    #>  tz       America/Chicago             
-    #>  date     2020-07-09                  
-    #> 
-    #> - Packages -------------------------------------------------------------------
-    #>  package     * version    date       lib source        
-    #>  assertthat    0.2.1      2019-03-21 [1] CRAN (R 3.6.2)
-    #>  backports     1.1.5      2019-10-02 [1] CRAN (R 3.6.1)
-    #>  callr         3.4.3      2020-03-28 [1] CRAN (R 3.6.3)
-    #>  cli           2.0.2      2020-02-28 [1] CRAN (R 3.6.3)
-    #>  CMPS        * 0.0.0.9000 2020-07-09 [1] local         
-    #>  crayon        1.3.4      2017-09-16 [1] CRAN (R 3.6.2)
-    #>  desc          1.2.0      2018-05-01 [1] CRAN (R 3.6.3)
-    #>  devtools      2.3.0      2020-04-10 [1] CRAN (R 3.6.3)
-    #>  digest        0.6.25     2020-02-23 [1] CRAN (R 3.6.3)
-    #>  ellipsis      0.3.0      2019-09-20 [1] CRAN (R 3.6.2)
-    #>  evaluate      0.14       2019-05-28 [1] CRAN (R 3.6.2)
-    #>  fansi         0.4.1      2020-01-08 [1] CRAN (R 3.6.2)
-    #>  fs            1.4.0      2020-03-31 [1] CRAN (R 3.6.3)
-    #>  glue          1.4.1      2020-05-13 [1] CRAN (R 3.6.3)
-    #>  htmltools     0.4.0      2019-10-04 [1] CRAN (R 3.6.2)
-    #>  knitr         1.28       2020-02-06 [1] CRAN (R 3.6.3)
-    #>  lattice       0.20-38    2018-11-04 [2] CRAN (R 3.6.3)
-    #>  magrittr      1.5        2014-11-22 [1] CRAN (R 3.6.2)
-    #>  memoise       1.1.0      2017-04-21 [1] CRAN (R 3.6.3)
-    #>  pkgbuild      1.0.6      2019-10-09 [1] CRAN (R 3.6.3)
-    #>  pkgload       1.0.2      2018-10-29 [1] CRAN (R 3.6.3)
-    #>  prettyunits   1.1.1      2020-01-24 [1] CRAN (R 3.6.2)
-    #>  processx      3.4.2      2020-02-09 [1] CRAN (R 3.6.3)
-    #>  ps            1.3.3      2020-05-08 [1] CRAN (R 3.6.3)
-    #>  R6            2.4.1      2019-11-12 [1] CRAN (R 3.6.2)
-    #>  Rcpp          1.0.4.6    2020-04-09 [1] CRAN (R 3.6.3)
-    #>  remotes       2.1.1      2020-02-15 [1] CRAN (R 3.6.3)
-    #>  rlang         0.4.6      2020-05-02 [1] CRAN (R 3.6.3)
-    #>  rmarkdown     2.1        2020-01-20 [1] CRAN (R 3.6.2)
-    #>  rprojroot     1.3-2      2018-01-03 [1] CRAN (R 3.6.3)
-    #>  sessioninfo   1.1.1      2018-11-05 [1] CRAN (R 3.6.3)
-    #>  stringi       1.4.6      2020-02-17 [1] CRAN (R 3.6.2)
-    #>  stringr       1.4.0      2019-02-10 [1] CRAN (R 3.6.2)
-    #>  testthat      2.3.2      2020-03-02 [1] CRAN (R 3.6.3)
-    #>  usethis       1.6.1      2020-04-29 [1] CRAN (R 3.6.3)
-    #>  withr         2.1.2      2018-03-15 [1] CRAN (R 3.6.2)
-    #>  xfun          0.12       2020-01-13 [1] CRAN (R 3.6.2)
-    #>  yaml          2.2.1      2020-02-01 [1] CRAN (R 3.6.2)
-    #>  zoo           1.8-8      2020-05-02 [1] CRAN (R 3.6.3)
-    #> 
-    #> [1] C:/Users/juwan/Documents/R/win-library/3.6
-    #> [2] C:/Program Files/R/R-3.6.3/library
 
 Plot of x and y
 
@@ -163,12 +115,13 @@ The main idea of the CMPS method is that:
 <img src="image/step3_1.png" width="80%" />
 
   - real case: compare `x` to `y`. We mark the 5 highest peaks for each
-    ccf curve.
+    ccf curve because the position of the “highest peak” might not be
+    the best one.
 
 <img src="image/step3_2.png" width="80%" />
 
 4.  each ccf curve votes for 5 candidate positions, then we ask two
-    questions:
+    questions in order to obtain the CMPS number/score:
 
 <!-- end list -->
 
@@ -202,22 +155,105 @@ The main idea of the CMPS method is that:
       - which position receives the most votes?
       - how many segments have voted for this position? -\> CMPS number
 
-  - if we consider all segments when comparing x and y, a KM comparison
+<!-- end list -->
+
+6.  if we consider all segments
+
+<!-- end list -->
+
+  - when comparing x and y, a KM comparison
 
 <!-- end list -->
 
 ``` r
 extract_feature_cmps(x, y, seg_length = 50, seg_scale_max = 3, Tx = 25, 
-                     npeaks.set = c(5, 3, 1), full_result = T)
+                     npeaks.set = c(5, 3, 1), full_result = TRUE)
 #> $CMPS.score
-#> [1] 0
+#> [1] 14
 #> 
 #> $rec.position
-#> NULL
+#> [1] -5
 #> 
 #> $pos.df
-#> NULL
+#>   position cmps
+#> 1       -9   14
+#> 2       -8   14
+#> 3       -7   14
+#> 4       -6   14
+#> 5       -5   14
+#> 6       -4   14
+#> 7       -3   14
+#> 8       -2   14
+#> 9       -1   14
 #> 
 #> $nseg
 #> [1] 22
 ```
+
+  - the result of a known non match (KNM) comparison:
+
+<!-- end list -->
+
+``` r
+land23 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+land13 <- bullets$sigs[bullets$bulletland == "1-3"][[1]]
+
+result <- extract_feature_cmps(land23$sig, land13$sig, seg_length = 50, seg_scale_max = 3, Tx = 25, 
+                     npeaks.set = c(5, 3, 1), full_result = TRUE)
+result$CMPS.score
+#> [1] 1
+```
+
+## Full Comparison Between Two Bullets
+
+`extract_feature_cmps()` can also be used in a pipeline fashion
+
+``` r
+lands <- unique(bullets$bulletland)
+
+comparisons <- data.frame(expand.grid(land1 = lands[1:6], land2 = lands[7:12]), 
+                          stringsAsFactors = FALSE)
+
+comparisons <- comparisons %>% mutate(
+  aligned = purrr::map2(.x = land1, .y = land2, 
+                        .f = function(xx, yy) {
+                          land1 <- bullets$sigs[bullets$bulletland == xx][[1]]
+                          land2 <- bullets$sigs[bullets$bulletland == yy][[1]]
+                          land1$bullet <- "first-land"
+                          land2$bullet <- "second-land"
+                          
+                          sig_align(land1$sig, land2$sig)
+                        }))
+
+comparisons <- comparisons %>% 
+  mutate(cmps = aligned %>% purrr::map(.f = function(a) {
+    extract_feature_cmps(a$lands$sig1, a$lands$sig2, full_result = TRUE)
+  }))
+
+# comparisons.cmps <- comparisons.cmps %>% 
+#   mutate(cmps = aligned %>% purrr::map_dbl(.f = function(a) {
+#     extract_feature_cmps(a$lands$sig1, a$lands$sig2, full_result = FALSE)
+#   }))
+# comparisons.cmps %>% select(land1, land2, cmps) 
+
+comparisons <- comparisons %>% 
+  mutate(
+    cmps_score = sapply(comparisons$cmps, function(x) x$CMPS.score),
+    cmps_nseg = sapply(comparisons$cmps, function(x) x$nseg)
+  )
+
+cp1 <- comparisons %>% select(land1, land2, cmps_score, cmps_nseg)
+cp1
+```
+
+## Future Work
+
+  - improve and manage to submit the CMPS package to CRAN
+
+  - cross-validate some hyper-parameters
+
+  - apply CMPS to
+    
+      - the dataset used in the paper to see if we can reproduce their
+        results
+      - other datasets

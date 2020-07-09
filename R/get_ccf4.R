@@ -9,6 +9,7 @@
 #' @export
 #' @importFrom assertthat assert_that
 #' @importFrom stats cor complete.cases
+#' @importFrom dplyr lag
 #' @examples
 get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))) 
 {
@@ -25,12 +26,12 @@ get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))
   lags <- 0:lag.max
   
   cors <- sapply(lags, function(lag) {
-    cor(xx, lag(yy, lag), use = "pairwise.complete")
+    cor(xx, dplyr::lag(yy, lag), use = "pairwise.complete.obs")
   })
   
   # running time improved with this chunk
   ns <- sapply(lags, function(lag) {
-    sum(complete.cases(xx, lag(yy, lag)))
+    sum(complete.cases(xx, dplyr::lag(yy, lag)))
   })
   
   cors[ns < min.overlap] <- NA

@@ -149,12 +149,12 @@ extract_feature_cmps <- function(x, y, seg_length = 50, seg_scale_max = 3, Tx = 
   
   segments <- get_segs(x, seg_length)
   nseg <- length(segments$segs)
-  
   if (seg_scale_max == 1) {
     ccp.list <- lapply(1:nseg, function(nseg) {
       ccr <- get_ccr_peaks(y, segments, seg_scale = seg_scale_max, 
                            nseg = nseg, npeaks = npeaks.set[seg_scale_max])
       ccr$peaks.pos
+      
     })
   } else if(seg_scale_max > 1) {
     ccp.list <- lapply(1:nseg, function(nseg) {

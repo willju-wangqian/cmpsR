@@ -20,7 +20,7 @@ rbind(data.frame(value = x, index = 1:length(x), sig = "x"),
   ylab("signature") +
   xlab("index") +
   ggtitle("plot of x and y")
-ggsave("image/step0.png")
+# ggsave("image/step0.png")
 
 
 
@@ -48,7 +48,7 @@ df %>% filter(segs <= 4) %>%
   facet_grid(segs ~ .) +
   xlab("position") +
   ylab("signature")
-ggsave("image/step1_1.png")
+# ggsave("image/step1_1.png")
 
 seg3 <- df %>% filter(segs == 7)
 seg3$segs <- "segment 7"
@@ -61,7 +61,7 @@ df.y %>% filter(!is.na(value)) %>%
   xlab("position") +
   ylab("signature") +
   ggtitle("Comparison Signature y and The Third Segment")
-ggsave("image/step2_1.png")
+# ggsave("image/step2_1.png")
 
 
 
@@ -77,7 +77,7 @@ df.ccf %>% ggplot() +
   xlab("position") +
   ylab("ccf") +
   ggtitle("CCF of y and the 7th segment")
-ggsave("image/step2_2.png")
+# ggsave("image/step2_2.png")
 
 ##################################################
 # step 3-1
@@ -109,7 +109,7 @@ ccf.df %>%
   ggtitle("Ideal Case: x compares to itself") +
   xlab("position") +
   ylab("ccf")
-ggsave("image/step3_1.png")
+# ggsave("image/step3_1.png")
 
 ###########################################################
 # step 3-2
@@ -141,7 +141,7 @@ ccf.df %>%
   # ggtitle("Ideal Case: x compares to itself") +
   xlab("position") +
   ylab("ccf")
-ggsave("image/step3_2.png")
+# ggsave("image/step3_2.png")
 
 
 ###############################################
@@ -155,14 +155,15 @@ multi.seg <- do.call(rbind, lapply(1:3, function(scale) {
   df.tmp <- data.frame(value = tt$aug_seg, index=tt$aug_idx, scale=paste("scale", scale))
 }))
 
-rbind(data.frame(value = x, index = 1:length(x), scale = "x"), multi.seg) %>% filter(!is.na(value)) %>% 
+# rbind(data.frame(value = x, index = 1:length(x), scale = "x"), multi.seg) 
+multi.seg %>% filter(!is.na(value)) %>% 
   ggplot() +
   geom_line(aes(index, value)) +
   facet_grid(scale ~ .) + 
   ylab("signature") +
   xlab("position") +
   ggtitle("x and segment 7 in 3 different scales")
-ggsave("image/step5_1.png")
+# ggsave("image/step5_1.png")
 
 multi.df <- do.call(rbind, lapply(1:3, function(scale) {
   ccrpeaks <- get_ccr_peaks(comp, segments = segments, nseg = nseg, npeaks = npeaks.set[scale], seg_scale = scale)
@@ -186,6 +187,6 @@ multi.df %>% ggplot() +
   ylab("ccf") +
   xlab("position") +
   ggtitle("ccf of segment 7 and y in 3 different scales")
-ggsave("image/step5_2.png")
+# ggsave("image/step5_2.png")
 
 

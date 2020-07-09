@@ -10,7 +10,8 @@ Authors@R:
 Description: What the package does (one paragraph).
 Imports: 
     assertthat (>= 0.2.0),
-    zoo
+    zoo,
+    dplyr
 Remotes: 
     heike/bulletxtrctr
 Suggests:

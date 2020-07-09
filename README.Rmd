@@ -51,12 +51,8 @@ land12 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
 x <- land23$sig
 y <- land12$sig
 
-cmps <- extract_feature_cmps(x, y, full_result = T)
+cmps <- extract_feature_cmps(x, y, full_result = TRUE)
 cmps
-```
-
-```{r echo = FALSE, include=FALSE}
-devtools::session_info()
 ```
 
 Plot of x and y
@@ -98,14 +94,14 @@ knitr::include_graphics("image/step2_2.png")
 knitr::include_graphics("image/step3_1.png")
 ```
 
-* real case: compare `x` to `y`. We mark the 5 highest peaks for each ccf curve.
+* real case: compare `x` to `y`. We mark the 5 highest peaks for each ccf curve because the position of the "highest peak" might not be the best one. 
 
 ```{r , echo=FALSE, out.width = '80%'}
 knitr::include_graphics("image/step3_2.png")
 ```
 
 
-4. each ccf curve votes for 5 candidate positions, then we ask two questions:
+4. each ccf curve votes for 5 candidate positions, then we ask two questions in order to obtain the CMPS number/score:
 
 * which position receives the most votes? -> the best position (indicated by the red vertical line)
 
@@ -113,7 +109,7 @@ knitr::include_graphics("image/step3_2.png")
 
   If we focus on these 7 segments only, the CMPS number is 6.
 
-5. how can the segment vote more wisely?
+5. how can the segment vote more wisely? Multi Segment Lengths Strategy
 
 * by increasing the segment length (scale), one can reduce the number of "false positive" peaks
 
@@ -129,12 +125,81 @@ knitr::include_graphics("image/step5_2.png")
 * and then, each ccf curve votes for only 1 best condidate position if a ccp can be found; again, we ask two quesitons:
     + which position receives the most votes?
     + how many segments have voted for this position? -> CMPS number
+    
+* by default, CMPS algorithm uses multi segment lengths strategy. 
 
-* if we consider all segments when comparing x and y, a KM comparison
+6. if we consider all segments 
+
+* when comparing x and y, a KM comparison
 
 ```{r}
 extract_feature_cmps(x, y, seg_length = 50, seg_scale_max = 3, Tx = 25, 
-                     npeaks.set = c(5, 3, 1), full_result = T)
+                     npeaks.set = c(5, 3, 1), full_result = TRUE)
 ```
+
+* the result of a known non match (KNM) comparison:
+
+```{r}
+land23 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+land13 <- bullets$sigs[bullets$bulletland == "1-3"][[1]]
+
+result <- extract_feature_cmps(land23$sig, land13$sig, seg_length = 50, seg_scale_max = 3, Tx = 25, 
+                     npeaks.set = c(5, 3, 1), full_result = TRUE)
+result$CMPS.score
+```
+
+
+## Full Comparison Between Two Bullets
+
+`extract_feature_cmps()` can also be used in a pipeline fashion
+
+```{r eval = FALSE}
+lands <- unique(bullets$bulletland)
+
+comparisons <- data.frame(expand.grid(land1 = lands[1:6], land2 = lands[7:12]), 
+                          stringsAsFactors = FALSE)
+
+comparisons <- comparisons %>% mutate(
+  aligned = purrr::map2(.x = land1, .y = land2, 
+                        .f = function(xx, yy) {
+                          land1 <- bullets$sigs[bullets$bulletland == xx][[1]]
+                          land2 <- bullets$sigs[bullets$bulletland == yy][[1]]
+                          land1$bullet <- "first-land"
+                          land2$bullet <- "second-land"
+                          
+                          sig_align(land1$sig, land2$sig)
+                        }))
+
+comparisons <- comparisons %>% 
+  mutate(cmps = aligned %>% purrr::map(.f = function(a) {
+    extract_feature_cmps(a$lands$sig1, a$lands$sig2, full_result = TRUE)
+  }))
+
+# comparisons.cmps <- comparisons.cmps %>% 
+#   mutate(cmps = aligned %>% purrr::map_dbl(.f = function(a) {
+#     extract_feature_cmps(a$lands$sig1, a$lands$sig2, full_result = FALSE)
+#   }))
+# comparisons.cmps %>% select(land1, land2, cmps) 
+
+comparisons <- comparisons %>% 
+  mutate(
+    cmps_score = sapply(comparisons$cmps, function(x) x$CMPS.score),
+    cmps_nseg = sapply(comparisons$cmps, function(x) x$nseg)
+  )
+
+cp1 <- comparisons %>% select(land1, land2, cmps_score, cmps_nseg)
+cp1
+```
+
+## Future Work
+
+* improve and manage to submit the CMPS package to CRAN
+
+* cross-validate some hyper-parameters
+
+* apply CMPS to 
+    + the dataset used in the paper to see if we can reproduce their results
+    + other datasets
+
 
 
