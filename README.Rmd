@@ -86,7 +86,7 @@ knitr::include_graphics("man/figures/step0.png")
 
 
 
-## Main Idea
+#### Main Idea
 
 The main idea of the CMPS method is that: 
 
