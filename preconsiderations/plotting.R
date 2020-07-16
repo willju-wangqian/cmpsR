@@ -20,7 +20,7 @@ rbind(data.frame(value = x, index = 1:length(x), sig = "x"),
   ylab("signature") +
   xlab("index") +
   ggtitle("plot of x and y")
-# ggsave("image/step0.png")
+# ggsave("man/figures/step0.png")
 
 
 
@@ -33,22 +33,39 @@ nseg <- length(segments$segs)
 df <- data.frame(value = unlist(segments$segs),
                  segs = rep(1:nseg, each = 50),
                  index = unlist(segments$index))
+df$segs_tag <- paste("seg", df$segs)
 
-df.part <- data.frame(value = unlist(segments$segs),
-                      segs = 0,
-                      index = unlist(segments$index))
-df <- rbind(df, df.part)
+df.partx <- data.frame(value = unlist(segments$segs),
+                       segs = 0,
+                       index = unlist(segments$index),
+                       segs_tag = "x")
+df.party <- data.frame(value = y,
+                       segs = 0,
+                       index = 1:length(y),
+                       segs_tag = "y")
+
 
 cutt <- sapply(segments$index, function(idx) {idx[1]})
 
-df %>% filter(segs <= 4) %>% 
+rbind(df.partx, df) %>% filter(segs <= 4) %>% 
   ggplot() +
   geom_line(aes(x = index, y = value)) +
   geom_vline(xintercept = cutt, color = "red") +
-  facet_grid(segs ~ .) +
+  facet_grid(segs_tag ~ .) +
   xlab("position") +
-  ylab("signature")
-# ggsave("image/step1_1.png")
+  ylab("signature") +
+  ggtitle("Cut x into basis segments")
+ggsave("man/figures/step1_1.png")
+
+rbind(df.party, df.partx, df) %>% filter(segs %in% c(0, 1,2,6,7) & !is.na(value)) %>% 
+  ggplot() +
+  geom_line(aes(x = index, y = value)) +
+  geom_vline(xintercept = cutt, color = "red") +
+  facet_grid(segs_tag ~ .) +
+  xlab("position") +
+  ylab("signature") +
+  ggtitle("Compare y to basis segments of x")
+ggsave("man/figures/step1_2.png")
 
 seg3 <- df %>% filter(segs == 7)
 seg3$segs <- "segment 7"
@@ -61,7 +78,7 @@ df.y %>% filter(!is.na(value)) %>%
   xlab("position") +
   ylab("signature") +
   ggtitle("Comparison Signature y and The Third Segment")
-# ggsave("image/step2_1.png")
+# ggsave("man/figures/step2_1.png")
 
 
 
@@ -77,7 +94,7 @@ df.ccf %>% ggplot() +
   xlab("position") +
   ylab("ccf") +
   ggtitle("CCF of y and the 7th segment")
-# ggsave("image/step2_2.png")
+# ggsave("man/figures/step2_2.png")
 
 ##################################################
 # step 3-1
@@ -109,7 +126,7 @@ ccf.df %>%
   ggtitle("Ideal Case: x compares to itself") +
   xlab("position") +
   ylab("ccf")
-# ggsave("image/step3_1.png")
+# ggsave("man/figures/step3_1.png")
 
 ###########################################################
 # step 3-2
@@ -141,7 +158,7 @@ ccf.df %>%
   # ggtitle("Ideal Case: x compares to itself") +
   xlab("position") +
   ylab("ccf")
-# ggsave("image/step3_2.png")
+# ggsave("man/figures/step3_2.png")
 
 
 ###############################################
@@ -163,7 +180,7 @@ multi.seg %>% filter(!is.na(value)) %>%
   ylab("signature") +
   xlab("position") +
   ggtitle("x and segment 7 in 3 different scales")
-# ggsave("image/step5_1.png")
+# ggsave("man/figures/step5_1.png")
 
 multi.df <- do.call(rbind, lapply(1:3, function(scale) {
   ccrpeaks <- get_ccr_peaks(comp, segments = segments, nseg = nseg, npeaks = npeaks.set[scale], seg_scale = scale)
@@ -187,6 +204,6 @@ multi.df %>% ggplot() +
   ylab("ccf") +
   xlab("position") +
   ggtitle("ccf of segment 7 and y in 3 different scales")
-# ggsave("image/step5_2.png")
+# ggsave("man/figures/step5_2.png")
 
 

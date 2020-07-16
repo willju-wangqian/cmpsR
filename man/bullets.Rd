@@ -5,7 +5,12 @@
 \alias{bullets}
 \title{Information of two example bullets}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 12 rows and 3 columns.
+A data frame/tbl/tbl_df with 12 rows and 3 variables:
+\describe{
+\item{source}{source of the bullet data}
+\item{sigs}{bullet signatures, detailed information about how to get the signatures can be found at https://sctyner.github.io/OpenForSciR/bullets.html}
+\item{bulletland}{label of the signatures}
+}
 }
 \source{
 \url{https://sctyner.github.io/OpenForSciR/bullets.html}
