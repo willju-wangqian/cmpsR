@@ -205,7 +205,47 @@ number of peaks for the highest segment scale must be 1, i.e., the very last ele
 
 <span class='co'># algorithm with multi-peak inspection at the basis scale only</span>
 <span class='no'>cmps_without_multi_scale</span> <span class='kw'>&lt;-</span> <span class='fu'>extract_feature_cmps</span>(<span class='no'>land2_3</span>$<span class='no'>sig</span>, <span class='no'>land1_2</span>$<span class='no'>sig</span>, <span class='kw'>seg_scale_max</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-                                                 <span class='kw'>npeaks.set</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>full_result</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div></span></pre>
+                                                 <span class='kw'>npeaks.set</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>full_result</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>tidyverse</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>bulletxtrctr</span>)
+
+<span class='no'>lands</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>bullets</span>$<span class='no'>bulletland</span>)
+
+<span class='no'>comparisons</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='kw'>land1</span> <span class='kw'>=</span> <span class='no'>lands</span>[<span class='fl'>1</span>:<span class='fl'>6</span>], <span class='kw'>land2</span> <span class='kw'>=</span> <span class='no'>lands</span>[<span class='fl'>7</span>:<span class='fl'>12</span>]),
+                          <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='no'>comparisons</span> <span class='kw'>&lt;-</span> <span class='no'>comparisons</span> <span class='kw'>%&gt;%</span> <span class='fu'>mutate</span>(
+  <span class='kw'>aligned</span> <span class='kw'>=</span> <span class='kw pkg'>purrr</span><span class='kw ns'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map2.html'>map2</a></span>(<span class='kw'>.x</span> <span class='kw'>=</span> <span class='no'>land1</span>, <span class='kw'>.y</span> <span class='kw'>=</span> <span class='no'>land2</span>,
+                        <span class='kw'>.f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>xx</span>, <span class='no'>yy</span>) {
+                          <span class='no'>land1</span> <span class='kw'>&lt;-</span> <span class='no'>bullets</span>$<span class='no'>sigs</span>[<span class='no'>bullets</span>$<span class='no'>bulletland</span> <span class='kw'>==</span> <span class='no'>xx</span>]<span class='kw'>[[</span><span class='fl'>1</span>]]
+                          <span class='no'>land2</span> <span class='kw'>&lt;-</span> <span class='no'>bullets</span>$<span class='no'>sigs</span>[<span class='no'>bullets</span>$<span class='no'>bulletland</span> <span class='kw'>==</span> <span class='no'>yy</span>]<span class='kw'>[[</span><span class='fl'>1</span>]]
+                          <span class='no'>land1</span>$<span class='no'>bullet</span> <span class='kw'>&lt;-</span> <span class='st'>"first-land"</span>
+                          <span class='no'>land2</span>$<span class='no'>bullet</span> <span class='kw'>&lt;-</span> <span class='st'>"second-land"</span>
+
+                          <span class='fu'><a href='https://rdrr.io/pkg/bulletxtrctr/man/sig_align.html'>sig_align</a></span>(<span class='no'>land1</span>$<span class='no'>sig</span>, <span class='no'>land2</span>$<span class='no'>sig</span>)
+                        }))
+
+<span class='no'>comparisons</span> <span class='kw'>&lt;-</span> <span class='no'>comparisons</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>mutate</span>(<span class='kw'>cmps</span> <span class='kw'>=</span> <span class='no'>aligned</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>purrr</span><span class='kw ns'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map</a></span>(<span class='kw'>.f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>a</span>) {
+    <span class='fu'>extract_feature_cmps</span>(<span class='no'>a</span>$<span class='no'>lands</span>$<span class='no'>sig1</span>, <span class='no'>a</span>$<span class='no'>lands</span>$<span class='no'>sig2</span>, <span class='kw'>full_result</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  }))
+
+<span class='co'># comparisons.cmps &lt;- comparisons.cmps %&gt;% </span>
+<span class='co'>#   mutate(cmps = aligned %&gt;% purrr::map_dbl(.f = function(a) {</span>
+<span class='co'>#     extract_feature_cmps(a$lands$sig1, a$lands$sig2, full_result = FALSE)</span>
+<span class='co'>#   }))</span>
+<span class='co'># comparisons.cmps %&gt;% select(land1, land2, cmps) </span>
+
+<span class='no'>comparisons</span> <span class='kw'>&lt;-</span> <span class='no'>comparisons</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>mutate</span>(
+    <span class='kw'>cmps_score</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='no'>comparisons</span>$<span class='no'>cmps</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>$<span class='no'>CMPS.score</span>),
+    <span class='kw'>cmps_nseg</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='no'>comparisons</span>$<span class='no'>cmps</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>$<span class='no'>nseg</span>)
+  )
+
+<span class='no'>cp1</span> <span class='kw'>&lt;-</span> <span class='no'>comparisons</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>land1</span>, <span class='no'>land2</span>, <span class='no'>cmps_score</span>, <span class='no'>cmps_nseg</span>)
+<span class='no'>cp1</span>
+}</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
