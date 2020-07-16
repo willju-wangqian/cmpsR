@@ -99,7 +99,46 @@ get_CMPS <- function(input.ccp, Tx = 25, order = T) {
 #' # algorithm with multi-peak inspection at the basis scale only
 #' cmps_without_multi_scale <- extract_feature_cmps(land2_3$sig, land1_2$sig, seg_scale_max = 1, 
 #'                                                  npeaks.set = 5, full_result = TRUE)
+#' \dontrun{
+#' library(tidyverse)
+#' library(bulletxtrctr)
 #' 
+#' lands <- unique(bullets$bulletland)
+#' 
+#' comparisons <- data.frame(expand.grid(land1 = lands[1:6], land2 = lands[7:12]), 
+#'                           stringsAsFactors = FALSE)
+#' 
+#' comparisons <- comparisons %>% mutate(
+#'   aligned = purrr::map2(.x = land1, .y = land2, 
+#'                         .f = function(xx, yy) {
+#'                           land1 <- bullets$sigs[bullets$bulletland == xx][[1]]
+#'                           land2 <- bullets$sigs[bullets$bulletland == yy][[1]]
+#'                           land1$bullet <- "first-land"
+#'                           land2$bullet <- "second-land"
+#'                           
+#'                           sig_align(land1$sig, land2$sig)
+#'                         }))
+#' 
+#' comparisons <- comparisons %>% 
+#'   mutate(cmps = aligned %>% purrr::map(.f = function(a) {
+#'     extract_feature_cmps(a$lands$sig1, a$lands$sig2, full_result = TRUE)
+#'   }))
+#' 
+#' # comparisons.cmps <- comparisons.cmps %>% 
+#' #   mutate(cmps = aligned %>% purrr::map_dbl(.f = function(a) {
+#' #     extract_feature_cmps(a$lands$sig1, a$lands$sig2, full_result = FALSE)
+#' #   }))
+#' # comparisons.cmps %>% select(land1, land2, cmps) 
+#' 
+#' comparisons <- comparisons %>% 
+#'   mutate(
+#'     cmps_score = sapply(comparisons$cmps, function(x) x$CMPS.score),
+#'     cmps_nseg = sapply(comparisons$cmps, function(x) x$nseg)
+#'   )
+#' 
+#' cp1 <- comparisons %>% select(land1, land2, cmps_score, cmps_nseg)
+#' cp1
+#' }
 extract_feature_cmps <- function(x, y, seg_length = 50, seg_scale_max = 3, Tx = 25, npeaks.set = c(5, 3, 1),
                                  full_result = FALSE) {
   
