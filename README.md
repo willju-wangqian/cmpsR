@@ -91,7 +91,7 @@ A KM Comparison, x and y
 
 </div>
 
-## Main Idea
+#### Main Idea
 
 The main idea of the CMPS method is that:
 

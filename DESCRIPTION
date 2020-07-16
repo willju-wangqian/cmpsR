@@ -1,13 +1,18 @@
 Package: CMPS
-Title: What the Package Does (One Line, Title Case)
+Title: Implementation of Congruent Matching Profile Segments (CMPS) Method
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Wangqian",
+           family = "Ju",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "wju@iastate.edu",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: The CMPS package is an implementation of the Congruent Matching 
+    Profile Segments (CMPS) method. In general, it can be used for 
+    objective comparison of striated tool marks, but in our examples, we mainly 
+    use it for bullet profiles/signatures comparison. The CMPS number is 
+    expected to be large if two signatures are similar. So it can also be 
+    considered as a feature that measures the similarity of two bullets.
 Imports: 
     assertthat (>= 0.2.0),
     zoo,
@@ -19,7 +24,7 @@ Suggests:
     tidyverse,
     x3ptools,
     bulletxtrctr
-License: What license it uses
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
