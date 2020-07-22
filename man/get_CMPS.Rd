@@ -24,3 +24,24 @@ a list of three components:
 \description{
 Compute the CMPS score from a list of positions of (consistent) correlation peaks.
 }
+\examples{
+data("bullets")
+land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+land1_2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
+x <- land2_3$sig
+y <- land1_2$sig
+
+segments <- get_segs(x, len = 50)
+nseg <- length(segments$segs)
+seg_scale_max <- 3
+npeaks.set <- c(5,3,1)
+
+ccp.list <- lapply(1:nseg, function(nseg) {
+ ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+   get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+ })
+ 
+ get_ccp(ccr.list, Tx = 25)
+})
+cmps <- get_CMPS(ccp.list, Tx = 25)
+}

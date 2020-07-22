@@ -20,3 +20,10 @@ non-overlapping, basis segments of the same desired length. If the profile
 starts or ends with a sequence of \code{NA} (missing values), the \code{NA}s will be trimmed.
 If the very last segment does not have the desired length, it will be dropped.
 }
+\examples{
+data("bullets")
+land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+x <- land2_3$sig
+
+segments <- get_segs(x, len = 50)
+}

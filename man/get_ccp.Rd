@@ -19,3 +19,24 @@ If multi segment lengths strategy is being used, at most one consistent correlat
 peak (ccp) will be found for the corresponding basis segment. If the ccp cannot be identified,
 return \code{NULL}
 }
+\examples{
+data("bullets")
+land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+land1_2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
+x <- land2_3$sig
+y <- land1_2$sig
+
+segments <- get_segs(x, len = 50)
+
+# identify the consistent correlation peak when ccf curves are computed
+# based on y and segment 7 in 3 different scales;
+# the number of peaks identified in each scale are 5, 3, and 1, respectively.
+seg_scale_max <- 3
+npeaks.set <- c(5,3,1)
+
+ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+  get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = 7, npeaks = npeaks.set[seg_scale])
+})
+
+get_ccp(ccr.list, Tx = 25)
+}

@@ -29,3 +29,11 @@ the length of the basis segment will be doubled to compute the correlation curve
 \code{get_seg_scale} computes the increased segment, which has the same center
 as the basis segment.
 }
+\examples{
+data("bullets")
+land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+x <- land2_3$sig
+
+segments <- get_segs(x, len = 50)
+seg5_scale3 <- get_seg_scale(segments, nseg = 5, scale = 3)
+}

@@ -22,6 +22,16 @@
 #' @importFrom assertthat assert_that
 #'
 #' @examples
+#' data("bullets")
+#' land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+#' land1_2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
+#' x <- land2_3$sig
+#' y <- land1_2$sig
+#' 
+#' segments <- get_segs(x, len = 50)
+#' 
+#' # compute ccf based on y and segment 7 with scale 1, then identify 5 highest peaks
+#' ccrpeaks <- get_ccr_peaks(y, segments = segments, nseg = 7, npeaks = 5, seg_scale = 1)
 get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
 
   assert_that(
@@ -72,6 +82,25 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
 #' @importFrom assertthat assert_that
 #'
 #' @examples
+#' data("bullets")
+#' land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+#' land1_2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
+#' x <- land2_3$sig
+#' y <- land1_2$sig
+#' 
+#' segments <- get_segs(x, len = 50)
+#' 
+#' # identify the consistent correlation peak when ccf curves are computed
+#' # based on y and segment 7 in 3 different scales;
+#' # the number of peaks identified in each scale are 5, 3, and 1, respectively.
+#' seg_scale_max <- 3
+#' npeaks.set <- c(5,3,1)
+#' 
+#' ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+#'   get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = 7, npeaks = npeaks.set[seg_scale])
+#' })
+#' 
+#' get_ccp(ccr.list, Tx = 25)
 get_ccp <- function(ccr.list, Tx = 25){
   
   assert_that(is.numeric(Tx))

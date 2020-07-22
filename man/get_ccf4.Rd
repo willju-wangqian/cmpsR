@@ -19,3 +19,15 @@ list consisting of the lag where the maximum correlation is achieved, and the ma
 \description{
 This function is used for CMPS algorithm.
 }
+\examples{
+data("bullets")
+land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+land1_2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
+x <- land2_3$sig
+y <- land1_2$sig
+
+segments <- get_segs(x, len = 50)
+
+ccr <- get_ccf4(y, segments$segs[[7]], 
+                min.overlap = length(segments$segs[[7]]))
+}

@@ -13,6 +13,25 @@
 #' @importFrom assertthat assert_that
 #'
 #' @examples
+#' data("bullets")
+#' land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+#' land1_2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
+#' x <- land2_3$sig
+#' y <- land1_2$sig
+#' 
+#' segments <- get_segs(x, len = 50)
+#' nseg <- length(segments$segs)
+#' seg_scale_max <- 3
+#' npeaks.set <- c(5,3,1)
+#' 
+#' ccp.list <- lapply(1:nseg, function(nseg) {
+#'  ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+#'    get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+#'  })
+#'  
+#'  get_ccp(ccr.list, Tx = 25)
+#' })
+#' cmps <- get_CMPS(ccp.list, Tx = 25)
 get_CMPS <- function(input.ccp, Tx = 25, order = T) {
   
   assert_that(is.numeric(Tx), is.logical(order))
@@ -139,6 +158,11 @@ get_CMPS <- function(input.ccp, Tx = 25, order = T) {
 #' cp1 <- comparisons %>% select(land1, land2, cmps_score, cmps_nseg)
 #' cp1
 #' }
+#' @references 
+#' Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song, 
+#' and Xuezeng Zhao. 2019. “Fired Bullet Signature Correlation Using the 
+#' Congruent Matching Profile Segments (CMPS) Method.” Forensic Science 
+#' International, December, #109964. https://doi.org/10.1016/j.forsciint.2019.109964.
 extract_feature_cmps <- function(x, y, seg_length = 50, seg_scale_max = 3, Tx = 25, npeaks.set = c(5, 3, 1),
                                  full_result = FALSE) {
   

@@ -1,5 +1,6 @@
 ---
 output: github_document
+bibliography: docs/references.bib  
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -19,7 +20,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The CMPS package is an implementation of the Congruent Matching Profile Segments (CMPS) method [cite?]. In general, it can be used for objective comparison of striated tool marks, but in our examples, we mainly use it for bullet profiles/signatures comparison. The CMPS number is expected to be large if two signatures are similar. So it can also be considered as a feature that measures the similarity of two bullets.
+The CMPS package is an implementation of the Congruent Matching Profile Segments (CMPS) method [@Chen:2019ji]. In general, it can be used for objective comparison of striated tool marks, but in our examples, we mainly use it for bullet profiles/signatures comparison. The CMPS number is expected to be large if two signatures are similar. So it can also be considered as a feature that measures the similarity of two bullets.
 
 ## Installation
 
@@ -302,5 +303,6 @@ cp1
     + the dataset used in the paper to see if we can reproduce their results
     + other datasets
 
+# Reference
 
 

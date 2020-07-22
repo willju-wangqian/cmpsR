@@ -35,3 +35,15 @@ a list consisting of:
 Given a comparison profile and a segment, \code{get_ccr_peaks} computes the
 cross correlation curve and finds peaks of the curve.
 }
+\examples{
+data("bullets")
+land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+land1_2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
+x <- land2_3$sig
+y <- land1_2$sig
+
+segments <- get_segs(x, len = 50)
+
+# compute ccf based on y and segment 7 with scale 1, then identify 5 highest peaks
+ccrpeaks <- get_ccr_peaks(y, segments = segments, nseg = 7, npeaks = 5, seg_scale = 1)
+}

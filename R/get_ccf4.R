@@ -11,6 +11,16 @@
 #' @importFrom stats cor complete.cases
 #' @importFrom dplyr lag
 #' @examples
+#' data("bullets")
+#' land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+#' land1_2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
+#' x <- land2_3$sig
+#' y <- land1_2$sig
+#' 
+#' segments <- get_segs(x, len = 50)
+#' 
+#' ccr <- get_ccf4(y, segments$segs[[7]], 
+#'                 min.overlap = length(segments$segs[[7]]))
 get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))) 
 {
   # requires x to be the longer signature

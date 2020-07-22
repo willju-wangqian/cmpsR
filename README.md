@@ -8,8 +8,8 @@
 <!-- badges: end -->
 
 The CMPS package is an implementation of the Congruent Matching Profile
-Segments (CMPS) method \[cite?\]. In general, it can be used for
-objective comparison of striated tool marks, but in our examples, we
+Segments (CMPS) method (Chen et al. 2019). In general, it can be used
+for objective comparison of striated tool marks, but in our examples, we
 mainly use it for bullet profiles/signatures comparison. The CMPS number
 is expected to be large if two signatures are similar. So it can also be
 considered as a feature that measures the similarity of two bullets.
@@ -423,3 +423,19 @@ cp1
       - the dataset used in the paper to see if we can reproduce their
         results
       - other datasets
+
+# Reference
+
+<div id="refs" class="references">
+
+<div id="ref-Chen:2019ji">
+
+Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song, and
+Xuezeng Zhao. 2019. “Fired Bullet Signature Correlation Using the
+Congruent Matching Profile Segments (CMPS) Method.” *Forensic Science
+International*, December, \#109964.
+<https://doi.org/10.1016/j.forsciint.2019.109964>.
+
+</div>
+
+</div>

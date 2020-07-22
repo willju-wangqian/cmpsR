@@ -12,6 +12,12 @@
 #' @importFrom zoo na.trim
 #' @importFrom assertthat assert_that
 #' @examples
+#' data("bullets")
+#' land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+#' x <- land2_3$sig
+#' 
+#' segments <- get_segs(x, len = 50)
+ 
 get_segs <- function(x, len = 50){
   
   assert_that(is.numeric(x), is.numeric(len))
@@ -52,6 +58,12 @@ get_segs <- function(x, len = 50){
 #' @importFrom assertthat assert_that
 #'
 #' @examples
+#' data("bullets")
+#' land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
+#' x <- land2_3$sig
+#' 
+#' segments <- get_segs(x, len = 50)
+#' seg5_scale3 <- get_seg_scale(segments, nseg = 5, scale = 3)
 get_seg_scale <- function(segments, nseg, scale = 2){
   
   assert_that(is.numeric(nseg), is.numeric(scale))

@@ -116,3 +116,9 @@ cp1 <- comparisons \%>\% select(land1, land2, cmps_score, cmps_nseg)
 cp1
 }
 }
+\references{
+Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song,
+and Xuezeng Zhao. 2019. “Fired Bullet Signature Correlation Using the
+Congruent Matching Profile Segments (CMPS) Method.” Forensic Science
+International, December, #109964. https://doi.org/10.1016/j.forsciint.2019.109964.
+}
