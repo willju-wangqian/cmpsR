@@ -52,7 +52,7 @@ ggplot(data = crosscuts, aes(x = x, y = value)) +
 bullets <- bullets %>% mutate(grooves = ccdata %>% purrr::map(.f = cc_locate_grooves, 
                                                               method = "middle", adjust = 30, return_plot = TRUE))
 
-do.call(gridExtra::grid.arrange, lapply(bullets$grooves, `[[`, 2))
+# do.call(gridExtra::grid.arrange, lapply(bullets$grooves, `[[`, 2))
 
 
 

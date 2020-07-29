@@ -1,12 +1,10 @@
 Package: CMPS
 Title: Implementation of Congruent Matching Profile Segments (CMPS) Method
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "Wangqian",
-           family = "Ju",
-           role = c("aut", "cre"),
-           email = "wju@iastate.edu",
-           comment = c(ORCID = "0000-0002-9977-377X"))
+Authors@R: c(
+    person("Wangqian", "Ju", email = "wju@iastate.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9977-377X")),
+    person("Heike", "Hofmann", email = "hofmann@iastate.edu", role = "ctb", comment=c(ORCID="0000-0001-6216-5183"))
+    )
 Description: The CMPS package is an implementation of the Congruent Matching 
     Profile Segments (CMPS) method (Chen et al. 2019). In general, it can be used for 
     objective comparison of striated tool marks, but in our examples, we mainly 
