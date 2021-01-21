@@ -38,35 +38,61 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
     is.numeric(comp), is.numeric(seg_scale), is.numeric(nseg), is.numeric(npeaks)
   )
   
+  # tic("time before finding the peaks")
   if(seg_scale == 1) {
     # compute for the basis segment
-    ccr <- get_ccf4(comp, segments$segs[[nseg]], 
-                    min.overlap = length(segments$segs[[nseg]]))
+    # tic("time for get_ccf4 1")
+    seg <- segments$segs[[nseg]]
+    
+    min.overlap <- min(length(seg[!is.na(seg)])*0.9, round(length(comp)*0.1))
+    
+    ccr <- get_ccf4(comp, seg, min.overlap = min.overlap)
+    # toc()
     tmp_pos <- segments$index[[nseg]][1]
   } else{
     # find the increased segment, then compute
+    # tic("time for get scale")
     tt <- get_seg_scale(segments, nseg, scale = seg_scale)
-    ccr <- get_ccf4(comp, tt$aug_seg, 
-                    min.overlap = length(tt$aug_seg[!is.na(tt$aug_seg)]))
+    # toc()
+    
+    # if(length(tt$aug_seg) == 1676) {browser()}
+    
+    min.overlap <- min(length(tt$aug_seg[!is.na(tt$aug_seg)])*0.9, round(length(comp)*0.1))
+    
+    # tic("time for get_ccf4 2")
+    ccr <- get_ccf4(comp, tt$aug_seg, min.overlap = min.overlap)
+    # toc()
     tmp_pos <- tt$aug_idx[1]
   }
+  # toc()
   
+  # tic("find peaks")
   # get all peaks and peak.heights
   find_maxs <- rollapply(ccr$ccf, 3, function(x) max(x) == x[2], 
                          fill = list(NA, NA, NA))
   peaks <- which(find_maxs)
-  peaks.heights <- ccr$ccf[peaks]
   
-  # get the position of peaks
-  peak_pos <- sort(peaks[order(peaks.heights, decreasing = T)][1:npeaks] - tmp_pos)
-  peak_height <- ccr$ccf[peak_pos + tmp_pos]
-  
+  # new stuff
+  od <- order(ccr$ccf[peaks], decreasing = TRUE)[1:npeaks]
   # adjust the position
   adj_pos <- ccr$lag - tmp_pos + 1
   
+  peaks.heights <- ccr$ccf[peaks][od]
+  peaks.pos <- adj_pos[peaks][od]
+  # toc()
+  
+  # tic("sort")
+  # get the position of peaks
+  # peak_pos <- sort(peaks[order(peaks.heights, decreasing = T)][1:npeaks] - tmp_pos)
+  # peak_height <- ccr$ccf[peak_pos + tmp_pos]
+  # toc()
   
   return(list(ccr = ccr, adj.pos = adj_pos,
-              peaks.pos = peak_pos, peaks.heights = peak_height))
+              peaks.pos = peaks.pos, peaks.heights = peaks.heights))
+  
+  
+  # return(list(ccr = ccr, adj.pos = adj_pos,
+  #             peaks.pos = peak_pos, peaks.heights = peak_height))
 }
 
 #' Identify at most one consistent correlation peak (ccp) 
@@ -123,6 +149,6 @@ get_ccp <- function(ccr.list, Tx = 25){
     ccr.list[[level]]$peaks.pos[abs(ccr.list[[level]]$peaks.pos - basis) <= Tx]
   })
   ccp <- unlist(c(ccp, basis))
-  if(length(ccp) == seg_level) {return(basis)} else {return(NULL)}
+  if(length(ccp) >= seg_level) {return(basis)} else {return(NULL)}
 }
 

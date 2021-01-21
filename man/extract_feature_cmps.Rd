@@ -8,10 +8,9 @@ extract_feature_cmps(
   x,
   y,
   seg_length = 50,
-  seg_scale_max = 3,
   Tx = 25,
   npeaks.set = c(5, 3, 1),
-  full_result = FALSE
+  include = NULL
 )
 }
 \arguments{
@@ -19,22 +18,21 @@ extract_feature_cmps(
 
 \item{y}{a numeric vector, vector of the comparison bullet signature/profile}
 
-\item{seg_length}{integer, integer, the length of a basis segment}
-
-\item{seg_scale_max}{integer, the maximum scale of the segment.
-\itemize{
-\item If setting \code{seg_scale_max = 1}, the algorithm uses multi-peak inspection only at the basis scale;
-\item If setting \code{seg_scale_max} to be an integer greater than 1, the algorithm uses multi-peak inspection at
-different segment scales.
-\item By default, \code{seg_scale_max = 3}. Increasing \code{seg_scale_max} will reduce the number of false positive results
-}}
+\item{seg_length}{integer, the length of a basis segment}
 
 \item{Tx}{integer, the tolerance zone is \verb{+/- Tx}}
 
 \item{npeaks.set}{a numeric vector, specify the number of peaks to be found for each different scale of segment. The
-number of peaks for the highest segment scale must be 1, i.e., the very last element of \code{npeaks.set} must be 1.}
+number of peaks for the highest segment scale must be 1, i.e., the very last element of \code{npeaks.set} must be 1.
+\itemize{
+\item If \code{length(npeaks.set) == 1}, the algorithm uses multi-peak inspection only at the basis scale;
+\item If \code{length(npeaks.set) > 1}, the algorithm uses multi-peak inspection at
+different segment scales.
+\item By default, \code{npeaks.set = c(5,3,1)}. Including more segment scales will reduce the number of false positive results
+}}
 
-\item{full_result}{boolean, whether or not to return the full CMPS result}
+\item{include}{boolean, whether or not to return the full CMPS result (todo: update this; full_result
+has been discarded)}
 }
 \value{
 integer or a list
@@ -70,11 +68,11 @@ land1_2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
 # compute cmps
 
 # algorithm with multi-peak insepction at three different segment scales
-cmps_with_multi_scale <- extract_feature_cmps(land2_3$sig, land1_2$sig, full_result = TRUE)
+cmps_with_multi_scale <- extract_feature_cmps(land2_3$sig, land1_2$sig, include = "full_result" )
 
 # algorithm with multi-peak inspection at the basis scale only
-cmps_without_multi_scale <- extract_feature_cmps(land2_3$sig, land1_2$sig, seg_scale_max = 1, 
-                                                 npeaks.set = 5, full_result = TRUE)
+cmps_without_multi_scale <- extract_feature_cmps(land2_3$sig, land1_2$sig, 
+                                                 npeaks.set = 5, include = "full_result" )
 \dontrun{
 library(tidyverse)
 library(bulletxtrctr)
@@ -97,12 +95,12 @@ comparisons <- comparisons \%>\% mutate(
 
 comparisons <- comparisons \%>\% 
   mutate(cmps = aligned \%>\% purrr::map(.f = function(a) {
-    extract_feature_cmps(a$lands$sig1, a$lands$sig2, full_result = TRUE)
+    extract_feature_cmps(a$lands$sig1, a$lands$sig2, include = "nseg")
   }))
 
-# comparisons.cmps <- comparisons.cmps \%>\% 
+# comparisons.cmps <- comparisons \%>\% 
 #   mutate(cmps = aligned \%>\% purrr::map_dbl(.f = function(a) {
-#     extract_feature_cmps(a$lands$sig1, a$lands$sig2, full_result = FALSE)
+#     extract_feature_cmps(a$lands$sig1, a$lands$sig2, include = NULL)
 #   }))
 # comparisons.cmps \%>\% select(land1, land2, cmps) 
 

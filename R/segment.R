@@ -24,9 +24,14 @@ get_segs <- function(x, len = 50){
 
   idx <- 1:length(x)
   idx[is.na(x)] <- NA
-  
+
   xx <- na.trim(x)
   idx <- na.trim(idx)
+  
+  assert_that(!is.na(idx[1]), !is.na(idx[length(idx)]))
+  
+  idx <- idx[1]:idx[length(idx)]
+  
   segs <- split(xx, ceiling(seq_along(xx)/len)) 
   index <- split(idx, ceiling(seq_along(xx)/len))
   
@@ -71,12 +76,15 @@ get_seg_scale <- function(segments, nseg, scale = 2){
   x <- segments$x
   idx <- segments$index[[nseg]]
   
-  ct <- floor(median(idx))
-  unitt <- max(idx) - ct
+  assert_that( !anyNA(idx) )
+  
+  ct <- floor(median(idx, na.rm = TRUE))
+  unitt <- max(idx, na.rm = TRUE) - ct
   ############# ???
   # cut at the max or min
-  min.idx <- max(ct - unitt * 2^(scale-1), 1)
-  max.idx <- min(ct + unitt * 2^(scale-1), length(x))
+  min.idx <- max(ct - unitt * 2^(scale-1), 1, na.rm = TRUE)
+  max.idx <- min(ct + unitt * 2^(scale-1), length(x), na.rm = TRUE)
+  
   
   return(list(aug_seg=x[min.idx:max.idx], aug_idx=min.idx:max.idx))
 }
