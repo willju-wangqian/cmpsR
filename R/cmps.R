@@ -8,17 +8,18 @@
 #' @return a list of three components:
 #' * `CMPS.score`: computed CMPS score
 #' * `rec.position`: the recommended position that results in the CMPS score
-#' * `pos.df`: a dataframe that includes all positions and their corresponding CMPS score 
-#' @export
+#' * `pos.df`: a dataframe that includes all positions and their corresponding CMPS score
+#' 
 #' @importFrom assertthat assert_that
-#'
+#' 
+#' @export
+#' 
 #' @examples
 #' data("bullets")
 #' land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
 #' land1_2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
 #' x <- land2_3$sig
 #' y <- land1_2$sig
-#' 
 #' segments <- get_segs(x, len = 50)
 #' nseg <- length(segments$segs)
 #' seg_scale_max <- 3
@@ -28,14 +29,14 @@
 #'  ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
 #'    get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
 #'  })
-#'  
+#' 
 #'  get_ccp(ccr.list, Tx = 25)
 #' })
 #' cmps <- get_CMPS(ccp.list, Tx = 25)
 get_CMPS <- function(input.ccp, Tx = 25, order = T) {
   
   assert_that(is.numeric(Tx), is.logical(order))
-
+  
   tt <- unlist(input.ccp)
   tt <- sort(tt)
   
@@ -115,6 +116,9 @@ get_CMPS <- function(input.ccp, Tx = 25, order = T) {
               congruent.seg.idx = (1:length(input.ccp))[current.voter], pos.df = pos.df ))
 }
 
+
+
+
 #' Computes the CMPS score of a comparison between two bullet profiles/signatures
 #' 
 #' Compute the Congruent Matching Profile Segments (CMPS) score based on two bullet profiles/signatures.
@@ -134,16 +138,21 @@ get_CMPS <- function(input.ccp, Tx = 25, order = T) {
 #' * If `length(npeaks.set) > 1`, the algorithm uses multi-peak inspection at 
 #'    different segment scales. 
 #' * By default, `npeaks.set = c(5,3,1)`. Including more segment scales will reduce the number of false positive results
-#' @param include boolean, whether or not to return the full CMPS result (todo: update this; full_result 
-#' has been discarded)
+#' @param include `NULL` or a vector of character strings indicating what additional information should be included in
+#' the output of `extract_feature_cmps`. All possible options are: "nseg", "congruent.pos", "congruent.seg", 
+#' "congruent.seg.idx", "pos.df", "ccp.list","segments", and "parameters". If one wants to include them all, one can use
+#' `include = "full_result` 
 #'
-#' @return integer or a list
-#' * if `full_result = FALSE`, return the CMPS number only
-#' * if `full_result = TRUE`, return a list of four elements:
-#'     + `CMPS.score`: computed CMPS score
-#'     + `rec.position`: the recommended position that results in the CMPS score
-#'     + `pos.df`: a dataframe that includes all positions and their corresponding CMPS score 
-#'     + `nseg`: the number of basis segments obtained from the reference profile
+#' @return a numeric value or a list
+#' * if `include = NULL`, returns the CMPS score (a numeric value) only
+#' * if `include = ` one or a vector of strings listed above:
+#'     + `nseg`: number of basis segments
+#'     + `congruent.seg`: a vector of boolean values. `TRUE` means this basis segment is a congruent matching profile segment (CMPS)
+#'     + `congruent.seg.idx`: the indices of all CMPS
+#'     + `pos.df`: a dataframe that includes positions of correlation peaks and the CMPS score of these positions 
+#'     + `ccp.list`: a list of consistent correlation peaks of each basis segment. 
+#'     + `segments`: a list of all basis segments
+#'     + `parameters`: a list that stores all parameters used in the function call
 #' 
 #' @export
 #' @importFrom assertthat assert_that

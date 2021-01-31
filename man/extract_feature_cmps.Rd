@@ -31,19 +31,24 @@ different segment scales.
 \item By default, \code{npeaks.set = c(5,3,1)}. Including more segment scales will reduce the number of false positive results
 }}
 
-\item{include}{boolean, whether or not to return the full CMPS result (todo: update this; full_result
-has been discarded)}
+\item{include}{\code{NULL} or a vector of character strings indicating what additional information should be included in
+the output of \code{extract_feature_cmps}. All possible options are: "nseg", "congruent.pos", "congruent.seg",
+"congruent.seg.idx", "pos.df", "ccp.list","segments", and "parameters". If one wants to include them all, one can use
+\verb{include = "full_result}}
 }
 \value{
-integer or a list
+a numeric value or a list
 \itemize{
-\item if \code{full_result = FALSE}, return the CMPS number only
-\item if \code{full_result = TRUE}, return a list of four elements:
+\item if \code{include = NULL}, returns the CMPS score (a numeric value) only
+\item if \verb{include = } one or a vector of strings listed above:
 \itemize{
-\item \code{CMPS.score}: computed CMPS score
-\item \code{rec.position}: the recommended position that results in the CMPS score
-\item \code{pos.df}: a dataframe that includes all positions and their corresponding CMPS score
-\item \code{nseg}: the number of basis segments obtained from the reference profile
+\item \code{nseg}: number of basis segments
+\item \code{congruent.seg}: a vector of boolean values. \code{TRUE} means this basis segment is a congruent matching profile segment (CMPS)
+\item \code{congruent.seg.idx}: the indices of all CMPS
+\item \code{pos.df}: a dataframe that includes positions of correlation peaks and the CMPS score of these positions
+\item \code{ccp.list}: a list of consistent correlation peaks of each basis segment.
+\item \code{segments}: a list of all basis segments
+\item \code{parameters}: a list that stores all parameters used in the function call
 }
 }
 }
@@ -52,7 +57,7 @@ Compute the Congruent Matching Profile Segments (CMPS) score based on two bullet
 The reference profile will be divided into consecutive, non-overlapping, basis segments of the same length.
 Then the number of segments that are congruent matching will be found as the CMPS score.
 By default, \code{extract_feature_cmps} implements the algorithm with multi-peak insepction at three
-different segment scales. By setting \code{seg_scale_max = 1}, users can switch to the algorithm
+different segment scales. By setting \code{npeaks.set} as a single-length vector, users can switch to the algorithm
 with multi-peak inspection at the basis scale only.
 }
 \examples{
