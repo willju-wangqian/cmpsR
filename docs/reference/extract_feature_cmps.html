@@ -44,7 +44,7 @@
 The reference profile will be divided into consecutive, non-overlapping, basis segments of the same length.
 Then the number of segments that are congruent matching will be found as the CMPS score.
 By default, extract_feature_cmps implements the algorithm with multi-peak insepction at three
-different segment scales. By setting seg_scale_max = 1, users can switch to the algorithm
+different segment scales. By setting npeaks.set as a single-length vector, users can switch to the algorithm
 with multi-peak inspection at the basis scale only." />
 
 
@@ -77,7 +77,7 @@ with multi-peak inspection at the basis scale only." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CMPS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9.1000</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@ with multi-peak inspection at the basis scale only." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -118,19 +118,18 @@ with multi-peak inspection at the basis scale only." />
 The reference profile will be divided into consecutive, non-overlapping, basis segments of the same length.
 Then the number of segments that are congruent matching will be found as the CMPS score.
 By default, <code>extract_feature_cmps</code> implements the algorithm with multi-peak insepction at three
-different segment scales. By setting <code>seg_scale_max = 1</code>, users can switch to the algorithm
+different segment scales. By setting <code>npeaks.set</code> as a single-length vector, users can switch to the algorithm
 with multi-peak inspection at the basis scale only.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>extract_feature_cmps</span>(
-  <span class='no'>x</span>,
-  <span class='no'>y</span>,
-  <span class='kw'>seg_length</span> <span class='kw'>=</span> <span class='fl'>50</span>,
-  <span class='kw'>seg_scale_max</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>Tx</span> <span class='kw'>=</span> <span class='fl'>25</span>,
-  <span class='kw'>npeaks.set</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>3</span>, <span class='fl'>1</span>),
-  <span class='kw'>full_result</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>extract_feature_cmps</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>y</span>,
+  seg_length <span class='op'>=</span> <span class='fl'>50</span>,
+  Tx <span class='op'>=</span> <span class='fl'>25</span>,
+  npeaks.set <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>)</span>,
+  include <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -145,16 +144,7 @@ with multi-peak inspection at the basis scale only.</p>
     </tr>
     <tr>
       <th>seg_length</th>
-      <td><p>integer, integer, the length of a basis segment</p></td>
-    </tr>
-    <tr>
-      <th>seg_scale_max</th>
-      <td><p>integer, the maximum scale of the segment.</p><ul>
-<li><p>If setting <code>seg_scale_max = 1</code>, the algorithm uses multi-peak inspection only at the basis scale;</p></li>
-<li><p>If setting <code>seg_scale_max</code> to be an integer greater than 1, the algorithm uses multi-peak inspection at
-different segment scales.</p></li>
-<li><p>By default, <code>seg_scale_max = 3</code>. Increasing <code>seg_scale_max</code> will reduce the number of false positive results</p></li>
-</ul></td>
+      <td><p>integer, the length of a basis segment</p></td>
     </tr>
     <tr>
       <th>Tx</th>
@@ -163,23 +153,34 @@ different segment scales.</p></li>
     <tr>
       <th>npeaks.set</th>
       <td><p>a numeric vector, specify the number of peaks to be found for each different scale of segment. The
-number of peaks for the highest segment scale must be 1, i.e., the very last element of <code>npeaks.set</code> must be 1.</p></td>
+number of peaks for the highest segment scale must be 1, i.e., the very last element of <code>npeaks.set</code> must be 1.</p><ul>
+<li><p>If <code>length(npeaks.set) == 1</code>, the algorithm uses multi-peak inspection only at the basis scale;</p></li>
+<li><p>If <code>length(npeaks.set) &gt; 1</code>, the algorithm uses multi-peak inspection at
+different segment scales.</p></li>
+<li><p>By default, <code>npeaks.set = c(5,3,1)</code>. Including more segment scales will reduce the number of false positive results</p></li>
+</ul></td>
     </tr>
     <tr>
-      <th>full_result</th>
-      <td><p>boolean, whether or not to return the full CMPS result</p></td>
+      <th>include</th>
+      <td><p><code>NULL</code> or a vector of character strings indicating what additional information should be included in
+the output of <code>extract_feature_cmps</code>. All possible options are: "nseg", "congruent.pos", "congruent.seg",
+"congruent.seg.idx", "pos.df", "ccp.list","segments", and "parameters". If one wants to include them all, one can use
+<code>include = "full_result</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>integer or a list</p><ul>
-<li><p>if <code>full_result = FALSE</code>, return the CMPS number only</p></li>
-<li><p>if <code>full_result = TRUE</code>, return a list of four elements:</p><ul>
-<li><p><code>CMPS.score</code>: computed CMPS score</p></li>
-<li><p><code>rec.position</code>: the recommended position that results in the CMPS score</p></li>
-<li><p><code>pos.df</code>: a dataframe that includes all positions and their corresponding CMPS score</p></li>
-<li><p><code>nseg</code>: the number of basis segments obtained from the reference profile</p></li>
+    <p>a numeric value or a list</p><ul>
+<li><p>if <code>include = NULL</code>, returns the CMPS score (a numeric value) only</p></li>
+<li><p>if <code>include = </code> one or a vector of strings listed above:</p><ul>
+<li><p><code>nseg</code>: number of basis segments</p></li>
+<li><p><code>congruent.seg</code>: a vector of boolean values. <code>TRUE</code> means this basis segment is a congruent matching profile segment (CMPS)</p></li>
+<li><p><code>congruent.seg.idx</code>: the indices of all CMPS</p></li>
+<li><p><code>pos.df</code>: a dataframe that includes positions of correlation peaks and the CMPS score of these positions</p></li>
+<li><p><code>ccp.list</code>: a list of consistent correlation peaks of each basis segment.</p></li>
+<li><p><code>segments</code>: a list of all basis segments</p></li>
+<li><p><code>parameters</code>: a list that stores all parameters used in the function call</p></li>
 </ul></li>
 </ul>
 
@@ -191,67 +192,64 @@ Congruent Matching Profile Segments (CMPS) Method.” Forensic Science
 International, December, #109964. https://doi.org/10.1016/j.forsciint.2019.109964.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>bulletxtrctr</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>tidyverse</span>)</div><div class='output co'>#&gt; <span class='message'>-- <span style='font-weight: bold;'>Attaching packages</span><span> --------------------------------------------------------------------- tidyverse 1.3.0 --</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>v</span><span> </span><span style='color: #0000BB;'>ggplot2</span><span> 3.3.0     </span><span style='color: #00BB00;'>v</span><span> </span><span style='color: #0000BB;'>purrr  </span><span> 0.3.3</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>v</span><span> </span><span style='color: #0000BB;'>tibble </span><span> 2.1.3     </span><span style='color: #00BB00;'>v</span><span> </span><span style='color: #0000BB;'>dplyr  </span><span> 0.8.5</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>v</span><span> </span><span style='color: #0000BB;'>tidyr  </span><span> 1.0.2     </span><span style='color: #00BB00;'>v</span><span> </span><span style='color: #0000BB;'>stringr</span><span> 1.4.0</span>
-#&gt; <span class='message'></span><span style='color: #00BB00;'>v</span><span> </span><span style='color: #0000BB;'>readr  </span><span> 1.3.1     </span><span style='color: #00BB00;'>v</span><span> </span><span style='color: #0000BB;'>forcats</span><span> 0.5.0</span></div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>Conflicts</span><span> ------------------------------------------------------------------------ tidyverse_conflicts() --</span>
-#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> </span><span style='color: #0000BB;'>dplyr</span><span>::</span><span style='color: #00BB00;'>filter()</span><span> masks </span><span style='color: #0000BB;'>stats</span><span>::filter()</span>
-#&gt; <span class='message'></span><span style='color: #BB0000;'>x</span><span> </span><span style='color: #0000BB;'>dplyr</span><span>::</span><span style='color: #00BB00;'>lag()</span><span>    masks </span><span style='color: #0000BB;'>stats</span><span>::lag()</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>x3ptools</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>CMPS</span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://heike.github.io/bulletxtrctr/'>bulletxtrctr</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/heike/x3ptools'>x3ptools</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>CMPS</span><span class='op'>)</span>
 
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"bullets"</span>)
-<span class='no'>land2_3</span> <span class='kw'>&lt;-</span> <span class='no'>bullets</span>$<span class='no'>sigs</span>[<span class='no'>bullets</span>$<span class='no'>bulletland</span> <span class='kw'>==</span> <span class='st'>"2-3"</span>]<span class='kw'>[[</span><span class='fl'>1</span>]]
-<span class='no'>land1_2</span> <span class='kw'>&lt;-</span> <span class='no'>bullets</span>$<span class='no'>sigs</span>[<span class='no'>bullets</span>$<span class='no'>bulletland</span> <span class='kw'>==</span> <span class='st'>"1-2"</span>]<span class='kw'>[[</span><span class='fl'>1</span>]]
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"bullets"</span><span class='op'>)</span>
+<span class='va'>land2_3</span> <span class='op'>&lt;-</span> <span class='va'>bullets</span><span class='op'>$</span><span class='va'>sigs</span><span class='op'>[</span><span class='va'>bullets</span><span class='op'>$</span><span class='va'>bulletland</span> <span class='op'>==</span> <span class='st'>"2-3"</span><span class='op'>]</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
+<span class='va'>land1_2</span> <span class='op'>&lt;-</span> <span class='va'>bullets</span><span class='op'>$</span><span class='va'>sigs</span><span class='op'>[</span><span class='va'>bullets</span><span class='op'>$</span><span class='va'>bulletland</span> <span class='op'>==</span> <span class='st'>"1-2"</span><span class='op'>]</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
 
 <span class='co'># compute cmps</span>
 
 <span class='co'># algorithm with multi-peak insepction at three different segment scales</span>
-<span class='no'>cmps_with_multi_scale</span> <span class='kw'>&lt;-</span> <span class='fu'>extract_feature_cmps</span>(<span class='no'>land2_3</span>$<span class='no'>sig</span>, <span class='no'>land1_2</span>$<span class='no'>sig</span>, <span class='kw'>full_result</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='va'>cmps_with_multi_scale</span> <span class='op'>&lt;-</span> <span class='fu'>extract_feature_cmps</span><span class='op'>(</span><span class='va'>land2_3</span><span class='op'>$</span><span class='va'>sig</span>, <span class='va'>land1_2</span><span class='op'>$</span><span class='va'>sig</span>, include <span class='op'>=</span> <span class='st'>"full_result"</span> <span class='op'>)</span>
 
 <span class='co'># algorithm with multi-peak inspection at the basis scale only</span>
-<span class='no'>cmps_without_multi_scale</span> <span class='kw'>&lt;-</span> <span class='fu'>extract_feature_cmps</span>(<span class='no'>land2_3</span>$<span class='no'>sig</span>, <span class='no'>land1_2</span>$<span class='no'>sig</span>, <span class='kw'>seg_scale_max</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-                                                 <span class='kw'>npeaks.set</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>full_result</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>tidyverse</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>bulletxtrctr</span>)
+<span class='va'>cmps_without_multi_scale</span> <span class='op'>&lt;-</span> <span class='fu'>extract_feature_cmps</span><span class='op'>(</span><span class='va'>land2_3</span><span class='op'>$</span><span class='va'>sig</span>, <span class='va'>land1_2</span><span class='op'>$</span><span class='va'>sig</span>, 
+                                                 npeaks.set <span class='op'>=</span> <span class='fl'>5</span>, include <span class='op'>=</span> <span class='st'>"full_result"</span> <span class='op'>)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://heike.github.io/bulletxtrctr/'>bulletxtrctr</a></span><span class='op'>)</span>
 
-<span class='no'>lands</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span>(<span class='no'>bullets</span>$<span class='no'>bulletland</span>)
+<span class='va'>lands</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>bullets</span><span class='op'>$</span><span class='va'>bulletland</span><span class='op'>)</span>
 
-<span class='no'>comparisons</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span>(<span class='kw'>land1</span> <span class='kw'>=</span> <span class='no'>lands</span>[<span class='fl'>1</span>:<span class='fl'>6</span>], <span class='kw'>land2</span> <span class='kw'>=</span> <span class='no'>lands</span>[<span class='fl'>7</span>:<span class='fl'>12</span>]),
-                          <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='va'>comparisons</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span>land1 <span class='op'>=</span> <span class='va'>lands</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>6</span><span class='op'>]</span>, land2 <span class='op'>=</span> <span class='va'>lands</span><span class='op'>[</span><span class='fl'>7</span><span class='op'>:</span><span class='fl'>12</span><span class='op'>]</span><span class='op'>)</span>, 
+                          stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='no'>comparisons</span> <span class='kw'>&lt;-</span> <span class='no'>comparisons</span> <span class='kw'>%&gt;%</span> <span class='fu'>mutate</span>(
-  <span class='kw'>aligned</span> <span class='kw'>=</span> <span class='kw pkg'>purrr</span><span class='kw ns'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map2.html'>map2</a></span>(<span class='kw'>.x</span> <span class='kw'>=</span> <span class='no'>land1</span>, <span class='kw'>.y</span> <span class='kw'>=</span> <span class='no'>land2</span>,
-                        <span class='kw'>.f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>xx</span>, <span class='no'>yy</span>) {
-                          <span class='no'>land1</span> <span class='kw'>&lt;-</span> <span class='no'>bullets</span>$<span class='no'>sigs</span>[<span class='no'>bullets</span>$<span class='no'>bulletland</span> <span class='kw'>==</span> <span class='no'>xx</span>]<span class='kw'>[[</span><span class='fl'>1</span>]]
-                          <span class='no'>land2</span> <span class='kw'>&lt;-</span> <span class='no'>bullets</span>$<span class='no'>sigs</span>[<span class='no'>bullets</span>$<span class='no'>bulletland</span> <span class='kw'>==</span> <span class='no'>yy</span>]<span class='kw'>[[</span><span class='fl'>1</span>]]
-                          <span class='no'>land1</span>$<span class='no'>bullet</span> <span class='kw'>&lt;-</span> <span class='st'>"first-land"</span>
-                          <span class='no'>land2</span>$<span class='no'>bullet</span> <span class='kw'>&lt;-</span> <span class='st'>"second-land"</span>
+<span class='va'>comparisons</span> <span class='op'>&lt;-</span> <span class='va'>comparisons</span> <span class='op'>%&gt;%</span> <span class='fu'>mutate</span><span class='op'>(</span>
+  aligned <span class='op'>=</span> <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map2.html'>map2</a></span><span class='op'>(</span>.x <span class='op'>=</span> <span class='va'>land1</span>, .y <span class='op'>=</span> <span class='va'>land2</span>, 
+                        .f <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>xx</span>, <span class='va'>yy</span><span class='op'>)</span> <span class='op'>{</span>
+                          <span class='va'>land1</span> <span class='op'>&lt;-</span> <span class='va'>bullets</span><span class='op'>$</span><span class='va'>sigs</span><span class='op'>[</span><span class='va'>bullets</span><span class='op'>$</span><span class='va'>bulletland</span> <span class='op'>==</span> <span class='va'>xx</span><span class='op'>]</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
+                          <span class='va'>land2</span> <span class='op'>&lt;-</span> <span class='va'>bullets</span><span class='op'>$</span><span class='va'>sigs</span><span class='op'>[</span><span class='va'>bullets</span><span class='op'>$</span><span class='va'>bulletland</span> <span class='op'>==</span> <span class='va'>yy</span><span class='op'>]</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
+                          <span class='va'>land1</span><span class='op'>$</span><span class='va'>bullet</span> <span class='op'>&lt;-</span> <span class='st'>"first-land"</span>
+                          <span class='va'>land2</span><span class='op'>$</span><span class='va'>bullet</span> <span class='op'>&lt;-</span> <span class='st'>"second-land"</span>
+                          
+                          <span class='fu'><a href='https://heike.github.io/bulletxtrctr/reference/sig_align.html'>sig_align</a></span><span class='op'>(</span><span class='va'>land1</span><span class='op'>$</span><span class='va'>sig</span>, <span class='va'>land2</span><span class='op'>$</span><span class='va'>sig</span><span class='op'>)</span>
+                        <span class='op'>}</span><span class='op'>)</span><span class='op'>)</span>
 
-                          <span class='fu'><a href='https://rdrr.io/pkg/bulletxtrctr/man/sig_align.html'>sig_align</a></span>(<span class='no'>land1</span>$<span class='no'>sig</span>, <span class='no'>land2</span>$<span class='no'>sig</span>)
-                        }))
+<span class='va'>comparisons</span> <span class='op'>&lt;-</span> <span class='va'>comparisons</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>cmps <span class='op'>=</span> <span class='va'>aligned</span> <span class='op'>%&gt;%</span> <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map</a></span><span class='op'>(</span>.f <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='fu'>extract_feature_cmps</span><span class='op'>(</span><span class='va'>a</span><span class='op'>$</span><span class='va'>lands</span><span class='op'>$</span><span class='va'>sig1</span>, <span class='va'>a</span><span class='op'>$</span><span class='va'>lands</span><span class='op'>$</span><span class='va'>sig2</span>, include <span class='op'>=</span> <span class='st'>"nseg"</span><span class='op'>)</span>
+  <span class='op'>}</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='no'>comparisons</span> <span class='kw'>&lt;-</span> <span class='no'>comparisons</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>mutate</span>(<span class='kw'>cmps</span> <span class='kw'>=</span> <span class='no'>aligned</span> <span class='kw'>%&gt;%</span> <span class='kw pkg'>purrr</span><span class='kw ns'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map</a></span>(<span class='kw'>.f</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>a</span>) {
-    <span class='fu'>extract_feature_cmps</span>(<span class='no'>a</span>$<span class='no'>lands</span>$<span class='no'>sig1</span>, <span class='no'>a</span>$<span class='no'>lands</span>$<span class='no'>sig2</span>, <span class='kw'>full_result</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-  }))
-
-<span class='co'># comparisons.cmps &lt;- comparisons.cmps %&gt;% </span>
+<span class='co'># comparisons.cmps &lt;- comparisons %&gt;% </span>
 <span class='co'>#   mutate(cmps = aligned %&gt;% purrr::map_dbl(.f = function(a) {</span>
-<span class='co'>#     extract_feature_cmps(a$lands$sig1, a$lands$sig2, full_result = FALSE)</span>
+<span class='co'>#     extract_feature_cmps(a$lands$sig1, a$lands$sig2, include = NULL)</span>
 <span class='co'>#   }))</span>
 <span class='co'># comparisons.cmps %&gt;% select(land1, land2, cmps) </span>
 
-<span class='no'>comparisons</span> <span class='kw'>&lt;-</span> <span class='no'>comparisons</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'>mutate</span>(
-    <span class='kw'>cmps_score</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='no'>comparisons</span>$<span class='no'>cmps</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>$<span class='no'>CMPS.score</span>),
-    <span class='kw'>cmps_nseg</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='no'>comparisons</span>$<span class='no'>cmps</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='no'>x</span>$<span class='no'>nseg</span>)
-  )
+<span class='va'>comparisons</span> <span class='op'>&lt;-</span> <span class='va'>comparisons</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>
+    cmps_score <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>comparisons</span><span class='op'>$</span><span class='va'>cmps</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>CMPS.score</span><span class='op'>)</span>,
+    cmps_nseg <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>comparisons</span><span class='op'>$</span><span class='va'>cmps</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>nseg</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
-<span class='no'>cp1</span> <span class='kw'>&lt;-</span> <span class='no'>comparisons</span> <span class='kw'>%&gt;%</span> <span class='fu'>select</span>(<span class='no'>land1</span>, <span class='no'>land2</span>, <span class='no'>cmps_score</span>, <span class='no'>cmps_nseg</span>)
-<span class='no'>cp1</span>
-}</div></span></pre>
+<span class='va'>cp1</span> <span class='op'>&lt;-</span> <span class='va'>comparisons</span> <span class='op'>%&gt;%</span> <span class='fu'>select</span><span class='op'>(</span><span class='va'>land1</span>, <span class='va'>land2</span>, <span class='va'>cmps_score</span>, <span class='va'>cmps_nseg</span><span class='op'>)</span>
+<span class='va'>cp1</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -267,7 +265,7 @@ International, December, #109964. https://doi.org/10.1016/j.forsciint.2019.10996
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

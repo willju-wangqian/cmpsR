@@ -73,7 +73,7 @@ cross correlation curve and finds peaks of the curve." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">CMPS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9.1000</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@ cross correlation curve and finds peaks of the curve." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -114,7 +114,7 @@ cross correlation curve and finds peaks of the curve." />
 cross correlation curve and finds peaks of the curve.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_ccr_peaks</span>(<span class='no'>comp</span>, <span class='no'>segments</span>, <span class='no'>seg_scale</span>, <span class='kw'>nseg</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>npeaks</span> <span class='kw'>=</span> <span class='fl'>5</span>)</pre>
+    <pre class="usage"><span class='fu'>get_ccr_peaks</span><span class='op'>(</span><span class='va'>comp</span>, <span class='va'>segments</span>, <span class='va'>seg_scale</span>, nseg <span class='op'>=</span> <span class='fl'>1</span>, npeaks <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,16 +156,17 @@ cross correlation curve and finds peaks of the curve.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"bullets"</span>)
-<span class='no'>land2_3</span> <span class='kw'>&lt;-</span> <span class='no'>bullets</span>$<span class='no'>sigs</span>[<span class='no'>bullets</span>$<span class='no'>bulletland</span> <span class='kw'>==</span> <span class='st'>"2-3"</span>]<span class='kw'>[[</span><span class='fl'>1</span>]]
-<span class='no'>land1_2</span> <span class='kw'>&lt;-</span> <span class='no'>bullets</span>$<span class='no'>sigs</span>[<span class='no'>bullets</span>$<span class='no'>bulletland</span> <span class='kw'>==</span> <span class='st'>"1-2"</span>]<span class='kw'>[[</span><span class='fl'>1</span>]]
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='no'>land2_3</span>$<span class='no'>sig</span>
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='no'>land1_2</span>$<span class='no'>sig</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"bullets"</span><span class='op'>)</span>
+<span class='va'>land2_3</span> <span class='op'>&lt;-</span> <span class='va'>bullets</span><span class='op'>$</span><span class='va'>sigs</span><span class='op'>[</span><span class='va'>bullets</span><span class='op'>$</span><span class='va'>bulletland</span> <span class='op'>==</span> <span class='st'>"2-3"</span><span class='op'>]</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
+<span class='va'>land1_2</span> <span class='op'>&lt;-</span> <span class='va'>bullets</span><span class='op'>$</span><span class='va'>sigs</span><span class='op'>[</span><span class='va'>bullets</span><span class='op'>$</span><span class='va'>bulletland</span> <span class='op'>==</span> <span class='st'>"1-2"</span><span class='op'>]</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>land2_3</span><span class='op'>$</span><span class='va'>sig</span>
+<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>land1_2</span><span class='op'>$</span><span class='va'>sig</span>
 
-<span class='no'>segments</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_segs.html'>get_segs</a></span>(<span class='no'>x</span>, <span class='kw'>len</span> <span class='kw'>=</span> <span class='fl'>50</span>)
+<span class='va'>segments</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_segs.html'>get_segs</a></span><span class='op'>(</span><span class='va'>x</span>, len <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
 
 <span class='co'># compute ccf based on y and segment 7 with scale 1, then identify 5 highest peaks</span>
-<span class='no'>ccrpeaks</span> <span class='kw'>&lt;-</span> <span class='fu'>get_ccr_peaks</span>(<span class='no'>y</span>, <span class='kw'>segments</span> <span class='kw'>=</span> <span class='no'>segments</span>, <span class='kw'>nseg</span> <span class='kw'>=</span> <span class='fl'>7</span>, <span class='kw'>npeaks</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>seg_scale</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div></pre>
+<span class='va'>ccrpeaks</span> <span class='op'>&lt;-</span> <span class='fu'>get_ccr_peaks</span><span class='op'>(</span><span class='va'>y</span>, segments <span class='op'>=</span> <span class='va'>segments</span>, nseg <span class='op'>=</span> <span class='fl'>7</span>, npeaks <span class='op'>=</span> <span class='fl'>5</span>, seg_scale <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -181,7 +182,7 @@ cross correlation curve and finds peaks of the curve.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
