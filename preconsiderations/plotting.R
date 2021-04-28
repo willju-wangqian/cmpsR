@@ -10,7 +10,7 @@ land1_2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
 x <- land2_3$sig
 y <- land1_2$sig
 
-cmps <- extract_feature_cmps(x, y, full_result = T)
+cmps <- extract_feature_cmps(x, y, include = "full")
 cmps$CMPS.score
 
 rbind(data.frame(value = x, index = 1:length(x), sig = "x"),
