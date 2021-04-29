@@ -1,6 +1,6 @@
 Package: CMPS
 Title: Implementation of Congruent Matching Profile Segments (CMPS) Method
-Version: 0.0.9.1000
+Version: 0.0.9.3000
 Authors@R: c(
     person("Wangqian", "Ju", email = "wju@iastate.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9977-377X")),
     person("Heike", "Hofmann", email = "hofmann@iastate.edu", role = "ctb", comment=c(ORCID="0000-0001-6216-5183"))
