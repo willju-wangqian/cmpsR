@@ -122,7 +122,7 @@ get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))
   # if(ny < min.overlap){
   #   #???
   # }
-  lag.max <- nx + 2 * (ny - min.overlap) - ny
+  lag.max <- nx + 2 * (ny - ceiling(min.overlap)) - ny
   lags <- 0:lag.max
   lag <- lags - (ny - min.overlap)
   if(all(is.na(x)) | all(is.na(y))){
@@ -153,3 +153,9 @@ get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))
             rep(NA, x.na.count[2] + y.na.count[1]))
   return(list(lag = lag, ccf = cors))
 }
+
+#' @useDynLib CMPS COMPUTE_CROSS_CORR_
+compute_cross_corr <- function(x, y, min.overlap) .Call(COMPUTE_CROSS_CORR_, x, y, min.overlap)
+
+#' @useDynLib CMPS NA_TRIM_
+na_trim_cmps <- function(x) .Call(NA_TRIM_, x)

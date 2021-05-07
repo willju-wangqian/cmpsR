@@ -24,3 +24,10 @@ SEXP _NA_TRIM(SEXP seq_in) {
     fun = (SEXP(*)(SEXP)) R_GetCCallable("CMPS", "na_trim_cmps");
   return fun(seq_in);  
 }
+
+SEXP LOCAL_MAX_(SEXP seq_in, SEXP MAX_MIN_in) {
+  static SEXP(*fun)(SEXP, SEXP) = NULL;
+  if (fun == NULL)
+    fun = (SEXP(*)(SEXP, SEXP)) R_GetCCallable("CMPS", "local_max_cmps");
+  return fun(seq_in, MAX_MIN_in);  
+}

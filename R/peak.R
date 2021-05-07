@@ -68,9 +68,11 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
   
   # tic("find peaks")
   # get all peaks and peak.heights
-  find_maxs <- rollapply(ccr$ccf, 3, function(x) max(x) == x[2], 
-                         fill = list(NA, NA, NA))
-  peaks <- which(find_maxs)
+  # find_maxs <- rollapply(ccr$ccf, 3, function(x) max(x) == x[2], 
+  #                        fill = list(NA, NA, NA))
+  # peaks <- which(find_maxs)
+  # using C implementation
+  peaks <- local_max_cmps(ccr$ccf)
   
   # new stuff
   od <- order(ccr$ccf[peaks], decreasing = TRUE)[1:npeaks]
@@ -152,3 +154,5 @@ get_ccp <- function(ccr.list, Tx = 25){
   if(length(ccp) >= seg_level) {return(basis)} else {return(NULL)}
 }
 
+#' @useDynLib CMPS LOCAL_MAX_
+local_max_cmps <- function(x, find_max = 0) .Call(LOCAL_MAX_, x, find_max)
