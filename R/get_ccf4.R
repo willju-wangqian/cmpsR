@@ -118,7 +118,7 @@ get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))
   nx <- length(x)
   ny <- length(y)
   assert_that(is.numeric(x), is.numeric(y))
-  assert_that(nx > 0, ny > 0, nx >= ny)
+  assert_that(nx > 0, ny > 0, nx >= ny, min.overlap >= 2)
   # if(ny < min.overlap){
   #   #???
   # }
@@ -136,7 +136,7 @@ get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))
   
   x.narm <- x[(x.na.count[1] + 1) : (length(x) - x.na.count[2])]
   y.narm <- y[(y.na.count[1] + 1) : (length(y) - y.na.count[2])]
-  nxx <- length(x.narm)
+  # nxx <- length(x.narm)
   nyy <- length(y.narm)
   
   xx <- c(rep(NA, nyy - min.overlap), x.narm, rep(NA, nyy - min.overlap))

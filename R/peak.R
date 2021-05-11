@@ -44,7 +44,10 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
     # tic("time for get_ccf4 1")
     seg <- segments$segs[[nseg]]
     
-    min.overlap <- min(length(seg[!is.na(seg)])*0.9, round(length(comp)*0.1))
+    min.overlap <- min(
+      length(seg[!is.na(seg)])*0.9, 
+      round(length(comp[!is.na(comp)])*0.1)
+      )
     
     ccr <- get_ccf4(comp, seg, min.overlap = min.overlap)
     # toc()
@@ -57,7 +60,10 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
     
     # if(length(tt$aug_seg) == 1676) {browser()}
     
-    min.overlap <- min(length(tt$aug_seg[!is.na(tt$aug_seg)])*0.9, round(length(comp)*0.1))
+    min.overlap <- min(
+      length(tt$aug_seg[!is.na(tt$aug_seg)])*0.9, 
+      round(length(comp[!is.na(comp)])*0.1)
+      )
     
     # tic("time for get_ccf4 2")
     ccr <- get_ccf4(comp, tt$aug_seg, min.overlap = min.overlap)
@@ -71,8 +77,14 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
   # find_maxs <- rollapply(ccr$ccf, 3, function(x) max(x) == x[2], 
   #                        fill = list(NA, NA, NA))
   # peaks <- which(find_maxs)
+  
   # using C implementation
-  peaks <- local_max_cmps(ccr$ccf)
+  tmp.x <- ccr$ccf
+  idx <- seq_along(tmp.x)
+  notna.idx <- !is.na(tmp.x)
+  peak.idx <- local_max_cmps(tmp.x[notna.idx])
+  peaks <- idx[notna.idx][peak.idx]
+  # peaks <- local_max_cmps(ccr$ccf)
   
   # new stuff
   od <- order(ccr$ccf[peaks], decreasing = TRUE)[1:npeaks]
