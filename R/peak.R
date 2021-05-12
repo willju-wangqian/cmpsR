@@ -159,11 +159,30 @@ get_ccp <- function(ccr.list, Tx = 25){
   # if(length(basis) != 1) {stop("the length of the highest level must be 1, i.e., 
   #                              the last element of npeaks.set must be 1")}
   
-  ccp <- lapply(1:(seg_level-1), function(level) {
-    ccr.list[[level]]$peaks.pos[abs(ccr.list[[level]]$peaks.pos - basis) <= Tx]
+  # ccp <- lapply(1:(seg_level-1), function(level) {
+  #   ccr.list[[level]]$peaks.pos[abs(ccr.list[[level]]$peaks.pos - basis) <= Tx]
+  # })
+  # ccp <- unlist(c(ccp, basis))
+  # if(length(ccp) >= seg_level) {return(basis)} else {return(NULL)}
+  
+  rr <- lapply(seq_along(basis), function(idx) {
+    ccp <- lapply(1:(seg_level), function(level) {
+      ck.tmp <- abs(ccr.list[[level]]$peaks.pos - basis[idx]) <= Tx
+      if(all(!ck.tmp)) { return(NULL) }
+      else {
+        return(ccr.list[[level]]$peaks.pos[ck.tmp][1])
+      }
+    })
+    if(length(unlist(ccp)) == seg_level) { 
+      # if every level has a peak, we have a ccp
+      return(basis[idx])
+    } else {
+      # else, return NULL
+      return(NULL)
+    }
   })
-  ccp <- unlist(c(ccp, basis))
-  if(length(ccp) >= seg_level) {return(basis)} else {return(NULL)}
+  return(unlist(rr))
+  
 }
 
 #' @useDynLib CMPS LOCAL_MAX_

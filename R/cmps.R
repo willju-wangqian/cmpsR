@@ -130,10 +130,9 @@ get_CMPS <- function(input.ccp, Tx = 25, order = T) {
 #'
 #' @param x a numeric vector, vector of the reference bullet signature/profile that will be divided into basis segments
 #' @param y a numeric vector, vector of the comparison bullet signature/profile
-#' @param seg_length integer, the length of a basis segment
-#' @param Tx integer, the tolerance zone is `+/- Tx`
-#' @param npeaks.set a numeric vector, specify the number of peaks to be found for each different scale of segment. The 
-#' number of peaks for the highest segment scale must be 1, i.e., the very last element of `npeaks.set` must be 1.
+#' @param seg_length a positive integer, the length of a basis segment
+#' @param Tx a positive integer, the tolerance zone is `+/- Tx`
+#' @param npeaks.set a numeric vector, specify the number of peaks to be found for each different scale of segment. 
 #' * If `length(npeaks.set) == 1`, the algorithm uses multi-peak inspection only at the basis scale;
 #' * If `length(npeaks.set) > 1`, the algorithm uses multi-peak inspection at 
 #'    different segment scales. 
@@ -141,7 +140,7 @@ get_CMPS <- function(input.ccp, Tx = 25, order = T) {
 #' @param include `NULL` or a vector of character strings indicating what additional information should be included in
 #' the output of `extract_feature_cmps`. All possible options are: "nseg", "congruent.pos", "congruent.seg", 
 #' "congruent.seg.idx", "pos.df", "ccp.list","segments", and "parameters". If one wants to include them all, one can use
-#' `include = "full_result` 
+#' `include = "full_result"`. By default, `include = NULL` and only the CMPS score is returned
 #'
 #' @return a numeric value or a list
 #' * if `include = NULL`, returns the CMPS score (a numeric value) only
@@ -179,41 +178,33 @@ get_CMPS <- function(input.ccp, Tx = 25, order = T) {
 #' library(tidyverse)
 #' library(bulletxtrctr)
 #' 
+#' data("bullets")
+#' 
 #' lands <- unique(bullets$bulletland)
 #' 
-#' comparisons <- data.frame(expand.grid(land1 = lands[1:6], land2 = lands[7:12]), 
+#' comparisons <- data.frame(expand.grid(land1 = lands[1:6], land2 = lands[7:12]),
 #'                           stringsAsFactors = FALSE)
 #' 
+#' comparisons <- comparisons %>%
+#'   left_join(bullets %>% select(bulletland, sig1=sigs),
+#'             by = c("land1" = "bulletland")) %>%
+#'   left_join(bullets %>% select(bulletland, sig2=sigs),
+#'             by = c("land2" = "bulletland"))
+#' 
 #' comparisons <- comparisons %>% mutate(
-#'   aligned = purrr::map2(.x = land1, .y = land2, 
-#'                         .f = function(xx, yy) {
-#'                           land1 <- bullets$sigs[bullets$bulletland == xx][[1]]
-#'                           land2 <- bullets$sigs[bullets$bulletland == yy][[1]]
-#'                           land1$bullet <- "first-land"
-#'                           land2$bullet <- "second-land"
-#'                           
-#'                           sig_align(land1$sig, land2$sig)
-#'                         }))
+#'   cmps = purrr::map2(sig1, sig2, .f = function(x, y) {
+#'     extract_feature_cmps(x$sig, y$sig, include = "full_result")
+#'   })
+#' )
 #' 
-#' comparisons <- comparisons %>% 
-#'   mutate(cmps = aligned %>% purrr::map(.f = function(a) {
-#'     extract_feature_cmps(a$lands$sig1, a$lands$sig2, include = "nseg")
-#'   }))
-#' 
-#' # comparisons.cmps <- comparisons %>% 
-#' #   mutate(cmps = aligned %>% purrr::map_dbl(.f = function(a) {
-#' #     extract_feature_cmps(a$lands$sig1, a$lands$sig2, include = NULL)
-#' #   }))
-#' # comparisons.cmps %>% select(land1, land2, cmps) 
-#' 
-#' comparisons <- comparisons %>% 
+#' comparisons <- comparisons %>%
 #'   mutate(
 #'     cmps_score = sapply(comparisons$cmps, function(x) x$CMPS.score),
 #'     cmps_nseg = sapply(comparisons$cmps, function(x) x$nseg)
 #'   )
-#' 
+#'   
 #' cp1 <- comparisons %>% select(land1, land2, cmps_score, cmps_nseg)
-#' cp1
+#' cp1  
 #' }
 #' @references 
 #' Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song, 
@@ -231,16 +222,17 @@ extract_feature_cmps <- function(x, y, seg_length = 50, Tx = 25, npeaks.set = c(
     (is.null(include) | is.character(include))
   )
   
+  assert_that(
+    Tx > 0, seg_length > 0, all(npeaks.set > 0)
+  )
+  
   seg_scale_max <- length(npeaks.set)
 
-  if (length(npeaks.set) != seg_scale_max) { 
-    stop("seg_scale_max doesn't match the length of npeaks.set.")
-  }
   
   # if (seg_scale_max > 1 & npeaks.set[length(npeaks.set)] != 1) {
-  if (seg_scale_max > 1 & npeaks.set[seg_scale_max] != 1) {  
-    stop("the length of the highest level must be 1, i.e., the last element of npeaks.set must be 1")
-  }
+  # if (seg_scale_max > 1 & npeaks.set[seg_scale_max] != 1) {  
+  #   stop("the length of the highest level must be 1, i.e., the last element of npeaks.set must be 1")
+  # }
   
   segments <- get_segs(x, seg_length)
   nseg <- length(segments$segs)

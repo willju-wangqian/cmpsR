@@ -18,12 +18,11 @@ extract_feature_cmps(
 
 \item{y}{a numeric vector, vector of the comparison bullet signature/profile}
 
-\item{seg_length}{integer, the length of a basis segment}
+\item{seg_length}{a positive integer, the length of a basis segment}
 
-\item{Tx}{integer, the tolerance zone is \verb{+/- Tx}}
+\item{Tx}{a positive integer, the tolerance zone is \verb{+/- Tx}}
 
-\item{npeaks.set}{a numeric vector, specify the number of peaks to be found for each different scale of segment. The
-number of peaks for the highest segment scale must be 1, i.e., the very last element of \code{npeaks.set} must be 1.
+\item{npeaks.set}{a numeric vector, specify the number of peaks to be found for each different scale of segment.
 \itemize{
 \item If \code{length(npeaks.set) == 1}, the algorithm uses multi-peak inspection only at the basis scale;
 \item If \code{length(npeaks.set) > 1}, the algorithm uses multi-peak inspection at
@@ -34,7 +33,7 @@ different segment scales.
 \item{include}{\code{NULL} or a vector of character strings indicating what additional information should be included in
 the output of \code{extract_feature_cmps}. All possible options are: "nseg", "congruent.pos", "congruent.seg",
 "congruent.seg.idx", "pos.df", "ccp.list","segments", and "parameters". If one wants to include them all, one can use
-\verb{include = "full_result}}
+\code{include = "full_result"}. By default, \code{include = NULL} and only the CMPS score is returned}
 }
 \value{
 a numeric value or a list
@@ -82,41 +81,33 @@ cmps_without_multi_scale <- extract_feature_cmps(land2_3$sig, land1_2$sig,
 library(tidyverse)
 library(bulletxtrctr)
 
+data("bullets")
+
 lands <- unique(bullets$bulletland)
 
-comparisons <- data.frame(expand.grid(land1 = lands[1:6], land2 = lands[7:12]), 
+comparisons <- data.frame(expand.grid(land1 = lands[1:6], land2 = lands[7:12]),
                           stringsAsFactors = FALSE)
 
+comparisons <- comparisons \%>\%
+  left_join(bullets \%>\% select(bulletland, sig1=sigs),
+            by = c("land1" = "bulletland")) \%>\%
+  left_join(bullets \%>\% select(bulletland, sig2=sigs),
+            by = c("land2" = "bulletland"))
+
 comparisons <- comparisons \%>\% mutate(
-  aligned = purrr::map2(.x = land1, .y = land2, 
-                        .f = function(xx, yy) {
-                          land1 <- bullets$sigs[bullets$bulletland == xx][[1]]
-                          land2 <- bullets$sigs[bullets$bulletland == yy][[1]]
-                          land1$bullet <- "first-land"
-                          land2$bullet <- "second-land"
-                          
-                          sig_align(land1$sig, land2$sig)
-                        }))
+  cmps = purrr::map2(sig1, sig2, .f = function(x, y) {
+    extract_feature_cmps(x$sig, y$sig, include = "full_result")
+  })
+)
 
-comparisons <- comparisons \%>\% 
-  mutate(cmps = aligned \%>\% purrr::map(.f = function(a) {
-    extract_feature_cmps(a$lands$sig1, a$lands$sig2, include = "nseg")
-  }))
-
-# comparisons.cmps <- comparisons \%>\% 
-#   mutate(cmps = aligned \%>\% purrr::map_dbl(.f = function(a) {
-#     extract_feature_cmps(a$lands$sig1, a$lands$sig2, include = NULL)
-#   }))
-# comparisons.cmps \%>\% select(land1, land2, cmps) 
-
-comparisons <- comparisons \%>\% 
+comparisons <- comparisons \%>\%
   mutate(
     cmps_score = sapply(comparisons$cmps, function(x) x$CMPS.score),
     cmps_nseg = sapply(comparisons$cmps, function(x) x$nseg)
   )
-
+  
 cp1 <- comparisons \%>\% select(land1, land2, cmps_score, cmps_nseg)
-cp1
+cp1  
 }
 }
 \references{
