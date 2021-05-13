@@ -79,12 +79,12 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
   # peaks <- which(find_maxs)
   
   # using C implementation
-  tmp.x <- ccr$ccf
-  idx <- seq_along(tmp.x)
-  notna.idx <- !is.na(tmp.x)
-  peak.idx <- local_max_cmps(tmp.x[notna.idx])
-  peaks <- idx[notna.idx][peak.idx]
-  # peaks <- local_max_cmps(ccr$ccf)
+  # tmp.x <- ccr$ccf
+  # idx <- seq_along(tmp.x)
+  # notna.idx <- !is.na(tmp.x)
+  # peak.idx <- local_max_cmps(tmp.x[notna.idx])
+  # peaks <- idx[notna.idx][peak.idx]
+  peaks <- local_max_cmps(ccr$ccf)
   
   # new stuff
   od <- order(ccr$ccf[peaks], decreasing = TRUE)[1:npeaks]
@@ -185,5 +185,16 @@ get_ccp <- function(ccr.list, Tx = 25){
   
 }
 
-#' @useDynLib CMPS LOCAL_MAX_
-local_max_cmps <- function(x, find_max = 0) .Call(LOCAL_MAX_, x, find_max)
+#' find local maximums
+#' @useDynLib CMPS, .registration=TRUE
+#' @param x numeric vector, the input sequence
+#' @param find_max a numeric scalor, the function finds maximums if `find_max = 0`
+#' finds minimums if overwise.
+local_max_cmps <- function(x, find_max = 0) {
+  tmp.x <- x
+  idx <- seq_along(tmp.x)
+  notna.idx <- !is.na(tmp.x)
+  peak.idx <- .Call(local_max_c, tmp.x[notna.idx], find_max)
+  peaks <- idx[notna.idx][peak.idx]
+  return(peaks)
+}

@@ -130,9 +130,11 @@ get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))
     return(list(lag = lag, ccf = cors))
   }
   
-  x.na.count <- na_trim_cmps(x)
+  # x.na.count <- na_trim_cmps(x)
+  x.na.count <- .Call(na_trim_c, x)
     # .Call("_NA_TRIM", x)
-  y.na.count <- na_trim_cmps(y) #.Call("_NA_TRIM", y)
+  # y.na.count <- na_trim_cmps(y) #.Call("_NA_TRIM", y)
+  y.na.count <- .Call(na_trim_c, y)
   
   x.narm <- x[(x.na.count[1] + 1) : (length(x) - x.na.count[2])]
   y.narm <- y[(y.na.count[1] + 1) : (length(y) - y.na.count[2])]
@@ -146,7 +148,8 @@ get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))
   # make sure that xx has no extra NA values; all NA are needed for shifting
   # make sure that ny >= min.overlap
   # assume x and y have been na.trim-ed
-  cors <- compute_cross_corr(xx, y.narm, as.numeric(min.overlap))
+  # cors <- compute_cross_corr(xx, y.narm, as.numeric(min.overlap))
+  cors <- .Call(compute_cross_corr_c, xx, y.narm, as.numeric(min.overlap))
   # cors <- .Call("common_elements_short", xx, y.narm, as.numeric(min.overlap))
   cors <- c(rep(NA, x.na.count[1] + y.na.count[2]), 
             cors, 
@@ -154,8 +157,12 @@ get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))
   return(list(lag = lag, ccf = cors))
 }
 
-#' @useDynLib CMPS COMPUTE_CROSS_CORR_
-compute_cross_corr <- function(x, y, min.overlap) .Call(COMPUTE_CROSS_CORR_, x, y, min.overlap)
+#' Wrapper function for compute_cross_corr
+#' @param x numeric vector, the longer sequence
+#' @param y numeric vector, the shorter sequence
+#' @param min.overlap numeric scalor, set the length of the minimum overlapping part
+compute_cross_corr <- function(x, y, min.overlap) .Call(compute_cross_corr_c, x, y, min.overlap)
 
-#' @useDynLib CMPS NA_TRIM_
-na_trim_cmps <- function(x) .Call(NA_TRIM_, x)
+#' Wrapper function for na_trim
+#' @param x numeric vector
+na_trim_cmps <- function(x) .Call(na_trim_c, x)

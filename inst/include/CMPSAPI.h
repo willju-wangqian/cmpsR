@@ -4,12 +4,6 @@
 #include <R.h>
 #include <Rinternals.h>
 
-SEXP add_(SEXP x, SEXP y) {
-  static SEXP(*fun)(SEXP, SEXP) = NULL;
-  if (fun == NULL)
-    fun = (SEXP(*)(SEXP, SEXP)) R_GetCCallable("CMPS", "add");
-  return fun(x, y);
-}
 
 SEXP COMPUTE_CROSS_CORR_(SEXP xx_in, SEXP yy_in, SEXP minoverlap_in) {
   static SEXP(*fun)(SEXP, SEXP, SEXP) = NULL;
