@@ -4,14 +4,12 @@
 \alias{get_CMPS}
 \title{Compute the CMPS score}
 \usage{
-get_CMPS(input.ccp, Tx = 25, order = T)
+get_CMPS(input.ccp, Tx = 25)
 }
 \arguments{
 \item{input.ccp}{a list of positions for (consistent) correlation peaks}
 
 \item{Tx}{integer, the tolerance zone is \verb{+/- Tx}}
-
-\item{order}{boolean, whether or not to order peak positions based on their CMPS score}
 }
 \value{
 a list of three components:

@@ -25,8 +25,11 @@ get_segs <- function(x, len = 50){
   idx <- 1:length(x)
   idx[is.na(x)] <- NA
 
-  xx <- na.trim(x)
-  idx <- na.trim(idx)
+  x.na.count <- .Call(na_trim_c, x)
+  xx <- x[(x.na.count[1] + 1) : (length(x) - x.na.count[2])]
+  idx <- idx[(x.na.count[1] + 1) : (length(x) - x.na.count[2])]
+  # xx <- na.trim(x)
+  # idx <- na.trim(idx)
   
   assert_that(!is.na(idx[1]), !is.na(idx[length(idx)]))
   

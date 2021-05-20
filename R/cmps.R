@@ -3,7 +3,6 @@
 #' Compute the CMPS score from a list of positions of (consistent) correlation peaks.
 #' @param input.ccp a list of positions for (consistent) correlation peaks
 #' @param Tx integer, the tolerance zone is `+/- Tx`
-#' @param order boolean, whether or not to order peak positions based on their CMPS score
 #'
 #' @return a list of three components:
 #' * `CMPS.score`: computed CMPS score
@@ -33,9 +32,9 @@
 #'  get_ccp(ccr.list, Tx = 25)
 #' })
 #' cmps <- get_CMPS(ccp.list, Tx = 25)
-get_CMPS <- function(input.ccp, Tx = 25, order = T) {
+get_CMPS <- function(input.ccp, Tx = 25) {
   
-  assert_that(is.numeric(Tx), is.logical(order))
+  assert_that(is.numeric(Tx))
   
   tt <- unlist(input.ccp)
   tt <- sort(tt)
@@ -81,20 +80,12 @@ get_CMPS <- function(input.ccp, Tx = 25, order = T) {
   ordered.pos.df <- pos.df[ood, ]
   ordered.current.voter <- current.voter.list[ood]
   
-  # CMPS <- pos.df[order(pos.df$cmps, decreasing = T)[1], ]$cmps  
   CMPS <- ordered.pos.df$cmps[1]
   if(CMPS != current.max) {
     stop("unexpected: current.max didn't find the max CMPS score")
   }
   
-  if(order) {
-    pos.df <- ordered.pos.df
-  }
-  
-  # recommended position for counting the CMPS score
-  # rec.position <- floor(median(pos.df[pos.df$cmps == CMPS, ]$position))
-  
-  # congruent.pos <- round(median(ordered.pos.df$position[ordered.pos.df$cmps == CMPS]))
+  pos.df <- ordered.pos.df
   congruent.pos.idx <- ceiling(sum(ordered.pos.df$cmps == CMPS)/2)
   
   if(congruent.pos.idx <= 0) {
@@ -104,12 +95,6 @@ get_CMPS <- function(input.ccp, Tx = 25, order = T) {
     congruent.pos <- ordered.pos.df$position[congruent.pos.idx]
     current.voter <- ordered.current.voter[[congruent.pos.idx]]
   }
-  
-  
-  
-  # browser()
-  
-  
   
   return(list(CMPS.score = CMPS, nseg = length(input.ccp), 
               congruent.pos = congruent.pos, congruent.seg = current.voter, 
