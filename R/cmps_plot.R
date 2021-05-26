@@ -19,7 +19,7 @@
 #' two signatures is achieved by shifting the reference signature to the congruent registration position. 
 #' * `seg_shift`: a data.frame. This data frame shows which basis segments are plotted (are CMPS) and 
 #' the units by which each segment shifted when plotting `segment_shift_plot`
-#' * `sig.plot$sig_shift`: a numeric value. The number of units by which the reference signature shifted
+#' * `sig_shift`: a numeric value. The number of units by which the reference signature shifted
 #' when plotting `signature_shift_plot`
 #' 
 #' @export

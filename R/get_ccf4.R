@@ -117,15 +117,14 @@ get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))
   y <- as.vector(unlist(y))
   nx <- length(x)
   ny <- length(y)
-  assert_that(is.numeric(x), is.numeric(y))
-  assert_that(nx > 0, ny > 0, nx >= ny, min.overlap >= 2)
-  # if(ny < min.overlap){
-  #   #???
-  # }
+  assert_that(nx > 0, ny > 0, nx >= ny, 
+              is.numeric(x), is.numeric(y), is.numeric(min.overlap))
+  
   lag.max <- nx + 2 * (ny - ceiling(min.overlap)) - ny
   lags <- 0:lag.max
   lag <- lags - (ny - min.overlap)
-  if(all(is.na(x)) | all(is.na(y))){
+  
+  if(all(is.na(x)) | all(is.na(y)) | (ny < min.overlap)){
     cors <- rep(NA, lag.max + 1)
     return(list(lag = lag, ccf = cors))
   }

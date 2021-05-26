@@ -26,7 +26,7 @@ signature and the comparison signature are plotted, and CMPS are highlighted. Th
 two signatures is achieved by shifting the reference signature to the congruent registration position.
 \item \code{seg_shift}: a data.frame. This data frame shows which basis segments are plotted (are CMPS) and
 the units by which each segment shifted when plotting \code{segment_shift_plot}
-\item \code{sig.plot$sig_shift}: a numeric value. The number of units by which the reference signature shifted
+\item \code{sig_shift}: a numeric value. The number of units by which the reference signature shifted
 when plotting \code{signature_shift_plot}
 }
 }

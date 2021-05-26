@@ -236,20 +236,19 @@ extract_feature_cmps <- function(x, y, seg_length = 50, Tx = 25, npeaks.set = c(
     
     ccp.list <- lapply(1:nseg, function(nseg) {
       
-      # tic("time for one segment")
+      if(all(is.na(segments$segs[nseg]))) {
+        return(NULL)
+      }
+
       ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
         
-        # tic("time for get_ccr_peaks for one scale")
         get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
-        # toc()
+
       })
       
       rr <- get_ccp(ccr.list, Tx = Tx)
       
-      # if(nseg == 2) {browser()}
-      
-      # toc()
-      rr
+      return(rr)
       
     })
   } else {

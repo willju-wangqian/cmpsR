@@ -168,9 +168,10 @@ get_ccp <- function(ccr.list, Tx = 25){
   rr <- lapply(seq_along(basis), function(idx) {
     ccp <- lapply(1:(seg_level), function(level) {
       ck.tmp <- abs(ccr.list[[level]]$peaks.pos - basis[idx]) <= Tx
-      if(all(!ck.tmp)) { return(NULL) }
+      if((all(!ck.tmp)) | (all(is.na(ck.tmp)))) { return(NULL) }
       else {
-        return(ccr.list[[level]]$peaks.pos[ck.tmp][1])
+        # return(ccr.list[[level]]$peaks.pos[ck.tmp][1])
+        return(1)
       }
     })
     if(length(unlist(ccp)) == seg_level) { 
@@ -191,6 +192,9 @@ get_ccp <- function(ccr.list, Tx = 25){
 #' @param find_max a numeric scalor, the function finds maximums if `find_max = 0`
 #' finds minimums if overwise.
 local_max_cmps <- function(x, find_max = 0) {
+  if(all(is.na(x))) {
+    return(NULL)
+  }
   tmp.x <- x
   idx <- seq_along(tmp.x)
   notna.idx <- !is.na(tmp.x)
