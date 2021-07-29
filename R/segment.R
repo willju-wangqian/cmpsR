@@ -72,22 +72,42 @@ get_segs <- function(x, len = 50){
 #' 
 #' segments <- get_segs(x, len = 50)
 #' seg5_scale3 <- get_seg_scale(segments, nseg = 5, scale = 3)
-get_seg_scale <- function(segments, nseg, scale = 2){
+# get_seg_scale <- function(segments, nseg, scale = 2){
+#   
+#   assert_that(is.numeric(nseg), is.numeric(scale))
+#   
+#   x <- segments$x
+#   idx <- segments$index[[nseg]]
+#   
+#   assert_that( !anyNA(idx) )
+#   
+#   ct <- floor(median(idx, na.rm = TRUE))
+#   unitt <- max(idx, na.rm = TRUE) - ct
+#   ############# ???
+#   # cut at the max or min
+#   min.idx <- max(ct - unitt * 2^(scale-1), 1, na.rm = TRUE)
+#   max.idx <- min(ct + unitt * 2^(scale-1), length(x), na.rm = TRUE)
+#   
+#   
+#   return(list(aug_seg=x[min.idx:max.idx], aug_idx=min.idx:max.idx))
+# }
+get_seg_scale <- function(segments, nseg, out_length){
   
-  assert_that(is.numeric(nseg), is.numeric(scale))
+  assert_that(is.numeric(nseg),
+              is.numeric(out_length))
   
   x <- segments$x
   idx <- segments$index[[nseg]]
   
+  # idx should not have any NA value
   assert_that( !anyNA(idx) )
   
-  ct <- floor(median(idx, na.rm = TRUE))
-  unitt <- max(idx, na.rm = TRUE) - ct
-  ############# ???
-  # cut at the max or min
-  min.idx <- max(ct - unitt * 2^(scale-1), 1, na.rm = TRUE)
-  max.idx <- min(ct + unitt * 2^(scale-1), length(x), na.rm = TRUE)
+  total_change <- out_length - length(idx)
+  left_change <- floor(total_change / 2)
+  right_change <- ceiling(total_change / 2)
   
+  left_end <- max(idx[1] - left_change, 1, na.rm = TRUE)
+  right_end <- min(idx[length(idx)] + right_change, length(x), na.rm = TRUE)
   
-  return(list(aug_seg=x[min.idx:max.idx], aug_idx=min.idx:max.idx))
+  return(list(aug_seg=x[left_end:right_end], aug_idx=left_end:right_end))
 }
