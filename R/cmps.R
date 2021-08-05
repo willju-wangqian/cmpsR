@@ -23,10 +23,12 @@
 #' nseg <- length(segments$segs)
 #' seg_scale_max <- 3
 #' npeaks.set <- c(5,3,1)
+#' outlength <- c(50, 100, 200)
 #' 
 #' ccp.list <- lapply(1:nseg, function(nseg) {
 #'  ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
-#'    get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+#'    get_ccr_peaks(y, segments, seg_outlength = outlength[seg_scale], 
+#'    nseg = nseg, npeaks = npeaks.set[seg_scale])
 #'  })
 #' 
 #'  get_ccp(ccr.list, Tx = 25)
@@ -109,24 +111,27 @@ get_CMPS <- function(input.ccp, Tx = 25) {
 #' Compute the Congruent Matching Profile Segments (CMPS) score based on two bullet profiles/signatures.
 #' The reference profile will be divided into consecutive, non-overlapping, basis segments of the same length.
 #' Then the number of segments that are congruent matching will be found as the CMPS score. 
-#' By default, `extract_feature_cmps` implements the algorithm with multi-peak insepction at three 
-#' different segment scales. By setting `npeaks.set` as a single-length vector, users can switch to the algorithm 
-#' with multi-peak inspection at the basis scale only.
+#' By default, `extract_feature_cmps` implements the algorithm with multi-peak inspection at three 
+#' different segment scale levels. By setting `npeaks.set` as a single-length vector, users can switch to the algorithm 
+#' with multi-peak inspection at the basis scale level only.
 #'
 #' @param x a numeric vector, vector of the reference bullet signature/profile that will be divided into basis segments
 #' @param y a numeric vector, vector of the comparison bullet signature/profile
 #' @param seg_length a positive integer, the length of a basis segment
 #' @param Tx a positive integer, the tolerance zone is `+/- Tx`
-#' @param npeaks.set a numeric vector, specify the number of peaks to be found for each different scale of segment. 
-#' * If `length(npeaks.set) == 1`, the algorithm uses multi-peak inspection only at the basis scale;
+#' @param npeaks.set a numeric vector, specify the number of peaks to be found at each segment scale level 
+#' * If `length(npeaks.set) == 1`, the algorithm uses multi-peak inspection only at the basis scale level;
 #' * If `length(npeaks.set) > 1`, the algorithm uses multi-peak inspection at 
-#'    different segment scales. 
-#' * By default, `npeaks.set = c(5,3,1)`. Including more segment scales will reduce the number of false positive results
+#'    different segment scale levels. 
+#' * By default, `npeaks.set = c(5,3,1)`. Including more segment scale levels will reduce the number of false positive results
 #' @param include `NULL` or a vector of character strings indicating what additional information should be included in
 #' the output of `extract_feature_cmps`. All possible options are: "nseg", "congruent.pos", "congruent.seg", 
 #' "congruent.seg.idx", "pos.df", "ccp.list","segments", and "parameters". If one wants to include them all, one can use
 #' `include = "full_result"`. By default, `include = NULL` and only the CMPS score is returned
-#'
+#' @param outlength `NULL` or a numeric vector, specify the segment length of each level of the basis segment when the 
+#' multi-segment lengths strategy is being used. If `outlength = NULL`, then the length of a basis segment will be doubled
+#' at each segment level
+#' 
 #' @return a numeric value or a list
 #' * if `include = NULL`, returns the CMPS score (a numeric value) only
 #' * if `include = ` one or a vector of strings listed above:
@@ -153,10 +158,10 @@ get_CMPS <- function(input.ccp, Tx = 25) {
 #' 
 #' # compute cmps
 #' 
-#' # algorithm with multi-peak insepction at three different segment scales
+#' # algorithm with multi-peak insepction at three different segment scale levels
 #' cmps_with_multi_scale <- extract_feature_cmps(land2_3$sig, land1_2$sig, include = "full_result" )
 #' 
-#' # algorithm with multi-peak inspection at the basis scale only
+#' # algorithm with multi-peak inspection at the basis scale level only
 #' cmps_without_multi_scale <- extract_feature_cmps(land2_3$sig, land1_2$sig, 
 #'                                                  npeaks.set = 5, include = "full_result" )
 #' \dontrun{
@@ -196,42 +201,40 @@ get_CMPS <- function(input.ccp, Tx = 25) {
 #' and Xuezeng Zhao. 2019. “Fired Bullet Signature Correlation Using the 
 #' Congruent Matching Profile Segments (CMPS) Method.” Forensic Science 
 #' International, December, #109964. https://doi.org/10.1016/j.forsciint.2019.109964.
-
-# extract_feature_cmps <- function(x, y, seg_length = 50, seg_scale_max = 3, Tx = 25, npeaks.set = c(5, 3, 1),
-#                                  full_result = FALSE) {
 extract_feature_cmps <- function(x, y, seg_length = 50, Tx = 25, npeaks.set = c(5, 3, 1),
-                                 include = NULL) {
+                                 include = NULL, outlength = NULL) {
   assert_that(
     is.numeric(x), is.numeric(y), is.numeric(seg_length), # is.numeric(seg_scale_max),
     is.numeric(Tx), is.numeric(npeaks.set),
-    (is.null(include) | is.character(include))
+    (is.null(include) | is.character(include)),
+    (is.null(outlength) | is.numeric(outlength))
   )
   
   assert_that(
     Tx > 0, seg_length > 0, all(npeaks.set > 0)
   )
   
-  seg_scale_max <- length(npeaks.set)
-
+  outlength_ <- c()
+  seg_levels <- length(npeaks.set)
   
-  # if (seg_scale_max > 1 & npeaks.set[length(npeaks.set)] != 1) {
-  # if (seg_scale_max > 1 & npeaks.set[seg_scale_max] != 1) {  
-  #   stop("the length of the highest level must be 1, i.e., the last element of npeaks.set must be 1")
-  # }
+  if(is.null(outlength)) {
+    outlength_ <- sapply(1:seg_levels, function(x) 2^(x-1)) * seg_length
+  } else {
+    outlength_ <- rep_len(outlength, seg_levels)
+  }
   
   segments <- get_segs(x, seg_length)
   nseg <- length(segments$segs)
   
-  # tic("Total")
   
-  if (seg_scale_max == 1) {
+  if (seg_levels == 1) {
     ccp.list <- lapply(1:nseg, function(nseg) {
-      ccr <- get_ccr_peaks(y, segments, seg_scale = seg_scale_max, 
-                           nseg = nseg, npeaks = npeaks.set[seg_scale_max])
+      ccr <- get_ccr_peaks(y, segments, seg_outlength = outlength_[seg_levels], 
+                           nseg = nseg, npeaks = npeaks.set[seg_levels])
       ccr$peaks.pos
       
     })
-  } else if(seg_scale_max > 1) {
+  } else if(seg_levels > 1) {
     
     
     ccp.list <- lapply(1:nseg, function(nseg) {
@@ -239,10 +242,11 @@ extract_feature_cmps <- function(x, y, seg_length = 50, Tx = 25, npeaks.set = c(
       if(all(is.na(segments$segs[nseg]))) {
         return(NULL)
       }
-
-      ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+      
+      ccr.list <- lapply(1:seg_levels, function(seg_level) {
         
-        get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = nseg, npeaks = npeaks.set[seg_scale])
+        get_ccr_peaks(y, segments, seg_outlength = outlength_[seg_level], 
+                      nseg = nseg, npeaks = npeaks.set[seg_level])
 
       })
       
@@ -252,21 +256,17 @@ extract_feature_cmps <- function(x, y, seg_length = 50, Tx = 25, npeaks.set = c(
       
     })
   } else {
-    stop("seg_scale_max is invalid. Please use a positive integer instead.")
+    stop("npeaks.set is invalid. Please provide at least one number.")
   }
   
-  # browser()
   
-  # tic("time for get_cmps")
   cmps <- get_CMPS(ccp.list, Tx = Tx)
-  # toc()
-  # cmps$nseg <- nseg
   if(cmps$nseg != nseg) {
     stop("unexpected: number of obs of ccp.list is not equal to nseg")
   }
   
   parameters <- list(x=x, y=y, seg_length=seg_length, Tx=Tx,
-                     npeaks.set=npeaks.set, include=include)
+                     npeaks.set=npeaks.set, include=include, outlength = outlength_)
   
   cmps$ccp.list <- ccp.list
   cmps$segments <- segments
@@ -288,6 +288,7 @@ extract_feature_cmps <- function(x, y, seg_length = 50, Tx = 25, npeaks.set = c(
     return(cmps[mm])
   }
   
-  # if(full_result) { return(cmps) } 
-  # else { return(cmps$CMPS.score) }
 }
+
+
+

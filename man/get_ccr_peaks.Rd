@@ -4,19 +4,14 @@
 \alias{get_ccr_peaks}
 \title{Identify peaks of a cross correlation curve}
 \usage{
-get_ccr_peaks(comp, segments, seg_scale, nseg = 1, npeaks = 5)
+get_ccr_peaks(comp, segments, seg_outlength, nseg = 1, npeaks = 5)
 }
 \arguments{
 \item{comp}{a nueric vector, vector of the bullet comparison profile}
 
 \item{segments}{list with basis segments and their corresponding indices in the original profile, obtianed by \code{get_segs()}}
 
-\item{seg_scale}{integer. the scale of the segment.
-\itemize{
-\item \code{seg_scale} = 1: the length remains the same;
-\item \code{seg_scale} = 2: the length will be doubled.
-\item \code{seg_scale} = 3: the length will be doubled twice.
-}}
+\item{seg_outlength}{length of the enlarged segment}
 
 \item{nseg}{integer. \code{nseg} = 3: the third segment in \code{segments}}
 
@@ -45,5 +40,6 @@ y <- land1_2$sig
 segments <- get_segs(x, len = 50)
 
 # compute ccf based on y and segment 7 with scale 1, then identify 5 highest peaks
-ccrpeaks <- get_ccr_peaks(y, segments = segments, nseg = 7, npeaks = 5, seg_scale = 1)
+ccrpeaks <- get_ccr_peaks(y, segments = segments, seg_outlength = 50,
+                          nseg = 7, npeaks = 5)
 }

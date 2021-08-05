@@ -52,11 +52,7 @@ get_segs <- function(x, len = 50){
 #' as the basis segment.
 #' @param segments list with basis segments and their corresponding indices in the original profile, obtianed by `get_segs()`
 #' @param nseg integer. `nseg` = 3: increase the length of the third basis segment.
-#' @param scale integer. The scale of the increased segment. 
-#'                      `scale` = 1: the length remains the same;
-#'                      `scale` = 2: the length will be doubled. If `len` = 50, the length of the returned segment will be 100;
-#'                      `scale` = 3: the length will be doubled twice. If `len` = 50, the length of the returned segment will be 200.
-#'                              
+#' @param out_length integer. The length of the enlarged segment     
 #'
 #' @return list consisting of 
 #' * `aug_seg`: the increased segment 
@@ -71,26 +67,7 @@ get_segs <- function(x, len = 50){
 #' x <- land2_3$sig
 #' 
 #' segments <- get_segs(x, len = 50)
-#' seg5_scale3 <- get_seg_scale(segments, nseg = 5, scale = 3)
-# get_seg_scale <- function(segments, nseg, scale = 2){
-#   
-#   assert_that(is.numeric(nseg), is.numeric(scale))
-#   
-#   x <- segments$x
-#   idx <- segments$index[[nseg]]
-#   
-#   assert_that( !anyNA(idx) )
-#   
-#   ct <- floor(median(idx, na.rm = TRUE))
-#   unitt <- max(idx, na.rm = TRUE) - ct
-#   ############# ???
-#   # cut at the max or min
-#   min.idx <- max(ct - unitt * 2^(scale-1), 1, na.rm = TRUE)
-#   max.idx <- min(ct + unitt * 2^(scale-1), length(x), na.rm = TRUE)
-#   
-#   
-#   return(list(aug_seg=x[min.idx:max.idx], aug_idx=min.idx:max.idx))
-# }
+#' seg5_scale3 <- get_seg_scale(segments, nseg = 5, out_length = 50)
 get_seg_scale <- function(segments, nseg, out_length){
   
   assert_that(is.numeric(nseg),
@@ -100,7 +77,8 @@ get_seg_scale <- function(segments, nseg, out_length){
   idx <- segments$index[[nseg]]
   
   # idx should not have any NA value
-  assert_that( !anyNA(idx) )
+  assert_that( !anyNA(idx),
+               length(out_length) == 1 )
   
   total_change <- out_length - length(idx)
   left_change <- floor(total_change / 2)

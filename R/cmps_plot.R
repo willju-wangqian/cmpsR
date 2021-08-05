@@ -46,7 +46,6 @@
 #' sig.plot <- cmps_signature_plot(cmps_with_multi_scale)
 #' 
 cmps_signature_plot <- function(cmps.result, add_background = TRUE) {
-  # type = c("segment", "signature")
   
   has_name(cmps.result, 
            c("parameters", "congruent.seg", "congruent.pos",
@@ -68,11 +67,8 @@ cmps_signature_plot <- function(cmps.result, add_background = TRUE) {
   
   # generate df for plotting    
   
-  # type <- match.arg(type)
-  
   # find shift for each segment
   seg.pos <- sapply(cmps.result$ccp.list[congruent.seg], function(ccp.list.element, Tx, con.pos) {
-    # pp <- abs(ccp.list.element - con.pos) <= Tx
     
     pp <- which.min(abs(ccp.list.element - con.pos))
     
@@ -97,8 +93,6 @@ cmps_signature_plot <- function(cmps.result, add_background = TRUE) {
   
   # for the signature level, use the median of 
   # all segment shifts as the signature shift
-  # browser()
-  
   sig_shift <- median(seg.pos)
   
   # data frame for segment shifts
@@ -116,19 +110,6 @@ cmps_signature_plot <- function(cmps.result, add_background = TRUE) {
   
   # data frame for plotting reference profile
   plot.df.ref <- data.frame(x=1:length(sig1) + sig_shift, sig=sig1, gp=0)
-  
-  # # segment shifts plot
-  # p1 <- plot.df.seg_shift %>% ggplot(aes(x=.data$x, y=.data$sig, group = gp)) +
-  #   geom_line(color = "red", size = 1.2) +
-  #   geom_line(data = plot.df.comp, color = "grey44") + 
-  #   theme_bw()
-  # 
-  # # signature shift plot
-  # p2 <- plot.df.sig_shift %>% ggplot(aes(x=.data$x, y=.data$sig, group = gp)) +
-  #   geom_line(color = "red", size = 1.2) +
-  #   geom_line(data = plot.df.comp, color = "grey44") + 
-  #   geom_line(data = plot.df.ref, color = "red", linetype = "longdash") + 
-  #   theme_bw()
   
   # segment shifts plot
   p1 <- plot.df.seg_shift %>% ggplot() +
@@ -255,21 +236,22 @@ cmps_segment_plot <- function(cmps.result, seg.idx = 1){
   # obtain results from cmps.result
   segments <- cmps.result$segments
   npeaks.set <- cmps.result$parameters$npeaks.set
-  seg_scale_max <- length(npeaks.set)
+  seg_levels <- length(npeaks.set)
+  outlength_ <- cmps.result$parameters$outlength
   
   # compute the cross-correlation for each segment scale
-  ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
+  ccr.list <- lapply(1:seg_levels, function(seg_level) {
     
-    get_ccr_peaks(cmps.result$parameters$y, segments, seg_scale = seg_scale, 
-                  nseg = seg.idx, npeaks = cmps.result$parameters$npeaks.set[seg_scale])
+    get_ccr_peaks(cmps.result$parameters$y, segments, seg_outlength = outlength_[seg_level], 
+                  nseg = seg.idx, npeaks = npeaks.set[seg_level])
     
     
   })
   
   # compute segments in different scales
-  seg.scale.list <- lapply(1:seg_scale_max, function(seg_scale) {
+  seg.scale.list <- lapply(1:seg_levels, function(seg_level) {
     
-    get_seg_scale(segments, seg.idx, seg_scale)
+    get_seg_scale(segments, seg.idx, outlength_[seg_level])
     
   })
   
@@ -281,34 +263,23 @@ cmps_segment_plot <- function(cmps.result, seg.idx = 1){
   )
   
   # a list of plots
-  pp.list <- lapply(1:seg_scale_max, function(scale.idx) {
+  pp.list <- lapply(1:seg_levels, function(level.idx) {
     
     # plot the selected segment in all positions where
     # it obtains cross-correlation peaks
-    tp.df1 <- seg.scale.list[[scale.idx]] %>% as.data.frame()
-    # p1 <- ggplot(tp.df1, aes(x=aug_idx, y=aug_seg)) +
-    #   geom_line(color="black", size=1) +
-    #   geom_line(data=plot.df.comp, aes(x=x, y=sig), color="darkgreen") +
-    #   xlab("Position") +
-    #   ylab("Profile Height") +
-    #   ggtitle(paste("Plotting for scale", scale.idx, "of segment", seg.idx)) +
-    #   theme_bw()
+    tp.df1 <- seg.scale.list[[level.idx]] %>% as.data.frame()
+
     p1 <- ggplot(tp.df1) +
       geom_line(aes(x=.data$aug_idx, y=.data$aug_seg), color="black", size=1) +
       geom_line(data=plot.df.comp, aes(x=.data$x, y=.data$sig), color="grey44") +
       xlab("Position") +
       ylab("Profile Height") +
-      ggtitle(paste("Plotting for scale", scale.idx, "of segment", seg.idx)) +
+      ggtitle(paste("Plotting for scale level", level.idx, "of segment", seg.idx)) +
       theme_bw()
     
-    # p.df <- lapply(length(ccr.list[[scale.idx]]$peaks.pos):1, function(i) {
-    #   data.frame(x = seg.scale.list[[scale.idx]]$aug_idx + ccr.list[[scale.idx]]$peaks.pos[i],
-    #              y = seg.scale.list[[scale.idx]]$aug_seg,
-    #              color = i)
-    # }) %>% do.call(rbind, .)
-    p.df <- lapply(length(ccr.list[[scale.idx]]$peaks.pos):1, function(i) {
-      data.frame(x = seg.scale.list[[scale.idx]]$aug_idx + ccr.list[[scale.idx]]$peaks.pos[i],
-                 y = seg.scale.list[[scale.idx]]$aug_seg,
+    p.df <- lapply(length(ccr.list[[level.idx]]$peaks.pos):1, function(i) {
+      data.frame(x = seg.scale.list[[level.idx]]$aug_idx + ccr.list[[level.idx]]$peaks.pos[i],
+                 y = seg.scale.list[[level.idx]]$aug_seg,
                  color = i)
     }) 
     
@@ -320,24 +291,21 @@ cmps_segment_plot <- function(cmps.result, seg.idx = 1){
                 size = 1, alpha = 1, show.legend = FALSE, linetype = "dashed")
     
     
-    if(length(ccr.list[[scale.idx]]$peaks.pos) == 1) {
+    if(length(ccr.list[[level.idx]]$peaks.pos) == 1) {
       p1 <- p1 + scale_color_gradient(low="red", high="red")
     } else {
       p1 <- p1 + scale_color_gradient(low="red", high="blue") 
     }
     
-    
-    # browser()
-    
     # plot the cross-correlation curve with peaks highlighted
-    p2 <- data.frame(x=ccr.list[[scale.idx]]$adj.pos, ccf=ccr.list[[scale.idx]]$ccr$ccf) %>% 
+    p2 <- data.frame(x=ccr.list[[level.idx]]$adj.pos, ccf=ccr.list[[level.idx]]$ccr$ccf) %>% 
       ggplot(aes(x=.data$x, y=.data$ccf))+
       geom_line() + 
       geom_point(
         data = data.frame(
-          x = ccr.list[[scale.idx]]$peaks.pos, 
-          ccf = ccr.list[[scale.idx]]$peaks.heights,
-          size = seq(2, 1.2, length.out = length(ccr.list[[scale.idx]]$peaks.pos))
+          x = ccr.list[[level.idx]]$peaks.pos, 
+          ccf = ccr.list[[level.idx]]$peaks.heights,
+          size = seq(2, 1.2, length.out = length(ccr.list[[level.idx]]$peaks.pos))
         ),
         aes(colour=.data$size), show.legend = FALSE
       ) +
@@ -347,15 +315,15 @@ cmps_segment_plot <- function(cmps.result, seg.idx = 1){
       scale_color_gradient(low="blue", high="red") + 
       xlab("Shift Position") + 
       ylab("Correlation Coefficient") + 
-      ggtitle(paste("Plotting for scale", scale.idx, "of segment", seg.idx)) +
+      ggtitle(paste("Plotting for scale level", level.idx, "of segment", seg.idx)) +
       theme_bw()
     
     if(length(cmps.result$parameters$npeaks.set) > 1) {
       p2 <- p2 +
-        geom_vline(xintercept = ccr.list[[seg_scale_max]]$peaks.pos,
+        geom_vline(xintercept = ccr.list[[seg_levels]]$peaks.pos,
                    color = "darkgreen", linetype = "twodash") + 
-        geom_vline(xintercept = c(ccr.list[[seg_scale_max]]$peaks.pos - cmps.result$parameters$Tx,
-                                  ccr.list[[seg_scale_max]]$peaks.pos + cmps.result$parameters$Tx),
+        geom_vline(xintercept = c(ccr.list[[seg_levels]]$peaks.pos - cmps.result$parameters$Tx,
+                                  ccr.list[[seg_levels]]$peaks.pos + cmps.result$parameters$Tx),
                    color = "blue", linetype = "dashed")
     }
     

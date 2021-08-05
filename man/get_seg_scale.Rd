@@ -4,17 +4,14 @@
 \alias{get_seg_scale}
 \title{Change the sacle of a segment}
 \usage{
-get_seg_scale(segments, nseg, scale = 2)
+get_seg_scale(segments, nseg, out_length)
 }
 \arguments{
 \item{segments}{list with basis segments and their corresponding indices in the original profile, obtianed by \code{get_segs()}}
 
 \item{nseg}{integer. \code{nseg} = 3: increase the length of the third basis segment.}
 
-\item{scale}{integer. The scale of the increased segment.
-\code{scale} = 1: the length remains the same;
-\code{scale} = 2: the length will be doubled. If \code{len} = 50, the length of the returned segment will be 100;
-\code{scale} = 3: the length will be doubled twice. If \code{len} = 50, the length of the returned segment will be 200.}
+\item{out_length}{integer. The length of the enlarged segment}
 }
 \value{
 list consisting of
@@ -35,5 +32,5 @@ land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
 x <- land2_3$sig
 
 segments <- get_segs(x, len = 50)
-seg5_scale3 <- get_seg_scale(segments, nseg = 5, scale = 3)
+seg5_scale3 <- get_seg_scale(segments, nseg = 5, out_length = 50)
 }

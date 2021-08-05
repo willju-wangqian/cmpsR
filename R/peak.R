@@ -4,10 +4,7 @@
 #' cross correlation curve and finds peaks of the curve.
 #' @param comp a nueric vector, vector of the bullet comparison profile
 #' @param segments list with basis segments and their corresponding indices in the original profile, obtianed by `get_segs()`
-#' @param seg_scale integer. the scale of the segment.
-#' * `seg_scale` = 1: the length remains the same;
-#' * `seg_scale` = 2: the length will be doubled. 
-#' * `seg_scale` = 3: the length will be doubled twice. 
+#' @param seg_outlength length of the enlarged segment
 #' @param nseg integer. `nseg` = 3: the third segment in `segments`
 #' @param npeaks integer. the number of peaks to be identified.
 #'
@@ -31,82 +28,35 @@
 #' segments <- get_segs(x, len = 50)
 #' 
 #' # compute ccf based on y and segment 7 with scale 1, then identify 5 highest peaks
-#' ccrpeaks <- get_ccr_peaks(y, segments = segments, nseg = 7, npeaks = 5, seg_scale = 1)
-get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
+#' ccrpeaks <- get_ccr_peaks(y, segments = segments, seg_outlength = 50,
+#'                           nseg = 7, npeaks = 5)
+get_ccr_peaks <- function(comp, segments, seg_outlength, nseg = 1, npeaks = 5){
 
   assert_that(
-    is.numeric(comp), is.numeric(seg_scale), is.numeric(nseg), is.numeric(npeaks)
+    is.numeric(comp), is.numeric(seg_outlength), is.numeric(nseg), is.numeric(npeaks)
   )
   
-  # tic("time before finding the peaks")
-  if(seg_scale == 1) {
-    # compute for the basis segment
-    # tic("time for get_ccf4 1")
-    seg <- segments$segs[[nseg]]
-    
-    min.overlap <- min(
-      length(seg[!is.na(seg)])*0.9, 
-      round(length(comp[!is.na(comp)])*0.1)
-      )
-    
-    ccr <- get_ccf4(comp, seg, min.overlap = min.overlap)
-    # toc()
-    tmp_pos <- segments$index[[nseg]][1]
-  } else{
-    # find the increased segment, then compute
-    # tic("time for get scale")
-    tt <- get_seg_scale(segments, nseg, scale = seg_scale)
-    # toc()
-    
-    # if(length(tt$aug_seg) == 1676) {browser()}
-    
-    min.overlap <- min(
-      length(tt$aug_seg[!is.na(tt$aug_seg)])*0.9, 
-      round(length(comp[!is.na(comp)])*0.1)
-      )
-    
-    # tic("time for get_ccf4 2")
-    ccr <- get_ccf4(comp, tt$aug_seg, min.overlap = min.overlap)
-    # toc()
-    tmp_pos <- tt$aug_idx[1]
-  }
-  # toc()
+  tt <- get_seg_scale(segments, nseg, out_length = seg_outlength)
+  min.overlap <- min(
+    length(tt$aug_seg[!is.na(tt$aug_seg)])*0.9, 
+    round(length(comp[!is.na(comp)])*0.1)
+  )
   
-  # tic("find peaks")
-  # get all peaks and peak.heights
-  # find_maxs <- rollapply(ccr$ccf, 3, function(x) max(x) == x[2], 
-  #                        fill = list(NA, NA, NA))
-  # peaks <- which(find_maxs)
+  ccr <- get_ccf4(comp, tt$aug_seg, min.overlap = min.overlap)
+  tmp_pos <- tt$aug_idx[1]
   
-  # using C implementation
-  # tmp.x <- ccr$ccf
-  # idx <- seq_along(tmp.x)
-  # notna.idx <- !is.na(tmp.x)
-  # peak.idx <- local_max_cmps(tmp.x[notna.idx])
-  # peaks <- idx[notna.idx][peak.idx]
   peaks <- local_max_cmps(ccr$ccf)
   
-  # new stuff
   od <- order(ccr$ccf[peaks], decreasing = TRUE)[1:npeaks]
   # adjust the position
   adj_pos <- ccr$lag - tmp_pos + 1
   
   peaks.heights <- ccr$ccf[peaks][od]
   peaks.pos <- adj_pos[peaks][od]
-  # toc()
-  
-  # tic("sort")
-  # get the position of peaks
-  # peak_pos <- sort(peaks[order(peaks.heights, decreasing = T)][1:npeaks] - tmp_pos)
-  # peak_height <- ccr$ccf[peak_pos + tmp_pos]
-  # toc()
   
   return(list(ccr = ccr, adj.pos = adj_pos,
               peaks.pos = peaks.pos, peaks.heights = peaks.heights))
   
-  
-  # return(list(ccr = ccr, adj.pos = adj_pos,
-  #             peaks.pos = peak_pos, peaks.heights = peak_height))
 }
 
 #' Identify at most one consistent correlation peak (ccp) 
@@ -135,9 +85,11 @@ get_ccr_peaks <- function(comp, segments, seg_scale, nseg = 1, npeaks = 5){
 #' # the number of peaks identified in each scale are 5, 3, and 1, respectively.
 #' seg_scale_max <- 3
 #' npeaks.set <- c(5,3,1)
+#' outlength <- c(50, 100, 200)
 #' 
 #' ccr.list <- lapply(1:seg_scale_max, function(seg_scale) {
-#'   get_ccr_peaks(y, segments, seg_scale = seg_scale, nseg = 7, npeaks = npeaks.set[seg_scale])
+#'   get_ccr_peaks(y, segments, seg_outlength = outlength[seg_scale], nseg = 7, 
+#'   npeaks = npeaks.set[seg_scale])
 #' })
 #' 
 #' get_ccp(ccr.list, Tx = 25)
@@ -155,22 +107,11 @@ get_ccp <- function(ccr.list, Tx = 25){
   # if the entire basis segment is NA 
   if(length(basis) == 0 & all(is.na(ccr.list[[seg_level]]$ccr$ccf))) { return(NULL) }
   
-  # for the purpose of debugging
-  # if(length(basis) != 1) {stop("the length of the highest level must be 1, i.e., 
-  #                              the last element of npeaks.set must be 1")}
-  
-  # ccp <- lapply(1:(seg_level-1), function(level) {
-  #   ccr.list[[level]]$peaks.pos[abs(ccr.list[[level]]$peaks.pos - basis) <= Tx]
-  # })
-  # ccp <- unlist(c(ccp, basis))
-  # if(length(ccp) >= seg_level) {return(basis)} else {return(NULL)}
-  
   rr <- lapply(seq_along(basis), function(idx) {
     ccp <- lapply(1:(seg_level), function(level) {
       ck.tmp <- abs(ccr.list[[level]]$peaks.pos - basis[idx]) <= Tx
       if((all(!ck.tmp)) | (all(is.na(ck.tmp)))) { return(NULL) }
       else {
-        # return(ccr.list[[level]]$peaks.pos[ck.tmp][1])
         return(1)
       }
     })

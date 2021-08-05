@@ -10,7 +10,8 @@ extract_feature_cmps(
   seg_length = 50,
   Tx = 25,
   npeaks.set = c(5, 3, 1),
-  include = NULL
+  include = NULL,
+  outlength = NULL
 )
 }
 \arguments{
@@ -22,18 +23,22 @@ extract_feature_cmps(
 
 \item{Tx}{a positive integer, the tolerance zone is \verb{+/- Tx}}
 
-\item{npeaks.set}{a numeric vector, specify the number of peaks to be found for each different scale of segment.
+\item{npeaks.set}{a numeric vector, specify the number of peaks to be found at each segment scale level
 \itemize{
-\item If \code{length(npeaks.set) == 1}, the algorithm uses multi-peak inspection only at the basis scale;
+\item If \code{length(npeaks.set) == 1}, the algorithm uses multi-peak inspection only at the basis scale level;
 \item If \code{length(npeaks.set) > 1}, the algorithm uses multi-peak inspection at
-different segment scales.
-\item By default, \code{npeaks.set = c(5,3,1)}. Including more segment scales will reduce the number of false positive results
+different segment scale levels.
+\item By default, \code{npeaks.set = c(5,3,1)}. Including more segment scale levels will reduce the number of false positive results
 }}
 
 \item{include}{\code{NULL} or a vector of character strings indicating what additional information should be included in
 the output of \code{extract_feature_cmps}. All possible options are: "nseg", "congruent.pos", "congruent.seg",
 "congruent.seg.idx", "pos.df", "ccp.list","segments", and "parameters". If one wants to include them all, one can use
 \code{include = "full_result"}. By default, \code{include = NULL} and only the CMPS score is returned}
+
+\item{outlength}{\code{NULL} or a numeric vector, specify the segment length of each level of the basis segment when the
+multi-segment lengths strategy is being used. If \code{outlength = NULL}, then the length of a basis segment will be doubled
+at each segment level}
 }
 \value{
 a numeric value or a list
@@ -55,9 +60,9 @@ a numeric value or a list
 Compute the Congruent Matching Profile Segments (CMPS) score based on two bullet profiles/signatures.
 The reference profile will be divided into consecutive, non-overlapping, basis segments of the same length.
 Then the number of segments that are congruent matching will be found as the CMPS score.
-By default, \code{extract_feature_cmps} implements the algorithm with multi-peak insepction at three
-different segment scales. By setting \code{npeaks.set} as a single-length vector, users can switch to the algorithm
-with multi-peak inspection at the basis scale only.
+By default, \code{extract_feature_cmps} implements the algorithm with multi-peak inspection at three
+different segment scale levels. By setting \code{npeaks.set} as a single-length vector, users can switch to the algorithm
+with multi-peak inspection at the basis scale level only.
 }
 \examples{
 library(bulletxtrctr)
@@ -71,10 +76,10 @@ land1_2 <- bullets$sigs[bullets$bulletland == "1-2"][[1]]
 
 # compute cmps
 
-# algorithm with multi-peak insepction at three different segment scales
+# algorithm with multi-peak insepction at three different segment scale levels
 cmps_with_multi_scale <- extract_feature_cmps(land2_3$sig, land1_2$sig, include = "full_result" )
 
-# algorithm with multi-peak inspection at the basis scale only
+# algorithm with multi-peak inspection at the basis scale level only
 cmps_without_multi_scale <- extract_feature_cmps(land2_3$sig, land1_2$sig, 
                                                  npeaks.set = 5, include = "full_result" )
 \dontrun{
