@@ -165,3 +165,21 @@ compute_cross_corr <- function(x, y, min.overlap) .Call(compute_cross_corr_c, x,
 #' Wrapper function for na_trim
 #' @param x numeric vector
 na_trim_cmps <- function(x) .Call(na_trim_c, x)
+
+
+#' Remove the leading and trailing missing values in a numeric vector
+#' @param x numeric vector
+#' @return a numeric vector; only the leading and trailing missing values are removed
+#' @export
+#' @examples
+#' x <- c(NA, 1, 2, 3, 4, NA)
+#' cmps_na_trim(x)
+cmps_na_trim <- function(x){
+  assert_that(is.numeric(x))
+  
+  x.na.count <- na_trim_cmps(x)
+  
+  x.narm <- x[(x.na.count[1] + 1) : (length(x) - x.na.count[2])]
+  return(x.narm)
+}
+

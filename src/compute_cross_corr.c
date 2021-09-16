@@ -18,7 +18,7 @@ SEXP COMPUTE_CROSS_CORR_(SEXP xx_in, SEXP yy_in, SEXP minoverlap_in)
         double *xx, *yy;
         int *xx_na, *yy_na;
         // double *px, *py, *px2, *py2;
-        double pxsum, pysum, pxpysum, px2sum, py2sum, corr;
+        double pxsum, pysum, pxpysum, px2sum, py2sum, corr, denom;
         double pxsum_tr, pysum_tr, pxpysum_tr, px2sum_tr, py2sum_tr;
 
         pxsum = pysum = pxpysum = px2sum = py2sum = 0;
@@ -145,10 +145,20 @@ SEXP COMPUTE_CROSS_CORR_(SEXP xx_in, SEXP yy_in, SEXP minoverlap_in)
                 }
                 else
                 {
-                        corr = (pxpysum * true_count - pxsum_tr * pysum_tr) /
-                               sqrt((true_count * px2sum_tr - pxsum_tr * pxsum_tr) * (true_count * py2sum_tr - pysum_tr * pysum_tr));
+                        denom = sqrt((true_count * px2sum_tr - pxsum_tr * pxsum_tr) * 
+                                (true_count * py2sum_tr - pysum_tr * pysum_tr));
+                        
+                        if(denom == 0){
+                                cor_result[j] = NA_REAL;
+                        } else {
+                                corr = (pxpysum * true_count - pxsum_tr * pysum_tr) / denom;
+                                cor_result[j] = corr;
+                        }
+                        
+                        
+                               
                         // SET_REAL_ELT(corr_vec, j, corr);
-                        cor_result[j] = corr;
+                        
                         // Rprintf("%lf %lf %d %d\n %lf %lf %lf %lf\n %d %d\n%lf %lf\n %;f %lf %lf %lf\n", corr, pxpysum, true_count, minoverlap,
                         //         pxsum_tr, pysum_tr, px2sum_tr, py2sum_tr,
                         //         xx_na[0], yy_na[0],
