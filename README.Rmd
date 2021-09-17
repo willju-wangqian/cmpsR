@@ -15,26 +15,26 @@ knitr::opts_chunk$set(
 )
 ```
 
-# CMPS
+# cmpsR
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The CMPS package is an implementation of the Congruent Matching Profile Segments (CMPS) method [@Chen:2019ji]. In general, it can be used for objective comparison of striated tool marks, but in our examples, we mainly use it for bullet profiles/signatures comparison. The CMPS number is expected to be large if two signatures are similar. So it can also be considered as a feature that measures the similarity of two bullets.
+The `cmpsR` package is an implementation of the Congruent Matching Profile Segments (CMPS) method [@Chen:2019ji]. In general, it can be used for objective comparison of striated tool marks, but in our examples, we mainly use it for bullet profiles/signatures comparison. The CMPS number is expected to be large if two signatures are similar. So it can also be considered as a feature that measures the similarity of two bullets.
 
 ## Installation
 
-You can install the released version of CMPS from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of cmpsR from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("CMPS")
+install.packages("cmpsR")
 ```
 
 And the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("willju-wangqian/CMPS")
+devtools::install_github("willju-wangqian/cmpsR")
 ```
 
 ## Example and Summary of the Algorithm
@@ -44,7 +44,7 @@ In this section we use a known match (KM) compasison to illustrate the main idea
 We can also run the following chunk. In this example, we are taking the signature of the third land engraved area (LEA) of the second bullet as the reference signature and the second LEA of the first bullet as the comparison signature. This is a KM comparison. 
 
 ```{r eval=FALSE, echo=TRUE}
-library(CMPS)
+library(cmpsR)
 
 data("bullets")
 land23 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
@@ -295,7 +295,7 @@ cp1
 
 ## Future Work
 
-* improve and manage to submit the CMPS package to CRAN
+* improve and manage to submit the cmpsR package to CRAN
 
 * cross-validate some hyper-parameters
 

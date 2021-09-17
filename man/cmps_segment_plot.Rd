@@ -37,7 +37,7 @@ indicates the tolerance zone (determined by \code{Tx})
 library(bulletxtrctr)
 library(tidyverse)
 library(x3ptools)
-library(CMPS)
+library(cmpsR)
 library(ggpubr)
 
 data("bullets")

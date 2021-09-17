@@ -38,7 +38,7 @@ registration position.
 library(bulletxtrctr)
 library(tidyverse)
 library(x3ptools)
-library(CMPS)
+library(cmpsR)
 
 data("bullets")
 land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]

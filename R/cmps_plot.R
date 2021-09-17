@@ -31,7 +31,7 @@
 #' library(bulletxtrctr)
 #' library(tidyverse)
 #' library(x3ptools)
-#' library(CMPS)
+#' library(cmpsR)
 #' 
 #' data("bullets")
 #' land2_3 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
@@ -204,7 +204,7 @@ cmps_signature_plot <- function(cmps.result, add_background = TRUE) {
 #' library(bulletxtrctr)
 #' library(tidyverse)
 #' library(x3ptools)
-#' library(CMPS)
+#' library(cmpsR)
 #' library(ggpubr)
 #' 
 #' data("bullets")

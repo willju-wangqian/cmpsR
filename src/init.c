@@ -1,4 +1,4 @@
-#include "cmps.h"
+#include "cmpsR.h"
 #include <Rconfig.h>
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
@@ -11,7 +11,7 @@ R_CallMethodDef callMethods[] = {
         {NULL,                    NULL,                            0}
 };
 
-void R_init_CMPS(DllInfo *info)
+void R_init_cmpsR(DllInfo *info)
 {
 //   SymbolShortcuts();
   R_registerRoutines(info,
@@ -23,8 +23,8 @@ void R_init_CMPS(DllInfo *info)
   R_useDynamicSymbols(info, TRUE);
 
   /* used by external packages linking to internal xts code from C */
-  R_RegisterCCallable("CMPS","compute_cross_corr",      (DL_FUNC) &COMPUTE_CROSS_CORR_);
-  R_RegisterCCallable("CMPS","na_trim_cmps",            (DL_FUNC) &NA_TRIM_);
-  R_RegisterCCallable("CMPS","local_max_cmps",          (DL_FUNC) &LOCAL_MAX_);
+  R_RegisterCCallable("cmpsR","compute_cross_corr",      (DL_FUNC) &COMPUTE_CROSS_CORR_);
+  R_RegisterCCallable("cmpsR","na_trim_cmps",            (DL_FUNC) &NA_TRIM_);
+  R_RegisterCCallable("cmpsR","local_max_cmps",          (DL_FUNC) &LOCAL_MAX_);
   
 }

@@ -128,7 +128,7 @@ get_ccp <- function(ccr.list, Tx = 25){
 }
 
 #' find local maximums
-#' @useDynLib CMPS, .registration=TRUE
+#' @useDynLib cmpsR, .registration=TRUE
 #' @param x numeric vector, the input sequence
 #' @param find_max a numeric scalor, the function finds maximums if `find_max = 0`
 #' finds minimums if overwise.
