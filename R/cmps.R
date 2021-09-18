@@ -164,7 +164,8 @@ get_CMPS <- function(input.ccp, Tx = 25) {
 #' # algorithm with multi-peak inspection at the basis scale level only
 #' cmps_without_multi_scale <- extract_feature_cmps(land2_3$sig, land1_2$sig, 
 #'                                                  npeaks.set = 5, include = "full_result" )
-#' \dontrun{
+#' 
+#' # Another example
 #' library(tidyverse)
 #' library(bulletxtrctr)
 #' 
@@ -195,7 +196,7 @@ get_CMPS <- function(input.ccp, Tx = 25) {
 #'   
 #' cp1 <- comparisons %>% select(land1, land2, cmps_score, cmps_nseg)
 #' cp1  
-#' }
+#' 
 #' @references 
 #' Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song, 
 #' and Xuezeng Zhao. 2019. “Fired Bullet Signature Correlation Using the 
