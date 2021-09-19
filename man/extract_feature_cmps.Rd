@@ -67,7 +67,6 @@ with multi-peak inspection at the basis scale level only.
 \examples{
 library(bulletxtrctr)
 library(tidyverse)
-library(x3ptools)
 library(cmpsR)
 
 data("bullets")

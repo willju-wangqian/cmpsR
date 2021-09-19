@@ -30,7 +30,6 @@
 #' @examples
 #' library(bulletxtrctr)
 #' library(tidyverse)
-#' library(x3ptools)
 #' library(cmpsR)
 #' 
 #' data("bullets")
@@ -203,7 +202,6 @@ cmps_signature_plot <- function(cmps.result, add_background = TRUE) {
 #' @examples
 #' library(bulletxtrctr)
 #' library(tidyverse)
-#' library(x3ptools)
 #' library(cmpsR)
 #' library(ggpubr)
 #' 

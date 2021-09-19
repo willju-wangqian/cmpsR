@@ -36,7 +36,6 @@ indicates the tolerance zone (determined by \code{Tx})
 \examples{
 library(bulletxtrctr)
 library(tidyverse)
-library(x3ptools)
 library(cmpsR)
 library(ggpubr)
 

@@ -149,7 +149,6 @@ get_CMPS <- function(input.ccp, Tx = 25) {
 #' @examples
 #' library(bulletxtrctr)
 #' library(tidyverse)
-#' library(x3ptools)
 #' library(cmpsR)
 #' 
 #' data("bullets")

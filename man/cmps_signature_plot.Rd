@@ -37,7 +37,6 @@ registration position.
 \examples{
 library(bulletxtrctr)
 library(tidyverse)
-library(x3ptools)
 library(cmpsR)
 
 data("bullets")
