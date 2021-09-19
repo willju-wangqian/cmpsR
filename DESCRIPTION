@@ -5,12 +5,12 @@ Authors@R: c(
     person("Wangqian", "Ju", email = "wju@iastate.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9977-377X")),
     person("Heike", "Hofmann", email = "hofmann@iastate.edu", role = "ctb", comment=c(ORCID="0000-0001-6216-5183"))
     )
-Description: The CMPS package is an implementation of the Congruent Matching 
+Description: The cmpsR package is an implementation of the Congruent Matching 
     Profile Segments (CMPS) method (Chen et al. 2019). In general, it can be used for 
     objective comparison of striated tool marks, but in our examples, we mainly 
-    use it for bullet profiles/signatures comparison. The CMPS number is 
+    use it for bullet signatures comparisons. The CMPS score is 
     expected to be large if two signatures are similar. So it can also be 
-    considered as a feature that measures the similarity of two bullets.
+    considered as a feature that measures the similarity of two bullet signatures.
 Imports: 
     assertthat (>= 0.2.0),
     zoo,
