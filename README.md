@@ -4,6 +4,8 @@
 # cmpsR
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/willju-wangqian/cmpsR/workflows/R-CMD-check/badge.svg)](https://github.com/willju-wangqian/cmpsR/actions)
 <!-- badges: end -->
 
 The `cmpsR` package is an implementation of the Congruent Matching
