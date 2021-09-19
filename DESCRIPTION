@@ -22,7 +22,6 @@ Remotes:
 Suggests:
     purrr,
     tidyverse,
-    x3ptools,
     bulletxtrctr,
     ggpubr
 License: GPL-3
