@@ -120,6 +120,9 @@ get_ccf4 <- function (x, y, min.overlap = round(0.1 * max(length(x), length(y)))
   assert_that(nx > 0, ny > 0, nx >= ny, 
               is.numeric(x), is.numeric(y), is.numeric(min.overlap))
   
+  x <- as.numeric(x)
+  y <- as.numeric(y)
+  
   lag.max <- nx + 2 * (ny - ceiling(min.overlap)) - ny
   lags <- 0:lag.max
   lag <- lags - (ny - min.overlap)

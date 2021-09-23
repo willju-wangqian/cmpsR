@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Identify at most one consistent correlation peak (ccp) — get_ccp • CMPS</title>
+<title>Identify at most one consistent correlation peak (ccp) — get_ccp • cmpsR</title>
 
 
 <!-- jquery -->
@@ -73,8 +73,8 @@ return NULL" />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">CMPS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9.1000</span>
+        <a class="navbar-link" href="../index.html">cmpsR</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9.4</span>
       </span>
     </div>
 
@@ -149,13 +149,15 @@ return <code>NULL</code></p>
 <span class='co'># the number of peaks identified in each scale are 5, 3, and 1, respectively.</span>
 <span class='va'>seg_scale_max</span> <span class='op'>&lt;-</span> <span class='fl'>3</span>
 <span class='va'>npeaks.set</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>3</span>,<span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>outlength</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>100</span>, <span class='fl'>200</span><span class='op'>)</span>
 
 <span class='va'>ccr.list</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='va'>seg_scale_max</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>seg_scale</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'><a href='get_ccr_peaks.html'>get_ccr_peaks</a></span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>segments</span>, seg_scale <span class='op'>=</span> <span class='va'>seg_scale</span>, nseg <span class='op'>=</span> <span class='fl'>7</span>, npeaks <span class='op'>=</span> <span class='va'>npeaks.set</span><span class='op'>[</span><span class='va'>seg_scale</span><span class='op'>]</span><span class='op'>)</span>
+  <span class='fu'><a href='get_ccr_peaks.html'>get_ccr_peaks</a></span><span class='op'>(</span><span class='va'>y</span>, <span class='va'>segments</span>, seg_outlength <span class='op'>=</span> <span class='va'>outlength</span><span class='op'>[</span><span class='va'>seg_scale</span><span class='op'>]</span>, nseg <span class='op'>=</span> <span class='fl'>7</span>, 
+  npeaks <span class='op'>=</span> <span class='va'>npeaks.set</span><span class='op'>[</span><span class='va'>seg_scale</span><span class='op'>]</span><span class='op'>)</span>
 <span class='op'>}</span><span class='op'>)</span>
 
 <span class='fu'>get_ccp</span><span class='op'>(</span><span class='va'>ccr.list</span>, Tx <span class='op'>=</span> <span class='fl'>25</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] -7</div></pre>
+</div><div class='output co'>#&gt; [1] -6</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

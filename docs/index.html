@@ -5,19 +5,19 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Implementation of Congruent Matching Profile Segments (CMPS) Method • CMPS</title>
+<title>Implementation of Congruent Matching Profile Segments (CMPS) Method • cmpsR</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Implementation of Congruent Matching Profile Segments (CMPS) Method">
-<meta property="og:description" content="The CMPS package is an implementation of the Congruent Matching 
+<meta property="og:description" content="The cmpsR package is an implementation of the Congruent Matching 
     Profile Segments (CMPS) method (Chen et al. 2019). In general, it can be used for 
     objective comparison of striated tool marks, but in our examples, we mainly 
-    use it for bullet profiles/signatures comparison. The CMPS number is 
+    use it for bullet signatures comparisons. The CMPS score is 
     expected to be large if two signatures are similar. So it can also be 
-    considered as a feature that measures the similarity of two bullets.">
+    considered as a feature that measures the similarity of two bullet signatures.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -35,8 +35,8 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">CMPS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9.1000</span>
+        <a class="navbar-link" href="index.html">cmpsR</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9.4</span>
       </span>
     </div>
 
@@ -64,30 +64,30 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="cmps" class="section level1">
+<div id="cmpsr" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#cmps" class="anchor"></a>CMPS</h1></div>
+<a href="#cmpsr" class="anchor"></a>cmpsR</h1></div>
 <!-- badges: start -->
-<!-- badges: end -->
-<p>The CMPS package is an implementation of the Congruent Matching Profile Segments (CMPS) method (Chen et al. 2019). In general, it can be used for objective comparison of striated tool marks, but in our examples, we mainly use it for bullet profiles/signatures comparison. The CMPS number is expected to be large if two signatures are similar. So it can also be considered as a feature that measures the similarity of two bullets.</p>
+
+<p>The <code>cmpsR</code> package is an implementation of the Congruent Matching Profile Segments (CMPS) method (Chen et al. 2019). In general, it can be used for objective comparison of striated tool marks, but in our examples, we mainly use it for bullet profiles/signatures comparison. The CMPS number is expected to be large if two signatures are similar. So it can also be considered as a feature that measures the similarity of two bullets.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of CMPS from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"CMPS"</span><span class="op">)</span></pre></div>
+<p>You can install the released version of cmpsR from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"cmpsR"</span><span class="op">)</span></code></pre></div>
 <p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"willju-wangqian/CMPS"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"willju-wangqian/cmpsR"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="example-and-summary-of-the-algorithm" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-and-summary-of-the-algorithm" class="anchor"></a>Example and Summary of the Algorithm</h2>
 <p>In this section we use a known match (KM) compasison to illustrate the main ideas of CMPS algorithm. The bullet data used here can be found in Chapter 3.5 of <a href="https://sctyner.github.io/OpenForSciR/bullets.html#case-study-1">Open Forensic Science in R</a>.</p>
 <p>We can also run the following chunk. In this example, we are taking the signature of the third land engraved area (LEA) of the second bullet as the reference signature and the second LEA of the first bullet as the comparison signature. This is a KM comparison.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">CMPS</span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">cmpsR</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span>
 <span class="va">land23</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
@@ -118,14 +118,12 @@
 <span class="co"># 9       -1   14</span>
 <span class="co"># </span>
 <span class="co"># $nseg</span>
-<span class="co"># [1] 22</span></pre></div>
+<span class="co"># [1] 22</span></code></pre></div>
 <p>And we have the plot of <code>x</code> and <code>y</code>.</p>
 <div class="figure" style="text-align: center">
-<p><img src="reference/figures/step0.png" alt="A KM Comparison, x and y" width="80%"></p>
-<p class="caption">
+<img src="reference/figures/step0.png" alt="A KM Comparison, x and y" width="80%"><p class="caption">
+A KM Comparison, x and y
 </p>
-<p>A KM Comparison, x and y</p>
-
 </div>
 <div id="main-idea" class="section level4">
 <h4 class="hasAnchor">
@@ -135,64 +133,52 @@
 <li>we take the first signature as the reference signature (<code>x</code>) and cut it into consecutive and non-overlapping basis segments of the same length. In this case, we set the length of a basis segment to be 50 units, and we have 22 basis segments in total.</li>
 </ol>
 <div class="figure" style="text-align: center">
-<p><img src="reference/figures/step1_1.png" alt="Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here" width="80%"></p>
-<p class="caption">
+<img src="reference/figures/step1_1.png" alt="Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here" width="80%"><p class="caption">
+Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here
 </p>
-<p>Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here</p>
-
 </div>
 <ol>
 <li>for each basis segment, we compute the cross-correlation function (ccf) between the basis segment and the comparison signature (<code>y</code>)</li>
 </ol>
 <div class="figure" style="text-align: center">
-<p><img src="reference/figures/step2_1.png" alt="y and 7th basis segment" width="80%"></p>
-<p class="caption">
+<img src="reference/figures/step2_1.png" alt="y and 7th basis segment" width="80%"><p class="caption">
+y and 7th basis segment
 </p>
-<p>y and 7th basis segment</p>
-
 </div>
 <div class="figure" style="text-align: center">
-<p><img src="reference/figures/step2_2.png" alt="the cross-correlation function (ccf) between y and segment 7" width="80%"></p>
-<p class="caption">
+<img src="reference/figures/step2_2.png" alt="the cross-correlation function (ccf) between y and segment 7" width="80%"><p class="caption">
+the cross-correlation function (ccf) between y and segment 7
 </p>
-<p>the cross-correlation function (ccf) between y and segment 7</p>
-
 </div>
 <ul>
 <li>for the <code>ccf</code> curve, the <code>position</code> represents the shift of the segment. A negative value means a shift to the left, a positive value means a shift to the right, and 0 means no shift (the segment stays at its original position in the reference signature);</li>
-<li>we are interested in the peaks in the ccf curve and the positions of those peaks (as indicated by the red vertical line in the plot above). In other words, if we shift the segment, which position would give us the “best fit”?</li>
+<li>we are interested in the peaks in the ccf curve and the positions of those peaks (as indicated by the red vertical line in the plot above). In other words, if we shift the segment, which position would give us the “best fit?”</li>
 </ul>
-<!-- end list --><ol>
-<li>If two signatures are similar (a KM comparison), most of the basis segments should agree with each other on the position of the best fit. Then these segments are called the “<strong>Congruent Matching Profile Segments</strong>”.</li>
+<ol>
+<li>If two signatures are similar (a KM comparison), most of the basis segments should agree with each other on the position of the best fit. Then these segments are called the “<strong>Congruent Matching Profile Segments</strong>.”</li>
 </ol>
 <div class="figure" style="text-align: center">
-<p><img src="reference/figures/step1_2.png" alt="compare y to the basis segments of x" width="80%"></p>
-<p class="caption">
+<img src="reference/figures/step1_2.png" alt="compare y to the basis segments of x" width="80%"><p class="caption">
+compare y to the basis segments of x
 </p>
-<p>compare y to the basis segments of x</p>
-
 </div>
 <p>And ideally, if two signatures are identical, we are expecting the position of the highest peak in the ccf curve remains the same across all ccf curves (we only show 7 segments here);</p>
 <div class="figure" style="text-align: center">
-<p><img src="reference/figures/step3_1.png" alt="ideal case: compare x to itself. The highest peak has value 1 and is marked by the blue dot" width="80%"></p>
-<p class="caption">
+<img src="reference/figures/step3_1.png" alt="ideal case: compare x to itself. The highest peak has value 1 and is marked by the blue dot" width="80%"><p class="caption">
+ideal case: compare x to itself. The highest peak has value 1 and is marked by the blue dot
 </p>
-<p>ideal case: compare x to itself. The highest peak has value 1 and is marked by the blue dot</p>
-
 </div>
 <p>But in the real case, the basis segments might not achieve a final agreement, but we have the majority;</p>
 <div class="figure" style="text-align: center">
-<p><img src="reference/figures/step3_2.png" alt="real case: compare x to y. The 5 highest peaks are marked by the blue dots" width="80%"></p>
-<p class="caption">
+<img src="reference/figures/step3_2.png" alt="real case: compare x to y. The 5 highest peaks are marked by the blue dots" width="80%"><p class="caption">
+real case: compare x to y. The 5 highest peaks are marked by the blue dots
 </p>
-<p>real case: compare x to y. The 5 highest peaks are marked by the blue dots</p>
-
 </div>
 <p>We mark the 5 highest peaks for each ccf curve because the position of the “highest peak” might not be the best one.</p>
 <ol>
 <li>each ccf curve votes for 5 candidate positions, then we ask two questions in order to obtain the CMPS number/score:</li>
 </ol>
-<!-- end list --><ul>
+<ul>
 <li><p>which position receives the most votes? -&gt; the best position (indicated by the red vertical line)</p></li>
 <li>
 <p>how many segments have voted for the best position? -&gt; CMPS number</p>
@@ -200,25 +186,21 @@
 <p>(If we consider all 22 segments, and have a default tolerance zone (+/- 25 units), the CMPS number is 20.)</p>
 </li>
 </ul>
-<!-- end list --><ol>
+<ol>
 <li>false positive: how can the segments vote more wisely? -&gt; Multi Segment Lengths Strategy</li>
 </ol>
-<!-- end list --><ul>
+<ul>
 <li>by increasing the segment length (scale), one can reduce the number of “false positive” peaks</li>
 </ul>
 <div class="figure" style="text-align: center">
-<p><img src="reference/figures/step5_1.png" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%"></p>
-<p class="caption">
+<img src="reference/figures/step5_1.png" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%"><p class="caption">
+Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves
 </p>
-<p>Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves</p>
-
 </div>
 <div class="figure" style="text-align: center">
-<p><img src="reference/figures/step5_2.png" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%"></p>
-<p class="caption">
+<img src="reference/figures/step5_2.png" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%"><p class="caption">
+Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves
 </p>
-<p>Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves</p>
-
 </div>
 <ul>
 <li>
@@ -234,14 +216,14 @@
 </li>
 <li><p>by default, CMPS algorithm uses the multi-segment lengths strategy.</p></li>
 </ul>
-<!-- end list --><ol>
+<ol>
 <li>if we consider all segments and use the multi-segment lengths strategy</li>
 </ol>
-<!-- end list --><ul>
+<ul>
 <li>when comparing x and y, a KM comparison, we have</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, seg_length <span class="op">=</span> <span class="fl">50</span>, seg_scale_max <span class="op">=</span> <span class="fl">3</span>, Tx <span class="op">=</span> <span class="fl">25</span>, 
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, seg_length <span class="op">=</span> <span class="fl">50</span>, seg_scale_max <span class="op">=</span> <span class="fl">3</span>, Tx <span class="op">=</span> <span class="fl">25</span>, 
                      npeaks.set <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, full_result <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co"># $CMPS.score</span>
@@ -263,12 +245,12 @@
 <span class="co"># 9       -1   14</span>
 <span class="co"># </span>
 <span class="co"># $nseg</span>
-<span class="co"># [1] 22</span></pre></div>
+<span class="co"># [1] 22</span></code></pre></div>
 <ul>
 <li>if we have a KNM (known non-match) comparison, e.g. compare land 2-3 with land 1-3:</li>
 </ul>
-<!-- end list --><div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">land23</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">land23</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="va">land13</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"1-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 
 <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">land23</span><span class="op">$</span><span class="va">sig</span>, <span class="va">land13</span><span class="op">$</span><span class="va">sig</span>, seg_length <span class="op">=</span> <span class="fl">50</span>, seg_scale_max <span class="op">=</span> <span class="fl">3</span>, Tx <span class="op">=</span> <span class="fl">25</span>, 
@@ -280,14 +262,14 @@
 <span class="co"># [1] 128</span>
 
 <span class="va">result</span><span class="op">$</span><span class="va">nseg</span>
-<span class="co"># [1] 22</span></pre></div>
+<span class="co"># [1] 22</span></code></pre></div>
 </div>
 <div id="full-comparison-between-two-bullets" class="section level4">
 <h4 class="hasAnchor">
 <a href="#full-comparison-between-two-bullets" class="anchor"></a>Full Comparison Between Two Bullets</h4>
 <p><code><a href="reference/extract_feature_cmps.html">extract_feature_cmps()</a></code> can also be used in a pipeline fashion</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://heike.github.io/bulletxtrctr/">bulletxtrctr</a></span><span class="op">)</span>
 
 <span class="va">lands</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span><span class="op">)</span>
@@ -362,14 +344,14 @@
 <span class="co"># 33   1-3   2-6          2        21</span>
 <span class="co"># 34   1-4   2-6          1        22</span>
 <span class="co"># 35   1-5   2-6         15        23</span>
-<span class="co"># 36   1-6   2-6          1        22</span></pre></div>
+<span class="co"># 36   1-6   2-6          1        22</span></code></pre></div>
 </div>
 </div>
 <div id="future-work" class="section level2">
 <h2 class="hasAnchor">
 <a href="#future-work" class="anchor"></a>Future Work</h2>
 <ul>
-<li><p>improve and manage to submit the CMPS package to CRAN</p></li>
+<li><p>improve and manage to submit the cmpsR package to CRAN</p></li>
 <li><p>cross-validate some hyper-parameters</p></li>
 <li>
 <p>apply CMPS to</p>
@@ -383,9 +365,9 @@
 <div id="reference" class="section level2">
 <h2 class="hasAnchor">
 <a href="#reference" class="anchor"></a>Reference</h2>
-<div id="refs" class="references">
-<div id="ref-Chen:2019ji">
-<p>Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song, and Xuezeng Zhao. 2019. “Fired Bullet Signature Correlation Using the Congruent Matching Profile Segments (CMPS) Method.” <em>Forensic Science International</em>, December, #109964. <a href="https://doi.org/10.1016/j.forsciint.2019.109964" class="uri">https://doi.org/10.1016/j.forsciint.2019.109964</a>.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Chen:2019ji" class="csl-entry">
+Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song, and Xuezeng Zhao. 2019. “<span class="nocase">Fired Bullet Signature Correlation Using the Congruent Matching Profile Segments (CMPS) Method</span>.” <em>Forensic Science International</em>, December, #109964. <a href="https://doi.org/10.1016/j.forsciint.2019.109964" class="uri">https://doi.org/10.1016/j.forsciint.2019.109964</a>.
 </div>
 </div>
 </div>
@@ -408,7 +390,13 @@
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/willju-wangqian/cmpsR/actions"><img src="https://github.com/willju-wangqian/cmpsR/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 

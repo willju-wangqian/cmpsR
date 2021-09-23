@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Identify peaks of a cross correlation curve — get_ccr_peaks • cmpsR</title>
+<title>Helper Function for Plotting the Distribution of a Metric — metric_plot_helper • cmpsR</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,8 @@
 
 
 
-<meta property="og:title" content="Identify peaks of a cross correlation curve — get_ccr_peaks" />
-<meta property="og:description" content="Given a comparison profile and a segment, get_ccr_peaks computes the
-cross correlation curve and finds peaks of the curve." />
+<meta property="og:title" content="Helper Function for Plotting the Distribution of a Metric — metric_plot_helper" />
+<meta property="og:description" content="Helper Function for Plotting the Distribution of a Metric" />
 
 
 
@@ -104,66 +103,46 @@ cross correlation curve and finds peaks of the curve." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Identify peaks of a cross correlation curve</h1>
+    <h1>Helper Function for Plotting the Distribution of a Metric</h1>
     
-    <div class="hidden name"><code>get_ccr_peaks.Rd</code></div>
+    <div class="hidden name"><code>metric_plot_helper.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Given a comparison profile and a segment, <code>get_ccr_peaks</code> computes the
-cross correlation curve and finds peaks of the curve.</p>
+    <p>Helper Function for Plotting the Distribution of a Metric</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_ccr_peaks</span><span class='op'>(</span><span class='va'>comp</span>, <span class='va'>segments</span>, <span class='va'>seg_outlength</span>, nseg <span class='op'>=</span> <span class='fl'>1</span>, npeaks <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>metric_plot_helper</span><span class='op'>(</span><span class='va'>cmps.metric</span>, <span class='va'>metric</span>, scaled <span class='op'>=</span> <span class='cn'>FALSE</span>, SSratio <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>comp</th>
-      <td><p>a nueric vector, vector of the bullet comparison profile</p></td>
+      <th>cmps.metric</th>
+      <td><p>a data frame containing values of the metric and the labels</p></td>
     </tr>
     <tr>
-      <th>segments</th>
-      <td><p>list with basis segments and their corresponding indices in the original profile, obtianed by <code><a href='get_segs.html'>get_segs()</a></code></p></td>
+      <th>metric</th>
+      <td><p>string. Which metric to be plotted</p></td>
     </tr>
     <tr>
-      <th>seg_outlength</th>
-      <td><p>length of the enlarged segment</p></td>
+      <th>scaled</th>
+      <td><p>logical value. If <code>scaled = TRUE</code>, the values should be within the interval of <code>[0, 1]</code></p></td>
     </tr>
     <tr>
-      <th>nseg</th>
-      <td><p>integer. <code>nseg</code> = 3: the third segment in <code>segments</code></p></td>
+      <th>SSratio</th>
+      <td><p>logical value. Whether to show the sum of squares ratio value</p></td>
     </tr>
     <tr>
-      <th>npeaks</th>
-      <td><p>integer. the number of peaks to be identified.</p></td>
+      <th>...</th>
+      <td><p>other arguments for plotting: <code>breaks</code>, <code>binwidth</code>, and <code>subtitle</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list consisting of:</p><ul>
-<li><p><code>ccr</code>: the cross correlation curve</p></li>
-<li><p><code>adj.pos</code>: indices of the curve</p></li>
-<li><p><code>peaks.pos</code>: position of the identified peaks</p></li>
-<li><p><code>peaks.heights</code>: the cross correlation value (height of the curve) of the peaks</p></li>
-</ul>
+    <p>a ggplot object</p>
 
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"bullets"</span><span class='op'>)</span>
-<span class='va'>land2_3</span> <span class='op'>&lt;-</span> <span class='va'>bullets</span><span class='op'>$</span><span class='va'>sigs</span><span class='op'>[</span><span class='va'>bullets</span><span class='op'>$</span><span class='va'>bulletland</span> <span class='op'>==</span> <span class='st'>"2-3"</span><span class='op'>]</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-<span class='va'>land1_2</span> <span class='op'>&lt;-</span> <span class='va'>bullets</span><span class='op'>$</span><span class='va'>sigs</span><span class='op'>[</span><span class='va'>bullets</span><span class='op'>$</span><span class='va'>bulletland</span> <span class='op'>==</span> <span class='st'>"1-2"</span><span class='op'>]</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>land2_3</span><span class='op'>$</span><span class='va'>sig</span>
-<span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>land1_2</span><span class='op'>$</span><span class='va'>sig</span>
-
-<span class='va'>segments</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_segs.html'>get_segs</a></span><span class='op'>(</span><span class='va'>x</span>, len <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
-
-<span class='co'># compute ccf based on y and segment 7 with scale 1, then identify 5 highest peaks</span>
-<span class='va'>ccrpeaks</span> <span class='op'>&lt;-</span> <span class='fu'>get_ccr_peaks</span><span class='op'>(</span><span class='va'>y</span>, segments <span class='op'>=</span> <span class='va'>segments</span>, seg_outlength <span class='op'>=</span> <span class='fl'>50</span>,
-                          nseg <span class='op'>=</span> <span class='fl'>7</span>, npeaks <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

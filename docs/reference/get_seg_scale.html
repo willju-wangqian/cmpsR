@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Change the sacle of a segment — get_seg_scale • CMPS</title>
+<title>Change the sacle of a segment — get_seg_scale • cmpsR</title>
 
 
 <!-- jquery -->
@@ -74,8 +74,8 @@ as the basis segment." />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">CMPS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9.1000</span>
+        <a class="navbar-link" href="../index.html">cmpsR</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9.4</span>
       </span>
     </div>
 
@@ -118,7 +118,7 @@ the length of the basis segment will be doubled to compute the correlation curve
 as the basis segment.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_seg_scale</span><span class='op'>(</span><span class='va'>segments</span>, <span class='va'>nseg</span>, scale <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>get_seg_scale</span><span class='op'>(</span><span class='va'>segments</span>, <span class='va'>nseg</span>, <span class='va'>out_length</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,11 +132,8 @@ as the basis segment.</p>
       <td><p>integer. <code>nseg</code> = 3: increase the length of the third basis segment.</p></td>
     </tr>
     <tr>
-      <th>scale</th>
-      <td><p>integer. The scale of the increased segment.
-<code>scale</code> = 1: the length remains the same;
-<code>scale</code> = 2: the length will be doubled. If <code>len</code> = 50, the length of the returned segment will be 100;
-<code>scale</code> = 3: the length will be doubled twice. If <code>len</code> = 50, the length of the returned segment will be 200.</p></td>
+      <th>out_length</th>
+      <td><p>integer. The length of the enlarged segment</p></td>
     </tr>
     </table>
 
@@ -154,7 +151,7 @@ as the basis segment.</p>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>land2_3</span><span class='op'>$</span><span class='va'>sig</span>
 
 <span class='va'>segments</span> <span class='op'>&lt;-</span> <span class='fu'><a href='get_segs.html'>get_segs</a></span><span class='op'>(</span><span class='va'>x</span>, len <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
-<span class='va'>seg5_scale3</span> <span class='op'>&lt;-</span> <span class='fu'>get_seg_scale</span><span class='op'>(</span><span class='va'>segments</span>, nseg <span class='op'>=</span> <span class='fl'>5</span>, scale <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='va'>seg5_scale3</span> <span class='op'>&lt;-</span> <span class='fu'>get_seg_scale</span><span class='op'>(</span><span class='va'>segments</span>, nseg <span class='op'>=</span> <span class='fl'>5</span>, out_length <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
