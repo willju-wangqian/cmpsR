@@ -54,7 +54,6 @@ compute_ss_ratio <- function(score, label, MS=FALSE) {
 #'
 #' @examples
 #' library(tidyverse)
-#' library(bulletxtrctr)
 #' 
 #' data("bullets")
 #' 
@@ -134,7 +133,6 @@ get_all_phases <- function(land1, land2, score, addNA = FALSE)
 #'
 #' @examples
 #' library(tidyverse)
-#' library(bulletxtrctr)
 #' 
 #' data("bullets")
 #' 
@@ -210,7 +208,6 @@ compute_diff_phase <- function(scores.list, FUNC = mean, na.rm = TRUE, both = FA
 #'
 #' @examples
 #' library(tidyverse)
-#' library(bulletxtrctr)
 #' 
 #' data("bullets")
 #' 

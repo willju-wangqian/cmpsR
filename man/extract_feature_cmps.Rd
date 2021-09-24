@@ -65,7 +65,6 @@ different segment scale levels. By setting \code{npeaks.set} as a single-length 
 with multi-peak inspection at the basis scale level only.
 }
 \examples{
-library(bulletxtrctr)
 library(tidyverse)
 library(cmpsR)
 
@@ -84,7 +83,6 @@ cmps_without_multi_scale <- extract_feature_cmps(land2_3$sig, land1_2$sig,
 
 # Another example
 library(tidyverse)
-library(bulletxtrctr)
 
 data("bullets")
 

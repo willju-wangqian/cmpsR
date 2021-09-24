@@ -46,7 +46,6 @@ By default, this helper function computes four metrics.
 }
 \examples{
 library(tidyverse)
-library(bulletxtrctr)
 
 data("bullets")
 

@@ -147,7 +147,6 @@ get_CMPS <- function(input.ccp, Tx = 25) {
 #' @importFrom assertthat assert_that
 #'
 #' @examples
-#' library(bulletxtrctr)
 #' library(tidyverse)
 #' library(cmpsR)
 #' 
@@ -166,7 +165,6 @@ get_CMPS <- function(input.ccp, Tx = 25) {
 #' 
 #' # Another example
 #' library(tidyverse)
-#' library(bulletxtrctr)
 #' 
 #' data("bullets")
 #' 

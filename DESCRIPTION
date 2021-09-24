@@ -17,15 +17,10 @@ Imports:
     dplyr,
     rlang,
     ggplot2
-Remotes: 
-    heike/x3ptools,
-    heike/bulletxtrctr
 Suggests:
     purrr,
     tidyverse,
-    ggpubr,
-    x3ptools,
-    bulletxtrctr
+    ggpubr
 Additional_repositories:
     https://github.com/heike/x3ptools
 License: GPL-3

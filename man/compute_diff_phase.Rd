@@ -26,7 +26,6 @@ based on all non-matching comparisons (background phases)
 }
 \examples{
 library(tidyverse)
-library(bulletxtrctr)
 
 data("bullets")
 

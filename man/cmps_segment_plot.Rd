@@ -34,7 +34,6 @@ indicates the position of the consistent correlation peak (if any); the blue ver
 indicates the tolerance zone (determined by \code{Tx})
 }
 \examples{
-library(bulletxtrctr)
 library(tidyverse)
 library(cmpsR)
 library(ggpubr)

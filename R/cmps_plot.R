@@ -28,7 +28,6 @@
 #' @import dplyr
 #'
 #' @examples
-#' library(bulletxtrctr)
 #' library(tidyverse)
 #' library(cmpsR)
 #' 
@@ -200,7 +199,6 @@ cmps_signature_plot <- function(cmps.result, add_background = TRUE) {
 #' @import ggplot2
 #'
 #' @examples
-#' library(bulletxtrctr)
 #' library(tidyverse)
 #' library(cmpsR)
 #' library(ggpubr)

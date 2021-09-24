@@ -23,7 +23,6 @@ Obtain a list of all phases of a bullet-by-bullet comparison
 }
 \examples{
 library(tidyverse)
-library(bulletxtrctr)
 
 data("bullets")
 
