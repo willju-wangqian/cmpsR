@@ -18,14 +18,14 @@ Imports:
     rlang,
     ggplot2
 Remotes: 
-    heike/bulletxtrctr,
-    heike/x3ptools
+    heike/x3ptools,
+    heike/bulletxtrctr
 Suggests:
     purrr,
     tidyverse,
     ggpubr,
-    bulletxtrctr,
-    x3ptools
+    x3ptools,
+    bulletxtrctr
 Additional_repositories:
     https://github.com/heike/x3ptools
 License: GPL-3
