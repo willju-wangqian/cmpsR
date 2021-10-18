@@ -1,12 +1,12 @@
 Package: cmpsR
 Title: R Implementation of Congruent Matching Profile Segments Method
-Version: 0.0.9.4
+Version: 0.1.0
 Authors@R: c(
     person("Wangqian", "Ju", email = "wju@iastate.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9977-377X")),
     person("Heike", "Hofmann", email = "hofmann@iastate.edu", role = "ctb", comment=c(ORCID="0000-0001-6216-5183"))
     )
 Description: This is an open-source implementation of the Congruent Matching Profile 
-    Segments (CMPS) method (Chen et al. 2019)<https://doi.org/10.1016/j.forsciint.2019.109964>. 
+    Segments (CMPS) method (Chen et al. 2019)<doi:10.1016/j.forsciint.2019.109964>. 
     In general, it can be used for objective comparison of striated tool marks, and in our 
     examples, we specifically use it for bullet signatures comparisons. The CMPS score is 
     expected to be large if two signatures are similar. So it can also be considered as a 

@@ -1,4 +1,4 @@
-library(CMPS)
+library(cmpsR)
 library(ggplot2)
 library(tidyverse)
 theme_set(theme_bw())
@@ -70,19 +70,20 @@ ggsave("man/figures/step1_2.png")
 seg3 <- df %>% filter(segs == 7)
 seg3$segs <- "segment 7"
 df.y <- data.frame(value = y, segs = "y", index = 1:length(y))
-df.y <- rbind(df.y, seg3)
+df.y <- rbind(df.y, seg3[,-4])
+df.y$segs <- factor(df.y$segs, levels = c("y", "segment 7"))
 df.y %>% filter(!is.na(value)) %>% 
   ggplot() +
   geom_line(aes(x = index, y = value)) +
   facet_grid(segs ~ .) +
   xlab("position") +
   ylab("signature") +
-  ggtitle("Comparison Signature y and The Third Segment")
+  ggtitle("Reference Signature y and the 7th Segment")
 # ggsave("man/figures/step2_1.png")
 
 
 
-ccrpeaks <- get_ccr_peaks(df.y$value, segments = segments, nseg = 7, npeaks = 1, seg_scale = 1)
+ccrpeaks <- get_ccr_peaks(y, segments = segments, 50, nseg = 7, npeaks = 1)
 df.ccf <- data.frame(value = ccrpeaks$ccr$ccf, index = ccrpeaks$adj.pos)
 # tt <- get_ccf4(df.y$value, seg3$value, 50)
 # tail(tt$ccf)
@@ -90,7 +91,6 @@ df.ccf <- data.frame(value = ccrpeaks$ccr$ccf, index = ccrpeaks$adj.pos)
 df.ccf %>% ggplot() +
   geom_line(aes(index, value)) + 
   geom_vline(xintercept = ccrpeaks$peaks.pos, color = "red") +
-  xlim(-400, 800) +
   xlab("position") +
   ylab("ccf") +
   ggtitle("CCF of y and the 7th segment")
@@ -100,16 +100,16 @@ df.ccf %>% ggplot() +
 # step 3-1
 comp <- x
 npeaks <- 1
-seg_scale <- 1
+seg_outlength <- 50
 
 ccf.df <- do.call(rbind, lapply(6:12, function(nss) {
-  ccrpeaks <- get_ccr_peaks(comp, segments = segments, nseg = nss, npeaks = npeaks, seg_scale = seg_scale)
+  ccrpeaks <- get_ccr_peaks(comp, segments = segments, seg_outlength = seg_outlength, nseg = nss, npeaks = npeaks)
   df.ccf <- data.frame(value = ccrpeaks$ccr$ccf, index = ccrpeaks$adj.pos)
   df.ccf$segs <- nss
   df.ccf
 }))
 peak.df <- do.call(rbind, lapply(6:12, function(nss) {
-  ccrpeaks <- get_ccr_peaks(comp, segments = segments, nseg = nss, npeaks = npeaks, seg_scale = seg_scale)
+  ccrpeaks <- get_ccr_peaks(comp, segments = segments, seg_outlength = seg_outlength, nseg = nss, npeaks = npeaks)
   df.ccf <- data.frame(value = ccrpeaks$peaks.heights, index = ccrpeaks$peaks.pos)
   df.ccf$segs <- nss
   df.ccf
@@ -123,7 +123,7 @@ ccf.df %>%
   geom_vline(xintercept = 0, color = "red") +
   facet_grid(segs ~ .) +
   # ggtitle("Real Case: x compares to y") +
-  ggtitle("Ideal Case: x compares to itself") +
+  ggtitle("Ideal Case: x Compares to Itself") +
   xlab("position") +
   ylab("ccf")
 # ggsave("man/figures/step3_1.png")
@@ -132,16 +132,16 @@ ccf.df %>%
 # step 3-2
 comp <- y
 npeaks <- 5
-seg_scale <- 1
+seg_outlength <- 50
 
 ccf.df <- do.call(rbind, lapply(6:12, function(nss) {
-  ccrpeaks <- get_ccr_peaks(comp, segments = segments, nseg = nss, npeaks = npeaks, seg_scale = seg_scale)
+  ccrpeaks <- get_ccr_peaks(comp, segments = segments, seg_outlength = seg_outlength, nseg = nss, npeaks = npeaks)
   df.ccf <- data.frame(value = ccrpeaks$ccr$ccf, index = ccrpeaks$adj.pos)
   df.ccf$segs <- nss
   df.ccf
 }))
 peak.df <- do.call(rbind, lapply(6:12, function(nss) {
-  ccrpeaks <- get_ccr_peaks(comp, segments = segments, nseg = nss, npeaks = npeaks, seg_scale = seg_scale)
+  ccrpeaks <- get_ccr_peaks(comp, segments = segments, seg_outlength = seg_outlength, nseg = nss, npeaks = npeaks)
   df.ccf <- data.frame(value = ccrpeaks$peaks.heights, index = ccrpeaks$peaks.pos)
   df.ccf$segs <- nss
   df.ccf
@@ -182,16 +182,21 @@ multi.seg %>% filter(!is.na(value)) %>%
   ggtitle("x and segment 7 in 3 different scales")
 # ggsave("man/figures/step5_1.png")
 
+out_length <- c(50, 100, 200)
+
 multi.df <- do.call(rbind, lapply(1:3, function(scale) {
-  ccrpeaks <- get_ccr_peaks(comp, segments = segments, nseg = nseg, npeaks = npeaks.set[scale], seg_scale = scale)
+  ccrpeaks <- get_ccr_peaks(comp, segments = segments,
+                            seg_outlength = out_length[scale],
+                            nseg = nseg, npeaks = npeaks.set[scale])
   df.tmp <- data.frame(value = ccrpeaks$ccr$ccf, index = ccrpeaks$adj.pos)
-  df.tmp$scale <- paste("scale", scale)
+  df.tmp$scale <- paste("scale level", scale)
   df.tmp
 }))
 multi.peak.df <- do.call(rbind, lapply(1:3, function(scale) {
-  ccrpeaks <- get_ccr_peaks(comp, segments = segments, nseg = nseg, npeaks = npeaks.set[scale], seg_scale = scale)
+  ccrpeaks <- get_ccr_peaks(comp, segments = segments, seg_outlength = out_length[scale],
+                            nseg = nseg, npeaks = npeaks.set[scale])
   df.tmp <- data.frame(value = ccrpeaks$peaks.heights, index = ccrpeaks$peaks.pos)
-  df.tmp$scale <- paste("scale", scale)
+  df.tmp$scale <- paste("scale level", scale)
   df.tmp
 }))
 multi.df %>% ggplot() +
