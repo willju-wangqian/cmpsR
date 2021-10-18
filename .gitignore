@@ -7,3 +7,8 @@ src/*.o
 src/*.so
 src/*.dll
 preconsiderations
+inst/doc
+doc
+Meta
+cmpsR.Rcheck
+..Rcheck
