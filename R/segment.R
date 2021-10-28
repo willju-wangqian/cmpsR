@@ -9,7 +9,6 @@
 #'
 #' @return list with basis segments and their corresponding indices in the profile
 #' @export
-#' @importFrom zoo na.trim
 #' @importFrom assertthat assert_that
 #' @examples
 #' data("bullets")

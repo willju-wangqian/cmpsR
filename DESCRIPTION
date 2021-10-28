@@ -13,10 +13,9 @@ Description: This is an open-source implementation of the Congruent Matching Pro
     feature that measures the similarity of two bullet signatures.
 Imports: 
     assertthat (>= 0.2.0),
-    zoo,
-    dplyr,
-    rlang,
-    ggplot2
+    dplyr (>= 1.0.5),
+    rlang (>= 0.4.5),
+    ggplot2 (>= 3.3.0)
 Suggests:
     purrr,
     tidyverse,

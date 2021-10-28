@@ -15,7 +15,6 @@
 #' * `peaks.heights`: the cross correlation value (height of the curve) of the peaks
 #' @export
 #' 
-#' @importFrom zoo rollapply
 #' @importFrom assertthat assert_that
 #'
 #' @examples
