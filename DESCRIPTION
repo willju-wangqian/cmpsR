@@ -1,6 +1,6 @@
 Package: cmpsR
 Title: R Implementation of Congruent Matching Profile Segments Method
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Wangqian", "Ju", email = "wju@iastate.edu", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9977-377X")),
     person("Heike", "Hofmann", email = "hofmann@iastate.edu", role = "ctb", comment=c(ORCID="0000-0001-6216-5183"))
@@ -26,7 +26,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Depends: 
     R (>= 3.5.0)
 VignetteBuilder: knitr

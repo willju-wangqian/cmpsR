@@ -76,7 +76,7 @@ x <- bullets$sigs[bullets$bulletland == "2-3"][[1]]$sig
 y <- bullets$sigs[bullets$bulletland == "1-2"][[1]]$sig
 
 cmps <- extract_feature_cmps(x, y, include = "full_result")
-cmps$CMPS.score
+cmps$CMPS_score
 #> [1] 18
 ```
 
@@ -239,8 +239,8 @@ decrease the number of false positive peaks in ccf curves
 
     ``` r
     cmps <- extract_feature_cmps(x, y, include = "full_result")
-    cmps.plot.list <- cmpsR::cmps_segment_plot(cmps, seg.idx = 7)
-    ggpubr::ggarrange(plotlist = unlist(cmps.plot.list, recursive = FALSE),
+    cmps_plot_list <- cmpsR::cmps_segment_plot(cmps, seg_idx = 7)
+    ggpubr::ggarrange(plotlist = unlist(cmps_plot_list, recursive = FALSE),
                       nrow = 3, ncol = 2)
     ```
 
@@ -265,8 +265,8 @@ decrease the number of false positive peaks in ccf curves
 
 ``` r
 cmps <- extract_feature_cmps(x, y, seg_length = 50, Tx = 25, 
-                     npeaks.set = c(5, 3, 1), include = "full_result")
-cmps$CMPS.score
+                     npeaks_set = c(5, 3, 1), include = "full_result")
+cmps$CMPS_score
 #> [1] 18
 ```
 
@@ -274,8 +274,8 @@ cmps$CMPS.score
     find out why.
 
     ``` r
-    cmps.plot.list <- cmpsR::cmps_segment_plot(cmps, seg.idx = 6)
-    ggpubr::ggarrange(plotlist = unlist(cmps.plot.list, recursive = FALSE),
+    cmps_plot_list <- cmpsR::cmps_segment_plot(cmps, seg_idx = 6)
+    ggpubr::ggarrange(plotlist = unlist(cmps_plot_list, recursive = FALSE),
                       nrow = 3, ncol = 2)
     ```
 
@@ -290,9 +290,9 @@ cmps$CMPS.score
 land23 <- bullets$sigs[bullets$bulletland == "2-3"][[1]]
 land13 <- bullets$sigs[bullets$bulletland == "1-3"][[1]]
 
-cmps.knm <- extract_feature_cmps(land23$sig, land13$sig, seg_length = 50, Tx = 25, 
-                     npeaks.set = c(5, 3, 1), include="full_result")
-cmps.knm$CMPS.score
+cmps_knm <- extract_feature_cmps(land23$sig, land13$sig, seg_length = 50, Tx = 25, 
+                     npeaks_set = c(5, 3, 1), include="full_result")
+cmps_knm$CMPS_score
 #> [1] 2
 ```
 
@@ -328,7 +328,7 @@ comparisons <- comparisons %>% mutate(
 
 comparisons <- comparisons %>%
   mutate(
-    cmps_score = sapply(comparisons$cmps, function(x) x$CMPS.score),
+    cmps_score = sapply(comparisons$cmps, function(x) x$CMPS_score),
     cmps_nseg = sapply(comparisons$cmps, function(x) x$nseg)
   )
   

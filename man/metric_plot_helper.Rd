@@ -4,10 +4,10 @@
 \alias{metric_plot_helper}
 \title{Helper Function for Plotting the Distribution of a Metric}
 \usage{
-metric_plot_helper(cmps.metric, metric, scaled = FALSE, SSratio = TRUE, ...)
+metric_plot_helper(cmps_metric, metric, scaled = FALSE, SSratio = TRUE, ...)
 }
 \arguments{
-\item{cmps.metric}{a data frame containing values of the metric and the labels}
+\item{cmps_metric}{a data frame containing values of the metric and the labels}
 
 \item{metric}{string. Which metric to be plotted}
 

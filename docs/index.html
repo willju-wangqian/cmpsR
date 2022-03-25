@@ -13,7 +13,7 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="R Implementation of Congruent Matching Profile Segments Method">
 <meta property="og:description" content="This is an open-source implementation of the Congruent Matching Profile 
-    Segments (CMPS) method (Chen et al. 2019)&lt;https://doi.org/10.1016/j.forsciint.2019.109964&gt;. 
+    Segments (CMPS) method (Chen et al. 2019)&lt;doi:10.1016/j.forsciint.2019.109964&gt;. 
     In general, it can be used for objective comparison of striated tool marks, and in our 
     examples, we specifically use it for bullet signatures comparisons. The CMPS score is 
     expected to be large if two signatures are similar. So it can also be considered as a 
@@ -24,6 +24,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -36,18 +38,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">cmpsR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.9.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -76,40 +72,40 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="cmpsr" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#cmpsr" class="anchor"></a>cmpsR</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="cmpsr">cmpsR<a class="anchor" aria-label="anchor" href="#cmpsr"></a>
+</h1></div>
 <!-- badges: start -->
 
 <p>The <code>cmpsR</code> package is an implementation of the Congruent Matching Profile Segments (CMPS) method (Chen et al. 2019). In general, it can be used for objective comparison of striated tool marks, but in our examples, we mainly use it for bullet signatures comparison. The CMPS score is expected to be large if two signatures are similar. So it can also be considered as a feature that measures the similarity of two bullet signatures.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the released version of cmpsR from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the released version of cmpsR from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"cmpsR"</span><span class="op">)</span></code></pre></div>
-<p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cmpsR"</span><span class="op">)</span></code></pre></div>
+<p>And the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"willju-wangqian/cmpsR"</span><span class="op">)</span></code></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"willju-wangqian/cmpsR"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="example-and-summary-of-the-algorithm" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-and-summary-of-the-algorithm" class="anchor"></a>Example and Summary of the Algorithm</h2>
-<p>In this section we use a known match (KM) compasison (of two bullets) to illustrate the main ideas of CMPS algorithm and to showcase the <code>cmpsR</code> implementation. The <code>cmpsR</code> package includes a simple data set of 12 bullet signatures generated from two bullets (each bullet has 6 bullet signatures). These bullet data come from the James Hamby Consecutively Rifled Ruger Barrel Study (Brundage 1998; Hamby, Brundage, and Thorpe 2009; Hamby et al. 2019), and the two bullets included in <code>cmpsR</code> are just a subset of Hamby set 252. These bullet data in their original format can also be found in Chapter 3.5 of <a href="https://sctyner.github.io/OpenForSciR/bullets.html#case-study-1">Open Forensic Science in R</a>.</p>
+<div class="section level2">
+<h2 id="example-and-summary-of-the-algorithm">Example and Summary of the Algorithm<a class="anchor" aria-label="anchor" href="#example-and-summary-of-the-algorithm"></a>
+</h2>
+<p>In this section we use a known match (KM) compasison (of two bullets) to illustrate the main ideas of CMPS algorithm and to showcase the <code>cmpsR</code> implementation. The <code>cmpsR</code> package includes a simple data set of 12 bullet signatures generated from two bullets (each bullet has 6 bullet signatures). These bullet data come from the James Hamby Consecutively Rifled Ruger Barrel Study (Brundage 1998; Hamby, Brundage, and Thorpe 2009; Hamby et al. 2019), and the two bullets included in <code>cmpsR</code> are just a subset of Hamby set 252. These bullet data in their original format can also be found in Chapter 3.5 of <a href="https://sctyner.github.io/OpenForSciR/bullets.html#case-study-1" class="external-link">Open Forensic Science in R</a>.</p>
 <p>A comparison of two bullets is considered as a match if two bullets are fired from the same barrel (come from the same source). The gun barrel used in the Hamby study has 6 lands, and during the firing process striation marks will be engraved on the bullet by these lands. A bullet signature is a numerical representation of the striation marks engraved by a land. This is why each bullet can generate 6 bullet signatures. Two bullet signatures are a match if they are originally engraved by the same land in a gun barrel. Therefore, two bullets of a known-match comparison will have 36 pairwise bullet signature comparisons, and 6 of them are matching bullet signature comparisons while 30 of them are non-matching bullet signature comparisons.</p>
 <p>Here we plot the twelve bullet signatures of the two bullets. The bullet signatures are aligned so that the top figure and the bottom figure of the same column are a matching bullet signature comparison.</p>
 <p><img src="reference/figures/README-signature_plot-1.png" width="80%"></p>
 <p>To further illustrate the idea of the CMPS algorithm, let’s consider one matching bullet signature comparison: bullet signature of bullet 1 land 2 and bullet signature of bullet 2 land 3 (the second column), and compute the CMPS score of this comparison:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">cmpsR</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">cmpsR</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span>
 
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">sig</span>
 <span class="va">y</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"1-2"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">sig</span>
 
 <span class="va">cmps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span>
-<span class="va">cmps</span><span class="op">$</span><span class="va">CMPS.score</span>
+<span class="va">cmps</span><span class="op">$</span><span class="va">CMPS_score</span>
 <span class="co">#&gt; [1] 18</span></code></pre></div>
 <p>And we have the plot of <code>x</code> and <code>y</code>.</p>
 <div class="figure" style="text-align: center">
@@ -117,11 +113,11 @@
 A KM Comparison, x and y
 </p>
 </div>
-<div id="main-idea" class="section level4">
-<h4 class="hasAnchor">
-<a href="#main-idea" class="anchor"></a>Main Idea</h4>
+<div class="section level4">
+<h4 id="main-idea">Main Idea<a class="anchor" aria-label="anchor" href="#main-idea"></a>
+</h4>
 <p>The main idea of the CMPS method is that:</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>we take the first signature as the comparison signature (<code>x</code> or bullet signature of “2-3”) and cut it into consecutive and non-overlapping basis segments of the same length. In this case, we set the length of a basis segment to be 50 units, and we have 22 basis segments in total for bullet signature <code>x</code>.</li>
 </ol>
 <div class="figure" style="text-align: center">
@@ -129,7 +125,7 @@ A KM Comparison, x and y
 Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here
 </p>
 </div>
-<ol>
+<ol start="2" style="list-style-type: decimal">
 <li>for each basis segment, we compute the cross-correlation function (ccf) between the basis segment and the reference signature (<code>y</code> or bullet signature of “1-2”)</li>
 </ol>
 <div class="figure" style="text-align: center">
@@ -146,7 +142,7 @@ the cross-correlation function (ccf) between y and segment 7
 <li>for the <code>ccf</code> curve, the <code>position</code> represents the shift of the segment. A negative value means a shift to the left, a positive value means a shift to the right, and 0 means no shift (the segment stays at its original position in the reference signature);</li>
 <li>we are interested in the peaks in the ccf curve and the positions of those peaks (as indicated by the red vertical line in the plot above). In other words, if we shift the segment, which position would give us the “best fit?”</li>
 </ul>
-<ol>
+<ol start="3" style="list-style-type: decimal">
 <li>If two signatures are from a KM comparison, most of the basis segments should agree with each other on the position of the best fit. Then these segments are called the “<strong>Congruent Matching Profile Segments (CMPS)</strong>.”</li>
 </ol>
 <p>Ideally, if two signatures are identical, we are expecting the position of the highest peak in the ccf curve remains the same across all ccf curves (we only show 7 segments here);</p>
@@ -162,7 +158,7 @@ real case: compare x to y. The 5 highest peaks are marked by the blue dots
 </p>
 </div>
 <p>We mark the 5 highest peaks for each ccf curve because the position of the “highest peak” might not be the best one.</p>
-<ol>
+<ol start="4" style="list-style-type: decimal">
 <li>each ccf curve votes for 5 candidate positions, then we ask two questions in order to obtain the CMPS number/score:</li>
 </ol>
 <ul>
@@ -173,7 +169,7 @@ real case: compare x to y. The 5 highest peaks are marked by the blue dots
 <p>(If we consider all 22 segments, and have a default tolerance zone (+/- 25 units), the CMPS number is 20.)</p>
 </li>
 </ul>
-<ol>
+<ol start="5" style="list-style-type: decimal">
 <li>false positive: how can the segments vote more wisely? -&gt; Multi Segment Lengths Strategy</li>
 </ol>
 <ul>
@@ -197,8 +193,8 @@ Multi Segment Lengths Strategy - increasing the segment length could decrease th
 <p>The following plots (generated by <code><a href="reference/cmps_segment_plot.html">cmpsR::cmps_segment_plot</a></code>) summarize the information of the two above plots. It shows that segment 7 finds a consistent correlation peak (ccp) at a position near 0 (position <code>-6</code>).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cmps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span>
-<span class="va">cmps.plot.list</span> <span class="op">&lt;-</span> <span class="fu">cmpsR</span><span class="fu">::</span><span class="fu"><a href="reference/cmps_segment_plot.html">cmps_segment_plot</a></span><span class="op">(</span><span class="va">cmps</span>, seg.idx <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>
-<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html">ggarrange</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">cmps.plot.list</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
+<span class="va">cmps_plot_list</span> <span class="op">&lt;-</span> <span class="fu">cmpsR</span><span class="fu">::</span><span class="fu"><a href="reference/cmps_segment_plot.html">cmps_segment_plot</a></span><span class="op">(</span><span class="va">cmps</span>, seg_idx <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>
+<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">cmps_plot_list</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
                   nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-plot_ccf_seg7-1.png" width="80%"></p>
 </li>
@@ -211,71 +207,71 @@ Multi Segment Lengths Strategy - increasing the segment length could decrease th
 </li>
 <li><p>by default, CMPS algorithm uses the multi-segment lengths strategy. Use <code><a href="reference/extract_feature_cmps.html">?cmpsR::extract_feature_cmps</a></code> to learn more about the function, including its default settings.</p></li>
 </ul>
-<ol>
+<ol start="6" style="list-style-type: decimal">
 <li>If we follow the procedure described above (using the multi-segment lengths strategy) and investigate all 22 basis segments, we can find that 18 of them have cast a vote for position <code>0</code>  ± 25 (since <code>Tx = 25</code> by default). Therefore, for this KM bullet signature comparison, the CMPS score is 18.</li>
 </ol>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cmps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, seg_length <span class="op">=</span> <span class="fl">50</span>, Tx <span class="op">=</span> <span class="fl">25</span>, 
-                     npeaks.set <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span>
-<span class="va">cmps</span><span class="op">$</span><span class="va">CMPS.score</span>
+                     npeaks_set <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span>
+<span class="va">cmps</span><span class="op">$</span><span class="va">CMPS_score</span>
 <span class="co">#&gt; [1] 18</span></code></pre></div>
 <ul>
 <li>
 <p>Segment 6 doesn’t cast a vote. Take a look at the following plot to find out why.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cmps.plot.list</span> <span class="op">&lt;-</span> <span class="fu">cmpsR</span><span class="fu">::</span><span class="fu"><a href="reference/cmps_segment_plot.html">cmps_segment_plot</a></span><span class="op">(</span><span class="va">cmps</span>, seg.idx <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
-<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html">ggarrange</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">cmps.plot.list</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
+<code class="sourceCode R"><span class="va">cmps_plot_list</span> <span class="op">&lt;-</span> <span class="fu">cmpsR</span><span class="fu">::</span><span class="fu"><a href="reference/cmps_segment_plot.html">cmps_segment_plot</a></span><span class="op">(</span><span class="va">cmps</span>, seg_idx <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
+<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">cmps_plot_list</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
                   nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-plot_ccf_seg6-1.png" width="80%"></p>
 <p>It doesn’t identify a consistent correlation peak.</p>
 </li>
 </ul>
-<ol>
+<ol start="7" style="list-style-type: decimal">
 <li>If we have a KNM (known non-match) comparison, e.g. compare bullet signature 2-3 with 1-3:</li>
 </ol>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">land23</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="va">land13</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"1-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 
-<span class="va">cmps.knm</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">land23</span><span class="op">$</span><span class="va">sig</span>, <span class="va">land13</span><span class="op">$</span><span class="va">sig</span>, seg_length <span class="op">=</span> <span class="fl">50</span>, Tx <span class="op">=</span> <span class="fl">25</span>, 
-                     npeaks.set <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, include<span class="op">=</span><span class="st">"full_result"</span><span class="op">)</span>
-<span class="va">cmps.knm</span><span class="op">$</span><span class="va">CMPS.score</span>
+<span class="va">cmps_knm</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">land23</span><span class="op">$</span><span class="va">sig</span>, <span class="va">land13</span><span class="op">$</span><span class="va">sig</span>, seg_length <span class="op">=</span> <span class="fl">50</span>, Tx <span class="op">=</span> <span class="fl">25</span>, 
+                     npeaks_set <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, include<span class="op">=</span><span class="st">"full_result"</span><span class="op">)</span>
+<span class="va">cmps_knm</span><span class="op">$</span><span class="va">CMPS_score</span>
 <span class="co">#&gt; [1] 2</span></code></pre></div>
 </div>
-<div id="full-comparison-between-two-bullets" class="section level4">
-<h4 class="hasAnchor">
-<a href="#full-comparison-between-two-bullets" class="anchor"></a>Full Comparison Between Two Bullets</h4>
+<div class="section level4">
+<h4 id="full-comparison-between-two-bullets">Full Comparison Between Two Bullets<a class="anchor" aria-label="anchor" href="#full-comparison-between-two-bullets"></a>
+</h4>
 <p><code><a href="reference/extract_feature_cmps.html">extract_feature_cmps()</a></code> can also be used in a pipeline fashion. The following code performs a full comparison of two bullets. That is, it evaluates all 36 pairwise bullet signature comparisons and computes the CMPS scores.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">cmpsR</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">cmpsR</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span>
 
-<span class="va">lands</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span><span class="op">)</span>
+<span class="va">lands</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span><span class="op">)</span>
 
-<span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span>land1 <span class="op">=</span> <span class="va">lands</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, land2 <span class="op">=</span> <span class="va">lands</span><span class="op">[</span><span class="fl">7</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span><span class="op">)</span>,
+<span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>land1 <span class="op">=</span> <span class="va">lands</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, land2 <span class="op">=</span> <span class="va">lands</span><span class="op">[</span><span class="fl">7</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span><span class="op">)</span>,
                           stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op">%&gt;%</span>
-  <span class="fu">left_join</span><span class="op">(</span><span class="va">bullets</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">bulletland</span>, sig1<span class="op">=</span><span class="va">sigs</span><span class="op">)</span>,
-            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"land1"</span> <span class="op">=</span> <span class="st">"bulletland"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">left_join</span><span class="op">(</span><span class="va">bullets</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">bulletland</span>, sig2<span class="op">=</span><span class="va">sigs</span><span class="op">)</span>,
-            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"land2"</span> <span class="op">=</span> <span class="st">"bulletland"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">bullets</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bulletland</span>, sig1<span class="op">=</span><span class="va">sigs</span><span class="op">)</span>,
+            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"land1"</span> <span class="op">=</span> <span class="st">"bulletland"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">bullets</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bulletland</span>, sig2<span class="op">=</span><span class="va">sigs</span><span class="op">)</span>,
+            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"land2"</span> <span class="op">=</span> <span class="st">"bulletland"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>
-  cmps <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">map2</a></span><span class="op">(</span><span class="va">sig1</span>, <span class="va">sig2</span>, .f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span>
+<span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
+  cmps <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">map2</a></span><span class="op">(</span><span class="va">sig1</span>, <span class="va">sig2</span>, .f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">sig</span>, <span class="va">y</span><span class="op">$</span><span class="va">sig</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span>
   <span class="op">}</span><span class="op">)</span>
 <span class="op">)</span>
 
-<span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op">%&gt;%</span>
-  <span class="fu">mutate</span><span class="op">(</span>
-    cmps_score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">CMPS.score</span><span class="op">)</span>,
-    cmps_nseg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">nseg</span><span class="op">)</span>
+<span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
+    cmps_score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">CMPS_score</span><span class="op">)</span>,
+    cmps_nseg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">nseg</span><span class="op">)</span>
   <span class="op">)</span>
   
-<span class="va">cp1</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">land1</span>, <span class="va">land2</span>, <span class="va">cmps_score</span>, <span class="va">cmps_nseg</span><span class="op">)</span>
+<span class="va">cp1</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">land1</span>, <span class="va">land2</span>, <span class="va">cmps_score</span>, <span class="va">cmps_nseg</span><span class="op">)</span>
 <span class="va">cp1</span>  
 <span class="co">#&gt;    land1 land2 cmps_score cmps_nseg</span>
 <span class="co">#&gt; 1    1-1   2-1          2        23</span>
@@ -318,18 +314,18 @@ Multi Segment Lengths Strategy - increasing the segment length could decrease th
 <p><img src="reference/figures/README-plot_all_pairwise-1.png" width="80%"></p>
 </div>
 </div>
-<div id="reference" class="section level2">
-<h2 class="hasAnchor">
-<a href="#reference" class="anchor"></a>Reference</h2>
+<div class="section level2">
+<h2 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
+</h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-brundage" class="csl-entry">
 Brundage, David J. 1998. “<span class="nocase">The Identification of Consecutively Rifled Gun Barrels</span>.” <em>AFTE Journal</em> 30 (3): 438–44.
 </div>
 <div id="ref-Chen:2019ji" class="csl-entry">
-Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song, and Xuezeng Zhao. 2019. “<span class="nocase">Fired Bullet Signature Correlation Using the Congruent Matching Profile Segments (CMPS) Method</span>.” <em>Forensic Science International</em>, December, #109964. <a href="https://doi.org/10.1016/j.forsciint.2019.109964" class="uri">https://doi.org/10.1016/j.forsciint.2019.109964</a>.
+Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song, and Xuezeng Zhao. 2019. “<span class="nocase">Fired Bullet Signature Correlation Using the Congruent Matching Profile Segments (CMPS) Method</span>.” <em>Forensic Science International</em>, December, #109964. <a href="https://doi.org/10.1016/j.forsciint.2019.109964" class="external-link uri">https://doi.org/10.1016/j.forsciint.2019.109964</a>.
 </div>
 <div id="ref-Hamby:2019" class="csl-entry">
-Hamby, James E., David J. Brundage, Nicholas D. K. Petraco, and James W. Thorpe. 2019. “A Worldwide Study of Bullets Fired From 10 Consecutively Rifled 9mm RUGER Pistol Barrels—Analysis of Examiner Error Rate.” <em>Journal of Forensic Sciences</em> 64 (2): 551–57. <a href="https://doi.org/10.1111/1556-4029.13916" class="uri">https://doi.org/10.1111/1556-4029.13916</a>.
+Hamby, James E., David J. Brundage, Nicholas D. K. Petraco, and James W. Thorpe. 2019. “A Worldwide Study of Bullets Fired From 10 Consecutively Rifled 9mm RUGER Pistol Barrels—Analysis of Examiner Error Rate.” <em>Journal of Forensic Sciences</em> 64 (2): 551–57. <a href="https://doi.org/10.1111/1556-4029.13916" class="external-link uri">https://doi.org/10.1111/1556-4029.13916</a>.
 </div>
 <div id="ref-hamby" class="csl-entry">
 Hamby, James E., David J. Brundage, and James W. Thorpe. 2009. “<span class="nocase">The Identification of Bullets Fired from 10 Consecutively Rifled 9mm Ruger Pistol Barrels: A Research Project Involving 507 Participants from 20 Countries</span>.” <em>AFTE Journal</em> 41 (2): 99–110.
@@ -340,37 +336,56 @@ Hamby, James E., David J. Brundage, and James W. Thorpe. 2009. “<span class="n
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
-<h2>License</h2>
+    <div class="links">
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></small></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Wangqian Ju <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-9977-377X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://cloud.r-project.org/package=cmpsR" class="external-link">View on CRAN</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/willju-wangqian/cmpsR/actions"><img src="https://github.com/willju-wangqian/cmpsR/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing cmpsR</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Wangqian Ju <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-9977-377X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/willju-wangqian/cmpsR/actions" class="external-link"><img src="https://github.com/willju-wangqian/cmpsR/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Wangqian Ju.</p>
+  <p></p>
+<p>Developed by Wangqian Ju.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -378,6 +393,8 @@ Hamby, James E., David J. Brundage, and James W. Thorpe. 2009. “<span class="n
 
   
 
+
+  
 
   </body>
 </html>
