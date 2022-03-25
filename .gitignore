@@ -13,3 +13,5 @@ Meta
 cmpsR.Rcheck
 ..Rcheck
 *.tar.gz
+/doc/
+/Meta/
