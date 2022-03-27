@@ -37,7 +37,7 @@ seg_scale_max <- 3
 npeaks_set <- c(5,3,1)
 outlength <- c(50, 100, 200)
 
-ccp.list <- lapply(1:nseg, function(nseg) {
+ccp_list <- lapply(1:nseg, function(nseg) {
  ccr_list <- lapply(1:seg_scale_max, function(seg_scale) {
    get_ccr_peaks(y, segments, seg_outlength = outlength[seg_scale], 
    nseg = nseg, npeaks = npeaks_set[seg_scale])
@@ -45,5 +45,5 @@ ccp.list <- lapply(1:nseg, function(nseg) {
 
  get_ccp(ccr_list, Tx = 25)
 })
-cmps <- get_CMPS(ccp.list, Tx = 25)
+cmps <- get_CMPS(ccp_list, Tx = 25)
 }

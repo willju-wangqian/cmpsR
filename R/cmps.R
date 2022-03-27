@@ -28,7 +28,7 @@
 #' npeaks_set <- c(5,3,1)
 #' outlength <- c(50, 100, 200)
 #' 
-#' ccp.list <- lapply(1:nseg, function(nseg) {
+#' ccp_list <- lapply(1:nseg, function(nseg) {
 #'  ccr_list <- lapply(1:seg_scale_max, function(seg_scale) {
 #'    get_ccr_peaks(y, segments, seg_outlength = outlength[seg_scale], 
 #'    nseg = nseg, npeaks = npeaks_set[seg_scale])
@@ -36,7 +36,7 @@
 #' 
 #'  get_ccp(ccr_list, Tx = 25)
 #' })
-#' cmps <- get_CMPS(ccp.list, Tx = 25)
+#' cmps <- get_CMPS(ccp_list, Tx = 25)
 get_CMPS <- function(input_ccp, Tx = 25) {
   
   assert_that(is.numeric(Tx))
@@ -51,54 +51,53 @@ get_CMPS <- function(input_ccp, Tx = 25) {
                 congruent_seg_idx = NA, pos_df = NA ))
   }
   
-  pos.df <- data.frame(position = tt)
+  pos_df <- data.frame(position = tt)
   
-  current.max <- 0
-  current.voter.list <- list()
+  current_max <- 0
+  current_voter_list <- list()
   
-  pos.df$cmps <- sapply(1:nrow(pos.df), function(i) {
-    ccp.count <- sapply(1:length(input_ccp), function(j) {
+  for (i in 1:nrow(pos_df)) {
+    ccp_count <- sapply(1:length(input_ccp), function(j) {
       # if any one of the peaks belongs to the interval 
       # centered at this position, count 1
-      any(abs(pos.df$position[i] - input_ccp[[j]]) <= Tx)
+      any(abs(pos_df$position[i] - input_ccp[[j]]) <= Tx)
     })
     
-    tmp.sum <- sum(ccp.count)
+    tmp.sum <- sum(ccp_count)
     
-    if(tmp.sum >= current.max) {
-      current.max <<- tmp.sum
+    if(tmp.sum >= current_max) {
+      current_max <- tmp.sum
     }
     
-    current.voter.list[[i]] <<- ccp.count
+    current_voter_list[[i]] <- ccp_count
     
-    return(tmp.sum)
-    
-  })
-  
-  # obtain the CMPS score
-  ood <- order(pos.df$cmps, decreasing = T)
-  ordered.pos.df <- pos.df[ood, ]
-  ordered.current.voter <- current.voter.list[ood]
-  
-  CMPS <- ordered.pos.df$cmps[1]
-  if(CMPS != current.max) {
-    stop("unexpected: current.max didn't find the max CMPS score")
+    pos_df$cmps[i] <- tmp.sum
   }
   
-  pos.df <- ordered.pos.df
-  congruent.pos.idx <- ceiling(sum(ordered.pos.df$cmps == CMPS)/2)
+  # obtain the CMPS score
+  ood <- order(pos_df$cmps, decreasing = T)
+  ordered.pos_df <- pos_df[ood, ]
+  ordered.current_voter <- current_voter_list[ood]
   
-  if(congruent.pos.idx <= 0) {
-    congruent.pos <- NA
-    current.voter <- rep(FALSE, length(input_ccp))
+  CMPS <- ordered.pos_df$cmps[1]
+  if(CMPS != current_max) {
+    stop("unexpected: current_max didn't find the max CMPS score")
+  }
+  
+  pos_df <- ordered.pos_df
+  congruent_pos_idx <- ceiling(sum(ordered.pos_df$cmps == CMPS)/2)
+  
+  if(congruent_pos_idx <= 0) {
+    congruent_pos <- NA
+    current_voter <- rep(FALSE, length(input_ccp))
   } else {
-    congruent.pos <- ordered.pos.df$position[congruent.pos.idx]
-    current.voter <- ordered.current.voter[[congruent.pos.idx]]
+    congruent_pos <- ordered.pos_df$position[congruent_pos_idx]
+    current_voter <- ordered.current_voter[[congruent_pos_idx]]
   }
   
   return(list(CMPS_score = CMPS, nseg = length(input_ccp), 
-              congruent_pos = congruent.pos, congruent_seg = current.voter, 
-              congruent_seg_idx = (1:length(input_ccp))[current.voter], pos_df = pos.df ))
+              congruent_pos = congruent_pos, congruent_seg = current_voter, 
+              congruent_seg_idx = (1:length(input_ccp))[current_voter], pos_df = pos_df ))
 }
 
 
@@ -123,8 +122,8 @@ get_CMPS <- function(input_ccp, Tx = 25) {
 #'    different segment scale levels. 
 #' * By default, `npeaks_set = c(5,3,1)`. Including more segment scale levels will reduce the number of false positive results
 #' @param include `NULL` or a vector of character strings indicating what additional information should be included in
-#' the output of `extract_feature_cmps`. All possible options are: "nseg", "congruent.pos", "congruent.seg", 
-#' "congruent.seg.idx", "pos.df", "ccp.list","segments", and "parameters". If one wants to include them all, one can use
+#' the output of `extract_feature_cmps`. All possible options are: "nseg", "congruent_pos", "congruent_seg", 
+#' "congruent_seg_idx", "pos_df", "ccp_list","segments", and "parameters". If one wants to include them all, one can use
 #' `include = "full_result"`. By default, `include = NULL` and only the CMPS score is returned
 #' @param outlength `NULL` or a numeric vector, specify the segment length of each level of the basis segment when the 
 #' multi-segment lengths strategy is being used. If `outlength = NULL`, then the length of a basis segment will be doubled
@@ -185,7 +184,7 @@ get_CMPS <- function(input_ccp, Tx = 25) {
 #' 
 #' comparisons <- comparisons %>%
 #'   mutate(
-#'     cmps_score = sapply(comparisons$cmps, function(x) x$CMPS.score),
+#'     cmps_score = sapply(comparisons$cmps, function(x) x$CMPS_score),
 #'     cmps_nseg = sapply(comparisons$cmps, function(x) x$nseg)
 #'   )
 #'   
@@ -224,7 +223,7 @@ extract_feature_cmps <- function(x, y, seg_length = 50, Tx = 25, npeaks_set = c(
   
   
   if (seg_levels == 1) {
-    ccp.list <- lapply(1:nseg, function(nseg) {
+    ccp_list <- lapply(1:nseg, function(nseg) {
       ccr <- get_ccr_peaks(y, segments, seg_outlength = outlength_[seg_levels], 
                            nseg = nseg, npeaks = npeaks_set[seg_levels])
       ccr$peaks.pos
@@ -233,7 +232,7 @@ extract_feature_cmps <- function(x, y, seg_length = 50, Tx = 25, npeaks_set = c(
   } else if(seg_levels > 1) {
     
     
-    ccp.list <- lapply(1:nseg, function(nseg) {
+    ccp_list <- lapply(1:nseg, function(nseg) {
       
       if(all(is.na(segments$segs[nseg]))) {
         return(NULL)
@@ -256,15 +255,15 @@ extract_feature_cmps <- function(x, y, seg_length = 50, Tx = 25, npeaks_set = c(
   }
   
   
-  cmps <- get_CMPS(ccp.list, Tx = Tx)
+  cmps <- get_CMPS(ccp_list, Tx = Tx)
   if(cmps$nseg != nseg) {
-    stop("unexpected: number of obs of ccp.list is not equal to nseg")
+    stop("unexpected: number of obs of ccp_list is not equal to nseg")
   }
   
   parameters <- list(x=x, y=y, seg_length=seg_length, Tx=Tx,
                      npeaks_set=npeaks_set, include=include, outlength = outlength_)
   
-  cmps$ccp_list <- ccp.list
+  cmps$ccp_list <- ccp_list
   cmps$segments <- segments
   cmps$parameters <- parameters
   

@@ -32,8 +32,8 @@ different segment scale levels.
 }}
 
 \item{include}{\code{NULL} or a vector of character strings indicating what additional information should be included in
-the output of \code{extract_feature_cmps}. All possible options are: "nseg", "congruent.pos", "congruent.seg",
-"congruent.seg.idx", "pos.df", "ccp.list","segments", and "parameters". If one wants to include them all, one can use
+the output of \code{extract_feature_cmps}. All possible options are: "nseg", "congruent_pos", "congruent_seg",
+"congruent_seg_idx", "pos_df", "ccp_list","segments", and "parameters". If one wants to include them all, one can use
 \code{include = "full_result"}. By default, \code{include = NULL} and only the CMPS score is returned}
 
 \item{outlength}{\code{NULL} or a numeric vector, specify the segment length of each level of the basis segment when the
@@ -105,7 +105,7 @@ comparisons <- comparisons \%>\% mutate(
 
 comparisons <- comparisons \%>\%
   mutate(
-    cmps_score = sapply(comparisons$cmps, function(x) x$CMPS.score),
+    cmps_score = sapply(comparisons$cmps, function(x) x$CMPS_score),
     cmps_nseg = sapply(comparisons$cmps, function(x) x$nseg)
   )
   
