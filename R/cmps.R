@@ -226,7 +226,7 @@ extract_feature_cmps <- function(x, y, seg_length = 50, Tx = 25, npeaks_set = c(
     ccp_list <- lapply(1:nseg, function(nseg) {
       ccr <- get_ccr_peaks(y, segments, seg_outlength = outlength_[seg_levels], 
                            nseg = nseg, npeaks = npeaks_set[seg_levels])
-      ccr$peaks.pos
+      ccr$peaks_pos
       
     })
   } else if(seg_levels > 1) {
