@@ -331,7 +331,7 @@ metric_plot_helper <- function(
       binwidth = dots$binwidth) +
     labs(
       x = metric,
-      y = if (plot_density) "group density/observed weighted percentage" else "count",
+      y = if (plot_density) "observed proportion by group" else "count",
       fill = "Comparison Type",
       subtitle = dots$subtitle
     ) +
