@@ -289,12 +289,17 @@ compute_score_metrics <- function(land1, land2, score,
 #' @param metric string. Which metric to be plotted
 #' @param scaled logical value. If `scaled = TRUE`, the values should be within the interval of `[0, 1]`
 #' @param SSratio logical value. Whether to show the sum of squares ratio value
+#' @param plot_density logical value. If `plot_density = TRUE`, the function plots
+#' group density on the y-axis; if `plot_density = FALSE`, it plots the count of a certain bin.
 #' @param ... other arguments for plotting: `breaks`, `binwidth`, and `subtitle`
 #'
 #' @return a ggplot object
 #' @import assertthat 
 #' @export
-metric_plot_helper <- function(cmps_metric, metric, scaled = FALSE, SSratio = TRUE, ...) {
+metric_plot_helper <- function(
+  cmps_metric, metric, scaled = FALSE, SSratio = TRUE, plot_density = TRUE,
+  ...
+  ) {
   assert_that(
     has_name(cmps_metric, "type_truth")
   )  
@@ -320,10 +325,13 @@ metric_plot_helper <- function(cmps_metric, metric, scaled = FALSE, SSratio = TR
   }
   
   p <- cmps_metric %>% ggplot() +
-    geom_histogram(aes(x = .data[[metric]],
-                       fill = as.factor(.data$type_truth)), binwidth = dots$binwidth) +
+    geom_histogram(aes(
+      x = .data[[metric]], y = if (plot_density) .data$..density.. else .data$..count..,
+      fill = as.factor(.data$type_truth)), 
+      binwidth = dots$binwidth) +
     labs(
       x = metric,
+      y = if (plot_density) "group density/observed weighted percentage" else "count",
       fill = "Comparison Type",
       subtitle = dots$subtitle
     ) +
