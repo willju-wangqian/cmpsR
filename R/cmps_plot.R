@@ -98,28 +98,45 @@ cmps_signature_plot <- function(cmps_result, add_background = TRUE) {
                                   sig=segs$segs[congruent_seg] %>% unlist(),
                                   gp = gp)
   
-  # data frame for plotting comparison profile
-  plot.df.comp <- data.frame(x=1:length(sig2), sig = sig2, gp = 0)
-  
   # data frame for plotting reference profile
-  plot.df.ref <- data.frame(x=1:length(sig1) + sig_shift, sig=sig1, gp=0)
+  plot.df.ref <- data.frame(x=1:length(sig2), sig = sig2, gp = 0)
+  
+  # data frame for plotting comparison profile
+  plot.df.comp <- data.frame(x=1:length(sig1) + sig_shift, sig=sig1, gp=0)
   
   # segment shifts plot
   p1 <- plot.df.seg_shift %>% ggplot() +
     geom_line(aes(x=.data$x, y=.data$sig, group = .data$gp), color = "red", size = 1.2) +
     geom_line(aes(x=.data$x, y=.data$sig, group = .data$gp), 
-              data = plot.df.comp, color = "black") + 
+              data = plot.df.ref, color = "black") + 
     theme_bw()
   
   # signature shift plot
-  p2 <- plot.df.sig_shift %>% ggplot() +
-    geom_line(aes(x=.data$x, y=.data$sig, group = gp), color = "red", size = 1.2) +
-    geom_line(data = plot.df.comp, 
-              # aes(x=.data$x, y=.data$sig, group = gp), color = "grey44") + 
-              aes(x=.data$x, y=.data$sig, group = gp), color = "black") + 
-    geom_line(data = plot.df.ref,
-              aes(x=.data$x, y=.data$sig, group = gp), color = "red", linetype = "longdash") + 
-    theme_bw()
+  col_values <- c("reference sig" = "black", "cmps" = "red", "non-cmps" = "red")
+  linetype_values <- c("reference sig" = 1, "cmps" = 1, "non-cmps" = 2)
+  
+  p2 <- plot.df.ref %>% ggplot() +
+    geom_line(aes(x=.data$x, y=.data$sig, group = .data$gp, 
+                  color = "reference sig", linetype = "reference sig")) +
+    geom_line(data = plot.df.comp,
+              aes(x=.data$x, y=.data$sig, group = .data$gp, 
+                  color = "non-cmps", linetype = "non-cmps")) +
+    geom_line(data = plot.df.sig_shift,
+              aes(x=.data$x, y=.data$sig, group = .data$gp, 
+                  color = "cmps", linetype = "cmps"), size = 0.6) + 
+    theme_bw() +
+    scale_color_manual(name = "", values = col_values) +
+    scale_linetype_manual(name = "", values = linetype_values) + 
+    theme(legend.position = "bottom")
+  
+  # p2 <- plot.df.sig_shift %>% ggplot() +
+  #   geom_line(aes(x=.data$x, y=.data$sig, group = gp), color = "red", size = 1.2) +
+  #   geom_line(data = plot.df.ref, 
+  #             # aes(x=.data$x, y=.data$sig, group = gp), color = "grey44") + 
+  #             aes(x=.data$x, y=.data$sig, group = gp), color = "black") + 
+  #   geom_line(data = plot.df.comp,
+  #             aes(x=.data$x, y=.data$sig, group = gp), color = "red", linetype = "longdash") + 
+  #   theme_bw()
   if(add_background){
     tmp <- lapply(segs$index, function(idx, sig_shift) {c(min(idx) + sig_shift, max(idx) + sig_shift + 1)}, 
                   sig_shift)
@@ -154,7 +171,7 @@ cmps_signature_plot <- function(cmps_result, add_background = TRUE) {
                          aes(xmin = .data$t_xmin, xmax = .data$t_xmax, 
                              ymin = .data$t_ymin, ymax = .data$t_ymax, fill = "a"),
                          alpha = 0.4, show.legend = FALSE)+
-      scale_fill_grey(start = 0.8, end = 0.3)
+      scale_fill_grey(start = 0.6, end = 0.6)
     
   }
   
@@ -245,8 +262,8 @@ cmps_segment_plot <- function(cmps_result, seg_idx = 1){
     
   })
   
-  # data frame for plotting the comparison profile
-  plot.df.comp <- data.frame(
+  # data frame for plotting the reference profile
+  plot.df.ref <- data.frame(
     x=1:length(cmps_result$parameters$y), 
     sig = cmps_result$parameters$y, 
     gp = 0
@@ -261,7 +278,7 @@ cmps_segment_plot <- function(cmps_result, seg_idx = 1){
 
     p1 <- ggplot(tp.df1) +
       geom_line(aes(x=.data$aug_idx, y=.data$aug_seg), color="black", size=1) +
-      geom_line(data=plot.df.comp, aes(x=.data$x, y=.data$sig), color="grey44") +
+      geom_line(data=plot.df.ref, aes(x=.data$x, y=.data$sig), color="grey44") +
       xlab("Position") +
       ylab("Profile Height") +
       ggtitle(paste("Plotting for scale level", level_idx, "of segment", seg_idx)) +
