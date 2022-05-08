@@ -73,10 +73,9 @@
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="cmpsr">cmpsR<a class="anchor" aria-label="anchor" href="#cmpsr"></a>
+<div class="page-header"><h1 id="cmpsr-">cmpsR <img src="reference/figures/cmpsR_hex.png" width="160px" align="right"><a class="anchor" aria-label="anchor" href="#cmpsr-"></a>
 </h1></div>
 <!-- badges: start -->
-
 <p>The <code>cmpsR</code> package is an implementation of the Congruent Matching Profile Segments (CMPS) method (Chen et al. 2019). In general, it can be used for objective comparison of striated tool marks, but in our examples, we mainly use it for bullet signatures comparison. The CMPS score is expected to be large if two signatures are similar. So it can also be considered as a feature that measures the similarity of two bullet signatures.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -108,59 +107,27 @@
 <span class="va">cmps</span><span class="op">$</span><span class="va">CMPS_score</span>
 <span class="co">#&gt; [1] 18</span></code></pre></div>
 <p>And we have the plot of <code>x</code> and <code>y</code>.</p>
-<div class="figure" style="text-align: center">
-<img src="reference/figures/README-plot_example-1.png" alt="A KM Comparison, x and y" width="80%"><p class="caption">
-A KM Comparison, x and y
-</p>
-</div>
+<p><img src="reference/figures/README-plot_example-1.png" title="A KM Comparison, x and y" alt="A KM Comparison, x and y" width="80%" style="display: block; margin: auto;"></p>
 <div class="section level4">
 <h4 id="main-idea">Main Idea<a class="anchor" aria-label="anchor" href="#main-idea"></a>
 </h4>
 <p>The main idea of the CMPS method is that:</p>
-<ol style="list-style-type: decimal">
-<li>we take the first signature as the comparison signature (<code>x</code> or bullet signature of “2-3”) and cut it into consecutive and non-overlapping basis segments of the same length. In this case, we set the length of a basis segment to be 50 units, and we have 22 basis segments in total for bullet signature <code>x</code>.</li>
-</ol>
-<div class="figure" style="text-align: center">
-<img src="reference/figures/README-plot_cut_x-1.png" alt="Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here" width="80%"><p class="caption">
-Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here
-</p>
-</div>
-<ol start="2" style="list-style-type: decimal">
-<li>for each basis segment, we compute the cross-correlation function (ccf) between the basis segment and the reference signature (<code>y</code> or bullet signature of “1-2”)</li>
-</ol>
-<div class="figure" style="text-align: center">
-<img src="reference/figures/README-plot_y_and_seg-1.png" alt="y and 7th basis segment" width="80%"><p class="caption">
-y and 7th basis segment
-</p>
-</div>
-<div class="figure" style="text-align: center">
-<img src="reference/figures/README-plot_ccf_y_seg-1.png" alt="the cross-correlation function (ccf) between y and segment 7" width="80%"><p class="caption">
-the cross-correlation function (ccf) between y and segment 7
-</p>
-</div>
+<ol style="list-style-type: decimal"><li>we take the first signature as the comparison signature (<code>x</code> or bullet signature of “2-3”) and cut it into consecutive and non-overlapping basis segments of the same length. In this case, we set the length of a basis segment to be 50 units, and we have 22 basis segments in total for bullet signature <code>x</code>.</li></ol>
+<p><img src="reference/figures/README-plot_cut_x-1.png" title="Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here" alt="Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here" width="80%" style="display: block; margin: auto;"></p>
+<ol start="2" style="list-style-type: decimal"><li>for each basis segment, we compute the cross-correlation function (ccf) between the basis segment and the reference signature (<code>y</code> or bullet signature of “1-2”)</li></ol>
+<p><img src="reference/figures/README-plot_y_and_seg-1.png" title="y and 7th basis segment" alt="y and 7th basis segment" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="reference/figures/README-plot_ccf_y_seg-1.png" title="the cross-correlation function (ccf) between y and segment 7" alt="the cross-correlation function (ccf) between y and segment 7" width="80%" style="display: block; margin: auto;"></p>
 <ul>
 <li>for the <code>ccf</code> curve, the <code>position</code> represents the shift of the segment. A negative value means a shift to the left, a positive value means a shift to the right, and 0 means no shift (the segment stays at its original position in the reference signature);</li>
-<li>we are interested in the peaks in the ccf curve and the positions of those peaks (as indicated by the red vertical line in the plot above). In other words, if we shift the segment, which position would give us the “best fit?”</li>
+<li>we are interested in the peaks in the ccf curve and the positions of those peaks (as indicated by the red vertical line in the plot above). In other words, if we shift the segment, which position would give us the “best fit”?</li>
 </ul>
-<ol start="3" style="list-style-type: decimal">
-<li>If two signatures are from a KM comparison, most of the basis segments should agree with each other on the position of the best fit. Then these segments are called the “<strong>Congruent Matching Profile Segments (CMPS)</strong>.”</li>
-</ol>
+<ol start="3" style="list-style-type: decimal"><li>If two signatures are from a KM comparison, most of the basis segments should agree with each other on the position of the best fit. Then these segments are called the “<strong>Congruent Matching Profile Segments (CMPS)</strong>”.</li></ol>
 <p>Ideally, if two signatures are identical, we are expecting the position of the highest peak in the ccf curve remains the same across all ccf curves (we only show 7 segments here);</p>
-<div class="figure" style="text-align: center">
-<img src="reference/figures/README-plot_x_itself-1.png" alt="ideal case: compare x to itself. The highest peak has value 1 and is marked by the blue dot" width="80%"><p class="caption">
-ideal case: compare x to itself. The highest peak has value 1 and is marked by the blue dot
-</p>
-</div>
+<p><img src="reference/figures/README-plot_x_itself-1.png" title="ideal case: compare x to itself. The highest peak has value 1 and is marked by the blue dot" alt="ideal case: compare x to itself. The highest peak has value 1 and is marked by the blue dot" width="80%" style="display: block; margin: auto;"></p>
 <p>But in the real case, the basis segments might not achieve a final agreement, but we have the majority;</p>
-<div class="figure" style="text-align: center">
-<img src="reference/figures/README-plot_real_xy-1.png" alt="real case: compare x to y. The 5 highest peaks are marked by the blue dots" width="80%"><p class="caption">
-real case: compare x to y. The 5 highest peaks are marked by the blue dots
-</p>
-</div>
+<p><img src="reference/figures/README-plot_real_xy-1.png" title="real case: compare x to y. The 5 highest peaks are marked by the blue dots" alt="real case: compare x to y. The 5 highest peaks are marked by the blue dots" width="80%" style="display: block; margin: auto;"></p>
 <p>We mark the 5 highest peaks for each ccf curve because the position of the “highest peak” might not be the best one.</p>
-<ol start="4" style="list-style-type: decimal">
-<li>each ccf curve votes for 5 candidate positions, then we ask two questions in order to obtain the CMPS number/score:</li>
-</ol>
+<ol start="4" style="list-style-type: decimal"><li>each ccf curve votes for 5 candidate positions, then we ask two questions in order to obtain the CMPS number/score:</li></ol>
 <ul>
 <li><p>which position receives the most votes? -&gt; the best position (indicated by the red vertical line)</p></li>
 <li>
@@ -169,23 +136,12 @@ real case: compare x to y. The 5 highest peaks are marked by the blue dots
 <p>(If we consider all 22 segments, and have a default tolerance zone (+/- 25 units), the CMPS number is 20.)</p>
 </li>
 </ul>
-<ol start="5" style="list-style-type: decimal">
-<li>false positive: how can the segments vote more wisely? -&gt; Multi Segment Lengths Strategy</li>
-</ol>
+<ol start="5" style="list-style-type: decimal"><li>false positive: how can the segments vote more wisely? -&gt; Multi Segment Lengths Strategy</li></ol>
 <ul>
 <li><p>by increasing the segment length, one can reduce the number of “false positive” peaks.</p></li>
 <li><p>the first scale level is the original length of segment 7; for the second scale level, we double its length while keeping its center. That is, we include 25 more units from both the left and right side of the segment 7 to obtain a segment of 100 units length. For the third scale level, we double the segment length again to obtain a segment of length 200.</p></li>
 </ul>
-<div class="figure" style="text-align: center">
-<img src="reference/figures/README-plot_false_positive-1.png" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%"><p class="caption">
-Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves
-</p>
-</div>
-<div class="figure" style="text-align: center">
-<img src="reference/figures/README-plot_false_positive-2.png" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%"><p class="caption">
-Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves
-</p>
-</div>
+<p><img src="reference/figures/README-plot_false_positive-1.png" title="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%" style="display: block; margin: auto;"><img src="reference/figures/README-plot_false_positive-2.png" title="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%" style="display: block; margin: auto;"></p>
 <ul>
 <li>
 <p>we choose five peaks at scale level 1; three peaks at scale level 2; one peak at scale level 3</p>
@@ -207,16 +163,13 @@ Multi Segment Lengths Strategy - increasing the segment length could decrease th
 </li>
 <li><p>by default, CMPS algorithm uses the multi-segment lengths strategy. Use <code><a href="reference/extract_feature_cmps.html">?cmpsR::extract_feature_cmps</a></code> to learn more about the function, including its default settings.</p></li>
 </ul>
-<ol start="6" style="list-style-type: decimal">
-<li>If we follow the procedure described above (using the multi-segment lengths strategy) and investigate all 22 basis segments, we can find that 18 of them have cast a vote for position <code>0</code>  ± 25 (since <code>Tx = 25</code> by default). Therefore, for this KM bullet signature comparison, the CMPS score is 18.</li>
-</ol>
+<ol start="6" style="list-style-type: decimal"><li>If we follow the procedure described above (using the multi-segment lengths strategy) and investigate all 22 basis segments, we can find that 18 of them have cast a vote for position <code>0</code> <img src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%5Cpm%2025" title="\pm 25" alt="\pm 25"> (since <code>Tx = 25</code> by default). Therefore, for this KM bullet signature comparison, the CMPS score is 18.</li></ol>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cmps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, seg_length <span class="op">=</span> <span class="fl">50</span>, Tx <span class="op">=</span> <span class="fl">25</span>, 
                      npeaks_set <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span>
 <span class="va">cmps</span><span class="op">$</span><span class="va">CMPS_score</span>
 <span class="co">#&gt; [1] 18</span></code></pre></div>
-<ul>
-<li>
+<ul><li>
 <p>Segment 6 doesn’t cast a vote. Take a look at the following plot to find out why.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cmps_plot_list</span> <span class="op">&lt;-</span> <span class="fu">cmpsR</span><span class="fu">::</span><span class="fu"><a href="reference/cmps_segment_plot.html">cmps_segment_plot</a></span><span class="op">(</span><span class="va">cmps</span>, seg_idx <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
@@ -224,11 +177,8 @@ Multi Segment Lengths Strategy - increasing the segment length could decrease th
                   nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-plot_ccf_seg6-1.png" width="80%"></p>
 <p>It doesn’t identify a consistent correlation peak.</p>
-</li>
-</ul>
-<ol start="7" style="list-style-type: decimal">
-<li>If we have a KNM (known non-match) comparison, e.g. compare bullet signature 2-3 with 1-3:</li>
-</ol>
+</li></ul>
+<ol start="7" style="list-style-type: decimal"><li>If we have a KNM (known non-match) comparison, e.g. compare bullet signature 2-3 with 1-3:</li></ol>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">land23</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="va">land13</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"1-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
@@ -318,18 +268,10 @@ Multi Segment Lengths Strategy - increasing the segment length could decrease th
 <h2 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-brundage" class="csl-entry">
-<p>Brundage, David J. 1998. “<span class="nocase">The Identification of Consecutively Rifled Gun Barrels</span>.” <em>AFTE Journal</em> 30 (3): 438–44.</p>
-</div>
-<div id="ref-Chen:2019ji" class="csl-entry">
-<p>Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song, and Xuezeng Zhao. 2019. “<span class="nocase">Fired Bullet Signature Correlation Using the Congruent Matching Profile Segments (CMPS) Method</span>.” <em>Forensic Science International</em>, December, #109964. <a href="https://doi.org/10.1016/j.forsciint.2019.109964" class="external-link uri">https://doi.org/10.1016/j.forsciint.2019.109964</a>.</p>
-</div>
-<div id="ref-Hamby:2019" class="csl-entry">
-<p>Hamby, James E., David J. Brundage, Nicholas D. K. Petraco, and James W. Thorpe. 2019. “A Worldwide Study of Bullets Fired From 10 Consecutively Rifled 9mm RUGER Pistol Barrels—Analysis of Examiner Error Rate.” <em>Journal of Forensic Sciences</em> 64 (2): 551–57. <a href="https://doi.org/10.1111/1556-4029.13916" class="external-link uri">https://doi.org/10.1111/1556-4029.13916</a>.</p>
-</div>
-<div id="ref-hamby" class="csl-entry">
-<p>Hamby, James E., David J. Brundage, and James W. Thorpe. 2009. “<span class="nocase">The Identification of Bullets Fired from 10 Consecutively Rifled 9mm Ruger Pistol Barrels: A Research Project Involving 507 Participants from 20 Countries</span>.” <em>AFTE Journal</em> 41 (2): 99–110.</p>
-</div>
+<div id="ref-brundage" class="csl-entry"><p>Brundage, David J. 1998. “<span class="nocase">The Identification of Consecutively Rifled Gun Barrels</span>.” <em>AFTE Journal</em> 30 (3): 438–44.</p></div>
+<div id="ref-Chen:2019ji" class="csl-entry"><p>Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song, and Xuezeng Zhao. 2019. “<span class="nocase">Fired Bullet Signature Correlation Using the Congruent Matching Profile Segments (CMPS) Method</span>.” <em>Forensic Science International</em>, December, #109964. <a href="https://doi.org/10.1016/j.forsciint.2019.109964" class="external-link uri">https://doi.org/10.1016/j.forsciint.2019.109964</a>.</p></div>
+<div id="ref-Hamby:2019" class="csl-entry"><p>Hamby, James E., David J. Brundage, Nicholas D. K. Petraco, and James W. Thorpe. 2019. “A Worldwide Study of Bullets Fired From 10 Consecutively Rifled 9mm RUGER Pistol Barrels—Analysis of Examiner Error Rate.” <em>Journal of Forensic Sciences</em> 64 (2): 551–57. <a href="https://doi.org/10.1111/1556-4029.13916" class="external-link uri">https://doi.org/10.1111/1556-4029.13916</a>.</p></div>
+<div id="ref-hamby" class="csl-entry"><p>Hamby, James E., David J. Brundage, and James W. Thorpe. 2009. “<span class="nocase">The Identification of Bullets Fired from 10 Consecutively Rifled 9mm Ruger Pistol Barrels: A Research Project Involving 507 Participants from 20 Countries</span>.” <em>AFTE Journal</em> 41 (2): 99–110.</p></div>
 </div>
 </div>
 </div>
@@ -385,7 +327,7 @@ Multi Segment Lengths Strategy - increasing the segment length could decrease th
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
