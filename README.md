@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# cmpsR
+# cmpsR <img src="man/figures/cmpsR_hex.png" width="160px" align="right" />
 
 <!-- badges: start -->
 
@@ -82,14 +82,7 @@ cmps$CMPS_score
 
 And we have the plot of `x` and `y`.
 
-<div class="figure" style="text-align: center">
-
-<img src="man/figures/README-plot_example-1.png" alt="A KM Comparison, x and y" width="80%" />
-<p class="caption">
-A KM Comparison, x and y
-</p>
-
-</div>
+<img src="man/figures/README-plot_example-1.png" title="A KM Comparison, x and y" alt="A KM Comparison, x and y" width="80%" style="display: block; margin: auto;" />
 
 #### Main Idea
 
@@ -101,37 +94,15 @@ The main idea of the CMPS method is that:
     set the length of a basis segment to be 50 units, and we have 22
     basis segments in total for bullet signature `x`.
 
-<div class="figure" style="text-align: center">
-
-<img src="man/figures/README-plot_cut_x-1.png" alt="Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here" width="80%" />
-<p class="caption">
-Cut x into consecutive and non-overlapping basis segments of the same
-length. Only 4 basis segments are shown here
-</p>
-
-</div>
+<img src="man/figures/README-plot_cut_x-1.png" title="Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here" alt="Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here" width="80%" style="display: block; margin: auto;" />
 
 2.  for each basis segment, we compute the cross-correlation function
     (ccf) between the basis segment and the reference signature (`y` or
     bullet signature of “1-2”)
 
-<div class="figure" style="text-align: center">
+<img src="man/figures/README-plot_y_and_seg-1.png" title="y and 7th basis segment" alt="y and 7th basis segment" width="80%" style="display: block; margin: auto;" />
 
-<img src="man/figures/README-plot_y_and_seg-1.png" alt="y and 7th basis segment" width="80%" />
-<p class="caption">
-y and 7th basis segment
-</p>
-
-</div>
-
-<div class="figure" style="text-align: center">
-
-<img src="man/figures/README-plot_ccf_y_seg-1.png" alt="the cross-correlation function (ccf) between y and segment 7" width="80%" />
-<p class="caption">
-the cross-correlation function (ccf) between y and segment 7
-</p>
-
-</div>
+<img src="man/figures/README-plot_ccf_y_seg-1.png" title="the cross-correlation function (ccf) between y and segment 7" alt="the cross-correlation function (ccf) between y and segment 7" width="80%" style="display: block; margin: auto;" />
 
 -   for the `ccf` curve, the `position` represents the shift of the
     segment. A negative value means a shift to the left, a positive
@@ -140,39 +111,23 @@ the cross-correlation function (ccf) between y and segment 7
 -   we are interested in the peaks in the ccf curve and the positions of
     those peaks (as indicated by the red vertical line in the plot
     above). In other words, if we shift the segment, which position
-    would give us the “best fit?”
+    would give us the “best fit”?
 
 3.  If two signatures are from a KM comparison, most of the basis
     segments should agree with each other on the position of the best
     fit. Then these segments are called the “**Congruent Matching
-    Profile Segments (CMPS)**.”
+    Profile Segments (CMPS)**”.
 
 Ideally, if two signatures are identical, we are expecting the position
 of the highest peak in the ccf curve remains the same across all ccf
 curves (we only show 7 segments here);
 
-<div class="figure" style="text-align: center">
-
-<img src="man/figures/README-plot_x_itself-1.png" alt="ideal case: compare x to itself. The highest peak has value 1 and is marked by the blue dot" width="80%" />
-<p class="caption">
-ideal case: compare x to itself. The highest peak has value 1 and is
-marked by the blue dot
-</p>
-
-</div>
+<img src="man/figures/README-plot_x_itself-1.png" title="ideal case: compare x to itself. The highest peak has value 1 and is marked by the blue dot" alt="ideal case: compare x to itself. The highest peak has value 1 and is marked by the blue dot" width="80%" style="display: block; margin: auto;" />
 
 But in the real case, the basis segments might not achieve a final
 agreement, but we have the majority;
 
-<div class="figure" style="text-align: center">
-
-<img src="man/figures/README-plot_real_xy-1.png" alt="real case: compare x to y. The 5 highest peaks are marked by the blue dots" width="80%" />
-<p class="caption">
-real case: compare x to y. The 5 highest peaks are marked by the blue
-dots
-</p>
-
-</div>
+<img src="man/figures/README-plot_real_xy-1.png" title="real case: compare x to y. The 5 highest peaks are marked by the blue dots" alt="real case: compare x to y. The 5 highest peaks are marked by the blue dots" width="80%" style="display: block; margin: auto;" />
 
 We mark the 5 highest peaks for each ccf curve because the position of
 the “highest peak” might not be the best one.
@@ -180,10 +135,10 @@ the “highest peak” might not be the best one.
 4.  each ccf curve votes for 5 candidate positions, then we ask two
     questions in order to obtain the CMPS number/score:
 
--   which position receives the most votes? -&gt; the best position
+-   which position receives the most votes? -\> the best position
     (indicated by the red vertical line)
 
--   how many segments have voted for the best position? -&gt; CMPS score
+-   how many segments have voted for the best position? -\> CMPS score
 
     If we focus on these 7 segments only, and have a very short
     tolerance zone, the CMPS number is 6.
@@ -191,7 +146,7 @@ the “highest peak” might not be the best one.
     (If we consider all 22 segments, and have a default tolerance zone
     (+/- 25 units), the CMPS number is 20.)
 
-5.  false positive: how can the segments vote more wisely? -&gt; Multi
+5.  false positive: how can the segments vote more wisely? -\> Multi
     Segment Lengths Strategy
 
 -   by increasing the segment length, one can reduce the number of
@@ -204,25 +159,7 @@ the “highest peak” might not be the best one.
     third scale level, we double the segment length again to obtain a
     segment of length 200.
 
-<div class="figure" style="text-align: center">
-
-<img src="man/figures/README-plot_false_positive-1.png" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%" />
-<p class="caption">
-Multi Segment Lengths Strategy - increasing the segment length could
-decrease the number of false positive peaks in ccf curves
-</p>
-
-</div>
-
-<div class="figure" style="text-align: center">
-
-<img src="man/figures/README-plot_false_positive-2.png" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%" />
-<p class="caption">
-Multi Segment Lengths Strategy - increasing the segment length could
-decrease the number of false positive peaks in ccf curves
-</p>
-
-</div>
+<img src="man/figures/README-plot_false_positive-1.png" title="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%" style="display: block; margin: auto;" /><img src="man/figures/README-plot_false_positive-2.png" title="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%" style="display: block; margin: auto;" />
 
 -   we choose five peaks at scale level 1; three peaks at scale level 2;
     one peak at scale level 3
@@ -251,7 +188,7 @@ decrease the number of false positive peaks in ccf curves
 
     -   which position receives the most votes (within a tolerance zone
         specified by `Tx`)?
-    -   how many segments have voted for this position? -&gt; CMPS score
+    -   how many segments have voted for this position? -\> CMPS score
 
 -   by default, CMPS algorithm uses the multi-segment lengths strategy.
     Use `?cmpsR::extract_feature_cmps` to learn more about the function,
@@ -259,9 +196,10 @@ decrease the number of false positive peaks in ccf curves
 
 6.  If we follow the procedure described above (using the multi-segment
     lengths strategy) and investigate all 22 basis segments, we can find
-    that 18 of them have cast a vote for position `0`  ± 25 (since
-    `Tx = 25` by default). Therefore, for this KM bullet signature
-    comparison, the CMPS score is 18.
+    that 18 of them have cast a vote for position `0`
+    ![\\pm 25](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cpm%2025 "\pm 25")
+    (since `Tx = 25` by default). Therefore, for this KM bullet
+    signature comparison, the CMPS score is 18.
 
 ``` r
 cmps <- extract_feature_cmps(x, y, seg_length = 50, Tx = 25, 
