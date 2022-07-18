@@ -56,25 +56,36 @@ cross correlation curve and finds peaks of the curve.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_ccr_peaks</span><span class="op">(</span><span class="va">comp</span>, <span class="va">segments</span>, <span class="va">seg_outlength</span>, nseg <span class="op">=</span> <span class="fl">1</span>, npeaks <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_ccr_peaks</span><span class="op">(</span><span class="va">comp</span>, <span class="va">segments</span>, <span class="va">seg_outlength</span>, nseg <span class="op">=</span> <span class="fl">1</span>, npeaks <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>comp</dt>
 <dd><p>a nueric vector, vector of the bullet comparison profile</p></dd>
+
+
 <dt>segments</dt>
 <dd><p>list with basis segments and their corresponding indices in the original profile, obtianed by <code><a href="get_segs.html">get_segs()</a></code></p></dd>
+
+
 <dt>seg_outlength</dt>
 <dd><p>length of the enlarged segment</p></dd>
+
+
 <dt>nseg</dt>
 <dd><p>integer. <code>nseg</code> = 3: the third segment in <code>segments</code></p></dd>
+
+
 <dt>npeaks</dt>
 <dd><p>integer. the number of peaks to be identified.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a list consisting of:</p><ul><li><p><code>ccr</code>: the cross correlation curve</p></li>
+    
+
+<p>a list consisting of:</p><ul><li><p><code>ccr</code>: the cross correlation curve</p></li>
 <li><p><code>adj_pos</code>: indices of the curve</p></li>
 <li><p><code>peaks_pos</code>: position of the identified peaks</p></li>
 <li><p><code>peaks_heights</code>: the cross correlation value (height of the curve) of the peaks</p></li>
@@ -82,17 +93,17 @@ cross correlation curve and finds peaks of the curve.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">land2_3</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">land1_2</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"1-2"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">land2_3</span><span class="op">$</span><span class="va">sig</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">land1_2</span><span class="op">$</span><span class="va">sig</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">segments</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_segs.html">get_segs</a></span><span class="op">(</span><span class="va">x</span>, len <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># compute ccf based on y and segment 7 with scale 1, then identify 5 highest peaks</span></span>
-<span class="r-in"><span class="va">ccrpeaks</span> <span class="op">&lt;-</span> <span class="fu">get_ccr_peaks</span><span class="op">(</span><span class="va">y</span>, segments <span class="op">=</span> <span class="va">segments</span>, seg_outlength <span class="op">=</span> <span class="fl">50</span>,</span>
-<span class="r-in">                          nseg <span class="op">=</span> <span class="fl">7</span>, npeaks <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">land2_3</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">land1_2</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"1-2"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">land2_3</span><span class="op">$</span><span class="va">sig</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">land1_2</span><span class="op">$</span><span class="va">sig</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">segments</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_segs.html">get_segs</a></span><span class="op">(</span><span class="va">x</span>, len <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compute ccf based on y and segment 7 with scale 1, then identify 5 highest peaks</span></span></span>
+<span class="r-in"><span><span class="va">ccrpeaks</span> <span class="op">&lt;-</span> <span class="fu">get_ccr_peaks</span><span class="op">(</span><span class="va">y</span>, segments <span class="op">=</span> <span class="va">segments</span>, seg_outlength <span class="op">=</span> <span class="fl">50</span>,</span></span>
+<span class="r-in"><span>                          nseg <span class="op">=</span> <span class="fl">7</span>, npeaks <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -107,7 +118,7 @@ cross correlation curve and finds peaks of the curve.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

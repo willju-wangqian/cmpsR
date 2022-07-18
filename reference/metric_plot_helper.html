@@ -54,35 +54,48 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">metric_plot_helper</span><span class="op">(</span>
-  <span class="va">cmps_metric</span>,
-  <span class="va">metric</span>,
-  scaled <span class="op">=</span> <span class="cn">FALSE</span>,
-  SSratio <span class="op">=</span> <span class="cn">TRUE</span>,
-  plot_density <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">metric_plot_helper</span><span class="op">(</span></span>
+<span>  <span class="va">cmps_metric</span>,</span>
+<span>  <span class="va">metric</span>,</span>
+<span>  scaled <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  SSratio <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  plot_density <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>cmps_metric</dt>
 <dd><p>a data frame containing values of the metric and the labels</p></dd>
+
+
 <dt>metric</dt>
 <dd><p>string. Which metric to be plotted</p></dd>
+
+
 <dt>scaled</dt>
 <dd><p>logical value. If <code>scaled = TRUE</code>, the values should be within the interval of <code>[0, 1]</code></p></dd>
+
+
 <dt>SSratio</dt>
 <dd><p>logical value. Whether to show the sum of squares ratio value</p></dd>
+
+
 <dt>plot_density</dt>
 <dd><p>logical value. If <code>plot_density = TRUE</code>, the function plots
 group density on the y-axis; if <code>plot_density = FALSE</code>, it plots the count of a certain bin.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>other arguments for plotting: <code>breaks</code>, <code>binwidth</code>, and <code>subtitle</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a ggplot object</p>
+    
+
+<p>a ggplot object</p>
     </div>
 
   </div>
@@ -97,7 +110,7 @@ group density on the y-axis; if <code>plot_density = FALSE</code>, it plots the 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

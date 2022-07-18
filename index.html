@@ -82,11 +82,11 @@
 </h2>
 <p>You can install the released version of cmpsR from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cmpsR"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cmpsR"</span><span class="op">)</span></span></code></pre></div>
 <p>And the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"willju-wangqian/cmpsR"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"willju-wangqian/cmpsR"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example-and-summary-of-the-algorithm">Example and Summary of the Algorithm<a class="anchor" aria-label="anchor" href="#example-and-summary-of-the-algorithm"></a>
@@ -97,15 +97,15 @@
 <p><img src="reference/figures/README-signature_plot-1.png" width="80%"></p>
 <p>To further illustrate the idea of the CMPS algorithm, let’s consider one matching bullet signature comparison: bullet signature of bullet 1 land 2 and bullet signature of bullet 2 land 3 (the second column), and compute the CMPS score of this comparison:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">cmpsR</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span>
-
-<span class="va">x</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">sig</span>
-<span class="va">y</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"1-2"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">sig</span>
-
-<span class="va">cmps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span>
-<span class="va">cmps</span><span class="op">$</span><span class="va">CMPS_score</span>
-<span class="co">#&gt; [1] 18</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">cmpsR</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">sig</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"1-2"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">sig</span></span>
+<span></span>
+<span><span class="va">cmps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span></span>
+<span><span class="va">cmps</span><span class="op">$</span><span class="va">CMPS_score</span></span>
+<span><span class="co">#&gt; [1] 18</span></span></code></pre></div>
 <p>And we have the plot of <code>x</code> and <code>y</code>.</p>
 <p><img src="reference/figures/README-plot_example-1.png" title="A KM Comparison, x and y" alt="A KM Comparison, x and y" width="80%" style="display: block; margin: auto;"></p>
 <div class="section level4">
@@ -148,10 +148,10 @@
 <p>the peak shared by all three scale levels is a <strong>consistent correlation peak</strong> (ccp). And the position of the ccp is our best choice. Sometimes a ccp might not be found. Trying to identify a ccp for each basis segment is called a “multi segment lengths” strategy.</p>
 <p>The following plots (generated by <code><a href="reference/cmps_segment_plot.html">cmpsR::cmps_segment_plot</a></code>) summarize the information of the two above plots. It shows that segment 7 finds a consistent correlation peak (ccp) at a position near 0 (position <code>-6</code>).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cmps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span>
-<span class="va">cmps_plot_list</span> <span class="op">&lt;-</span> <span class="fu">cmpsR</span><span class="fu">::</span><span class="fu"><a href="reference/cmps_segment_plot.html">cmps_segment_plot</a></span><span class="op">(</span><span class="va">cmps</span>, seg_idx <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>
-<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">cmps_plot_list</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-                  nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">cmps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span></span>
+<span><span class="va">cmps_plot_list</span> <span class="op">&lt;-</span> <span class="fu">cmpsR</span><span class="fu">::</span><span class="fu"><a href="reference/cmps_segment_plot.html">cmps_segment_plot</a></span><span class="op">(</span><span class="va">cmps</span>, seg_idx <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span>
+<span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">cmps_plot_list</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>                  nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plot_ccf_seg7-1.png" width="80%"></p>
 </li>
 <li>
@@ -165,101 +165,101 @@
 </ul>
 <ol start="6" style="list-style-type: decimal"><li>If we follow the procedure described above (using the multi-segment lengths strategy) and investigate all 22 basis segments, we can find that 18 of them have cast a vote for position <code>0</code> <img src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;%5Cpm%2025" title="\pm 25" alt="\pm 25"> (since <code>Tx = 25</code> by default). Therefore, for this KM bullet signature comparison, the CMPS score is 18.</li></ol>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cmps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, seg_length <span class="op">=</span> <span class="fl">50</span>, Tx <span class="op">=</span> <span class="fl">25</span>, 
-                     npeaks_set <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span>
-<span class="va">cmps</span><span class="op">$</span><span class="va">CMPS_score</span>
-<span class="co">#&gt; [1] 18</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">cmps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, seg_length <span class="op">=</span> <span class="fl">50</span>, Tx <span class="op">=</span> <span class="fl">25</span>, </span>
+<span>                     npeaks_set <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span></span>
+<span><span class="va">cmps</span><span class="op">$</span><span class="va">CMPS_score</span></span>
+<span><span class="co">#&gt; [1] 18</span></span></code></pre></div>
 <ul><li>
 <p>Segment 6 doesn’t cast a vote. Take a look at the following plot to find out why.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cmps_plot_list</span> <span class="op">&lt;-</span> <span class="fu">cmpsR</span><span class="fu">::</span><span class="fu"><a href="reference/cmps_segment_plot.html">cmps_segment_plot</a></span><span class="op">(</span><span class="va">cmps</span>, seg_idx <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
-<span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">cmps_plot_list</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
-                  nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">cmps_plot_list</span> <span class="op">&lt;-</span> <span class="fu">cmpsR</span><span class="fu">::</span><span class="fu"><a href="reference/cmps_segment_plot.html">cmps_segment_plot</a></span><span class="op">(</span><span class="va">cmps</span>, seg_idx <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span>
+<span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">cmps_plot_list</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>                  nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plot_ccf_seg6-1.png" width="80%"></p>
 <p>It doesn’t identify a consistent correlation peak.</p>
 </li></ul>
 <ol start="7" style="list-style-type: decimal"><li>If we have a KNM (known non-match) comparison, e.g. compare bullet signature 2-3 with 1-3:</li></ol>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">land23</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="va">land13</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"1-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-
-<span class="va">cmps_knm</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">land23</span><span class="op">$</span><span class="va">sig</span>, <span class="va">land13</span><span class="op">$</span><span class="va">sig</span>, seg_length <span class="op">=</span> <span class="fl">50</span>, Tx <span class="op">=</span> <span class="fl">25</span>, 
-                     npeaks_set <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, include<span class="op">=</span><span class="st">"full_result"</span><span class="op">)</span>
-<span class="va">cmps_knm</span><span class="op">$</span><span class="va">CMPS_score</span>
-<span class="co">#&gt; [1] 2</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">land23</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">land13</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"1-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">cmps_knm</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">land23</span><span class="op">$</span><span class="va">sig</span>, <span class="va">land13</span><span class="op">$</span><span class="va">sig</span>, seg_length <span class="op">=</span> <span class="fl">50</span>, Tx <span class="op">=</span> <span class="fl">25</span>, </span>
+<span>                     npeaks_set <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">3</span>, <span class="fl">1</span><span class="op">)</span>, include<span class="op">=</span><span class="st">"full_result"</span><span class="op">)</span></span>
+<span><span class="va">cmps_knm</span><span class="op">$</span><span class="va">CMPS_score</span></span>
+<span><span class="co">#&gt; [1] 2</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="full-comparison-between-two-bullets">Full Comparison Between Two Bullets<a class="anchor" aria-label="anchor" href="#full-comparison-between-two-bullets"></a>
 </h4>
 <p><code><a href="reference/extract_feature_cmps.html">extract_feature_cmps()</a></code> can also be used in a pipeline fashion. The following code performs a full comparison of two bullets. That is, it evaluates all 36 pairwise bullet signature comparisons and computes the CMPS scores.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">cmpsR</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span>
-
-<span class="va">lands</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span><span class="op">)</span>
-
-<span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>land1 <span class="op">=</span> <span class="va">lands</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, land2 <span class="op">=</span> <span class="va">lands</span><span class="op">[</span><span class="fl">7</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span><span class="op">)</span>,
-                          stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">bullets</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bulletland</span>, sig1<span class="op">=</span><span class="va">sigs</span><span class="op">)</span>,
-            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"land1"</span> <span class="op">=</span> <span class="st">"bulletland"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">bullets</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bulletland</span>, sig2<span class="op">=</span><span class="va">sigs</span><span class="op">)</span>,
-            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"land2"</span> <span class="op">=</span> <span class="st">"bulletland"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
-  cmps <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">map2</a></span><span class="op">(</span><span class="va">sig1</span>, <span class="va">sig2</span>, .f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">sig</span>, <span class="va">y</span><span class="op">$</span><span class="va">sig</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>
-    cmps_score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">CMPS_score</span><span class="op">)</span>,
-    cmps_nseg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">nseg</span><span class="op">)</span>
-  <span class="op">)</span>
-  
-<span class="va">cp1</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">land1</span>, <span class="va">land2</span>, <span class="va">cmps_score</span>, <span class="va">cmps_nseg</span><span class="op">)</span>
-<span class="va">cp1</span>  
-<span class="co">#&gt;    land1 land2 cmps_score cmps_nseg</span>
-<span class="co">#&gt; 1    1-1   2-1          2        23</span>
-<span class="co">#&gt; 2    1-2   2-1          2        22</span>
-<span class="co">#&gt; 3    1-3   2-1          1        21</span>
-<span class="co">#&gt; 4    1-4   2-1          2        22</span>
-<span class="co">#&gt; 5    1-5   2-1          2        23</span>
-<span class="co">#&gt; 6    1-6   2-1         16        22</span>
-<span class="co">#&gt; 7    1-1   2-2          3        23</span>
-<span class="co">#&gt; 8    1-2   2-2          1        22</span>
-<span class="co">#&gt; 9    1-3   2-2          1        21</span>
-<span class="co">#&gt; 10   1-4   2-2          1        22</span>
-<span class="co">#&gt; 11   1-5   2-2          2        23</span>
-<span class="co">#&gt; 12   1-6   2-2          3        22</span>
-<span class="co">#&gt; 13   1-1   2-3          2        23</span>
-<span class="co">#&gt; 14   1-2   2-3         17        22</span>
-<span class="co">#&gt; 15   1-3   2-3          3        21</span>
-<span class="co">#&gt; 16   1-4   2-3          1        22</span>
-<span class="co">#&gt; 17   1-5   2-3          1        23</span>
-<span class="co">#&gt; 18   1-6   2-3          1        22</span>
-<span class="co">#&gt; 19   1-1   2-4          2        23</span>
-<span class="co">#&gt; 20   1-2   2-4          1        22</span>
-<span class="co">#&gt; 21   1-3   2-4         14        21</span>
-<span class="co">#&gt; 22   1-4   2-4          1        22</span>
-<span class="co">#&gt; 23   1-5   2-4          1        23</span>
-<span class="co">#&gt; 24   1-6   2-4          2        22</span>
-<span class="co">#&gt; 25   1-1   2-5          1        23</span>
-<span class="co">#&gt; 26   1-2   2-5          2        22</span>
-<span class="co">#&gt; 27   1-3   2-5          1        21</span>
-<span class="co">#&gt; 28   1-4   2-5         10        22</span>
-<span class="co">#&gt; 29   1-5   2-5          1        23</span>
-<span class="co">#&gt; 30   1-6   2-5          1        22</span>
-<span class="co">#&gt; 31   1-1   2-6          2        23</span>
-<span class="co">#&gt; 32   1-2   2-6          3        22</span>
-<span class="co">#&gt; 33   1-3   2-6          1        21</span>
-<span class="co">#&gt; 34   1-4   2-6          1        22</span>
-<span class="co">#&gt; 35   1-5   2-6         15        23</span>
-<span class="co">#&gt; 36   1-6   2-6          1        22</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">cmpsR</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lands</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>land1 <span class="op">=</span> <span class="va">lands</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, land2 <span class="op">=</span> <span class="va">lands</span><span class="op">[</span><span class="fl">7</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>                          stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">bullets</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bulletland</span>, sig1<span class="op">=</span><span class="va">sigs</span><span class="op">)</span>,</span>
+<span>            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"land1"</span> <span class="op">=</span> <span class="st">"bulletland"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">bullets</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bulletland</span>, sig2<span class="op">=</span><span class="va">sigs</span><span class="op">)</span>,</span>
+<span>            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"land2"</span> <span class="op">=</span> <span class="st">"bulletland"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>  cmps <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">map2</a></span><span class="op">(</span><span class="va">sig1</span>, <span class="va">sig2</span>, .f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">sig</span>, <span class="va">y</span><span class="op">$</span><span class="va">sig</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    cmps_score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">CMPS_score</span><span class="op">)</span>,</span>
+<span>    cmps_nseg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">nseg</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span><span class="va">cp1</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">land1</span>, <span class="va">land2</span>, <span class="va">cmps_score</span>, <span class="va">cmps_nseg</span><span class="op">)</span></span>
+<span><span class="va">cp1</span>  </span>
+<span><span class="co">#&gt;    land1 land2 cmps_score cmps_nseg</span></span>
+<span><span class="co">#&gt; 1    1-1   2-1          2        23</span></span>
+<span><span class="co">#&gt; 2    1-2   2-1          2        22</span></span>
+<span><span class="co">#&gt; 3    1-3   2-1          1        21</span></span>
+<span><span class="co">#&gt; 4    1-4   2-1          2        22</span></span>
+<span><span class="co">#&gt; 5    1-5   2-1          2        23</span></span>
+<span><span class="co">#&gt; 6    1-6   2-1         16        22</span></span>
+<span><span class="co">#&gt; 7    1-1   2-2          3        23</span></span>
+<span><span class="co">#&gt; 8    1-2   2-2          1        22</span></span>
+<span><span class="co">#&gt; 9    1-3   2-2          1        21</span></span>
+<span><span class="co">#&gt; 10   1-4   2-2          1        22</span></span>
+<span><span class="co">#&gt; 11   1-5   2-2          2        23</span></span>
+<span><span class="co">#&gt; 12   1-6   2-2          3        22</span></span>
+<span><span class="co">#&gt; 13   1-1   2-3          2        23</span></span>
+<span><span class="co">#&gt; 14   1-2   2-3         17        22</span></span>
+<span><span class="co">#&gt; 15   1-3   2-3          3        21</span></span>
+<span><span class="co">#&gt; 16   1-4   2-3          1        22</span></span>
+<span><span class="co">#&gt; 17   1-5   2-3          1        23</span></span>
+<span><span class="co">#&gt; 18   1-6   2-3          1        22</span></span>
+<span><span class="co">#&gt; 19   1-1   2-4          2        23</span></span>
+<span><span class="co">#&gt; 20   1-2   2-4          1        22</span></span>
+<span><span class="co">#&gt; 21   1-3   2-4         14        21</span></span>
+<span><span class="co">#&gt; 22   1-4   2-4          1        22</span></span>
+<span><span class="co">#&gt; 23   1-5   2-4          1        23</span></span>
+<span><span class="co">#&gt; 24   1-6   2-4          2        22</span></span>
+<span><span class="co">#&gt; 25   1-1   2-5          1        23</span></span>
+<span><span class="co">#&gt; 26   1-2   2-5          2        22</span></span>
+<span><span class="co">#&gt; 27   1-3   2-5          1        21</span></span>
+<span><span class="co">#&gt; 28   1-4   2-5         10        22</span></span>
+<span><span class="co">#&gt; 29   1-5   2-5          1        23</span></span>
+<span><span class="co">#&gt; 30   1-6   2-5          1        22</span></span>
+<span><span class="co">#&gt; 31   1-1   2-6          2        23</span></span>
+<span><span class="co">#&gt; 32   1-2   2-6          3        22</span></span>
+<span><span class="co">#&gt; 33   1-3   2-6          1        21</span></span>
+<span><span class="co">#&gt; 34   1-4   2-6          1        22</span></span>
+<span><span class="co">#&gt; 35   1-5   2-6         15        23</span></span>
+<span><span class="co">#&gt; 36   1-6   2-6          1        22</span></span></code></pre></div>
 <p>The following plot summarizes the CMPS scores computed above.</p>
 <p><img src="reference/figures/README-plot_all_pairwise-1.png" width="80%"></p>
 </div>
@@ -327,7 +327,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

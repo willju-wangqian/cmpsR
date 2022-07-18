@@ -54,35 +54,42 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">get_ccf4</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, min.overlap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">0.1</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_ccf4</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, min.overlap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">0.1</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>numeric sequence of values</p></dd>
+
+
 <dt>y</dt>
 <dd><p>numeric sequence of values</p></dd>
+
+
 <dt>min.overlap</dt>
 <dd><p>integer, minimal number of values in the overlap between sequences x and y to calculate a correlation value. Set to 10 percent of the maximum length of either sequence (HH: this might be problematic for CMPS)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>list consisting of the lag where the maximum correlation is achieved, and the maximum correlation value.</p>
+    
+
+<p>list consisting of the lag where the maximum correlation is achieved, and the maximum correlation value.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">land2_3</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">land1_2</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"1-2"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">land2_3</span><span class="op">$</span><span class="va">sig</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">land1_2</span><span class="op">$</span><span class="va">sig</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">segments</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_segs.html">get_segs</a></span><span class="op">(</span><span class="va">x</span>, len <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">ccr</span> <span class="op">&lt;-</span> <span class="fu">get_ccf4</span><span class="op">(</span><span class="va">y</span>, <span class="va">segments</span><span class="op">$</span><span class="va">segs</span><span class="op">[[</span><span class="fl">7</span><span class="op">]</span><span class="op">]</span>, </span>
-<span class="r-in">                min.overlap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">segments</span><span class="op">$</span><span class="va">segs</span><span class="op">[[</span><span class="fl">7</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">land2_3</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">land1_2</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"1-2"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">land2_3</span><span class="op">$</span><span class="va">sig</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">land1_2</span><span class="op">$</span><span class="va">sig</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">segments</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_segs.html">get_segs</a></span><span class="op">(</span><span class="va">x</span>, len <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ccr</span> <span class="op">&lt;-</span> <span class="fu">get_ccf4</span><span class="op">(</span><span class="va">y</span>, <span class="va">segments</span><span class="op">$</span><span class="va">segs</span><span class="op">[[</span><span class="fl">7</span><span class="op">]</span><span class="op">]</span>, </span></span>
+<span class="r-in"><span>                min.overlap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">segments</span><span class="op">$</span><span class="va">segs</span><span class="op">[[</span><span class="fl">7</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -97,7 +104,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

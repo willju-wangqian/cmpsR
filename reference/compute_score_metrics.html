@@ -54,38 +54,53 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">compute_score_metrics</span><span class="op">(</span>
-  <span class="va">land1</span>,
-  <span class="va">land2</span>,
-  <span class="va">score</span>,
-  addNA <span class="op">=</span> <span class="cn">TRUE</span>,
-  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
-  include <span class="op">=</span> <span class="cn">NULL</span>,
-  out_names <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">compute_score_metrics</span><span class="op">(</span></span>
+<span>  <span class="va">land1</span>,</span>
+<span>  <span class="va">land2</span>,</span>
+<span>  <span class="va">score</span>,</span>
+<span>  addNA <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  include <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  out_names <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>land1</dt>
 <dd><p>(numeric) vector with land ids of bullet 1</p></dd>
+
+
 <dt>land2</dt>
 <dd><p>(numeric) vector with land ids of bullet 2</p></dd>
+
+
 <dt>score</dt>
 <dd><p>numeric vector of scores to be summarized into a single number</p></dd>
+
+
 <dt>addNA</dt>
 <dd><p>logical value. In case of missing lands, are scores set to 0 (addNA = FALSE) or set to NA (addNA = TRUE)</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>a logical value indicating whether NA values should be stripped before the computation proceeds</p></dd>
+
+
 <dt>include</dt>
 <dd><p>a character vector specifying which metrics to be included in the result; if <code>include = NULL</code>, including
 all metrics</p></dd>
+
+
 <dt>out_names</dt>
 <dd><p>a character vector specifying the variable names of each metric; if <code>out_names = NULL</code>, using the default names</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a data frame containing values of the metrics</p>
+    
+
+<p>a data frame containing values of the metrics</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -98,42 +113,42 @@ all metrics</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">lands</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>land1 <span class="op">=</span> <span class="va">lands</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, land2 <span class="op">=</span> <span class="va">lands</span><span class="op">[</span><span class="fl">7</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span><span class="op">)</span>,</span>
-<span class="r-in">                          stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">bullets</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bulletland</span>, sig1<span class="op">=</span><span class="va">sigs</span><span class="op">)</span>,</span>
-<span class="r-in">            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"land1"</span> <span class="op">=</span> <span class="st">"bulletland"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">bullets</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bulletland</span>, sig2<span class="op">=</span><span class="va">sigs</span><span class="op">)</span>,</span>
-<span class="r-in">            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"land2"</span> <span class="op">=</span> <span class="st">"bulletland"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span class="r-in">  cmps <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">map2</a></span><span class="op">(</span><span class="va">sig1</span>, <span class="va">sig2</span>, .f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="fu"><a href="extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">sig</span>, <span class="va">y</span><span class="op">$</span><span class="va">sig</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">}</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span class="r-in">    cmps_score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">CMPS_score</span><span class="op">)</span>,</span>
-<span class="r-in">    cmps_nseg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">nseg</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in">  </span>
-<span class="r-in"><span class="va">cp1</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">land1</span>, <span class="va">land2</span>, <span class="va">cmps_score</span>, <span class="va">cmps_nseg</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">cp1</span> <span class="op">&lt;-</span> <span class="va">cp1</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span class="r-in">  land1idx <span class="op">=</span> <span class="va">land1</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">  land2idx <span class="op">=</span> <span class="va">land2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">cp1</span>, <span class="op">{</span></span>
-<span class="r-in">  <span class="fu">compute_score_metrics</span><span class="op">(</span><span class="va">land1idx</span>, <span class="va">land2idx</span>, <span class="va">cmps_score</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">lands</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>land1 <span class="op">=</span> <span class="va">lands</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span>, land2 <span class="op">=</span> <span class="va">lands</span><span class="op">[</span><span class="fl">7</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                          stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">bullets</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bulletland</span>, sig1<span class="op">=</span><span class="va">sigs</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"land1"</span> <span class="op">=</span> <span class="st">"bulletland"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">bullets</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bulletland</span>, sig2<span class="op">=</span><span class="va">sigs</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>            by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"land2"</span> <span class="op">=</span> <span class="st">"bulletland"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  cmps <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">map2</a></span><span class="op">(</span><span class="va">sig1</span>, <span class="va">sig2</span>, .f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">sig</span>, <span class="va">y</span><span class="op">$</span><span class="va">sig</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    cmps_score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">CMPS_score</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    cmps_nseg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">nseg</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  </span></span>
+<span class="r-in"><span><span class="va">cp1</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">land1</span>, <span class="va">land2</span>, <span class="va">cmps_score</span>, <span class="va">cmps_nseg</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cp1</span> <span class="op">&lt;-</span> <span class="va">cp1</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  land1idx <span class="op">=</span> <span class="va">land1</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  land2idx <span class="op">=</span> <span class="va">land2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_sub.html" class="external-link">str_sub</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">cp1</span>, <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">compute_score_metrics</span><span class="op">(</span><span class="va">land1idx</span>, <span class="va">land2idx</span>, <span class="va">cmps_score</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       diff diff.med max maxbar</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 10.96667     13.5  17   12.5</span>
 </code></pre></div>
@@ -150,7 +165,7 @@ all metrics</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
