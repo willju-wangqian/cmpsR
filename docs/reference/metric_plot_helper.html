@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cmpsR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
       </span>
     </div>
 
@@ -26,7 +26,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -54,7 +54,14 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">metric_plot_helper</span><span class="op">(</span><span class="va">cmps_metric</span>, <span class="va">metric</span>, scaled <span class="op">=</span> <span class="cn">FALSE</span>, SSratio <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">metric_plot_helper</span><span class="op">(</span>
+  <span class="va">cmps_metric</span>,
+  <span class="va">metric</span>,
+  scaled <span class="op">=</span> <span class="cn">FALSE</span>,
+  SSratio <span class="op">=</span> <span class="cn">TRUE</span>,
+  plot_density <span class="op">=</span> <span class="cn">TRUE</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -67,6 +74,9 @@
 <dd><p>logical value. If <code>scaled = TRUE</code>, the values should be within the interval of <code>[0, 1]</code></p></dd>
 <dt>SSratio</dt>
 <dd><p>logical value. Whether to show the sum of squares ratio value</p></dd>
+<dt>plot_density</dt>
+<dd><p>logical value. If <code>plot_density = TRUE</code>, the function plots
+group density on the y-axis; if <code>plot_density = FALSE</code>, it plots the count of a certain bin.</p></dd>
 <dt>...</dt>
 <dd><p>other arguments for plotting: <code>breaks</code>, <code>binwidth</code>, and <code>subtitle</code></p></dd>
 </dl></div>
@@ -87,7 +97,8 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer></div>

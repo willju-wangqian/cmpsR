@@ -22,7 +22,7 @@ with multi-peak inspection at the basis scale level only."><!-- mathjax --><scri
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cmpsR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
       </span>
     </div>
 
@@ -31,7 +31,7 @@ with multi-peak inspection at the basis scale level only."><!-- mathjax --><scri
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -93,8 +93,8 @@ different segment scale levels.</p></li>
 </ul></dd>
 <dt>include</dt>
 <dd><p><code>NULL</code> or a vector of character strings indicating what additional information should be included in
-the output of <code>extract_feature_cmps</code>. All possible options are: "nseg", "congruent.pos", "congruent.seg",
-"congruent.seg.idx", "pos.df", "ccp.list","segments", and "parameters". If one wants to include them all, one can use
+the output of <code>extract_feature_cmps</code>. All possible options are: "nseg", "congruent_pos", "congruent_seg",
+"congruent_seg_idx", "pos_df", "ccp_list","segments", and "parameters". If one wants to include them all, one can use
 <code>include = "full_result"</code>. By default, <code>include = NULL</code> and only the CMPS score is returned</p></dd>
 <dt>outlength</dt>
 <dd><p><code>NULL</code> or a numeric vector, specify the segment length of each level of the basis segment when the
@@ -163,49 +163,49 @@ International, December, #109964. https://doi.org/10.1016/j.forsciint.2019.10996
 <span class="r-in"></span>
 <span class="r-in"><span class="va">comparisons</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span class="r-in">    cmps_score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">CMPS.score</span><span class="op">)</span>,</span>
+<span class="r-in">    cmps_score <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">CMPS_score</span><span class="op">)</span>,</span>
 <span class="r-in">    cmps_nseg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">comparisons</span><span class="op">$</span><span class="va">cmps</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">nseg</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">)</span></span>
 <span class="r-in">  </span>
 <span class="r-in"><span class="va">cp1</span> <span class="op">&lt;-</span> <span class="va">comparisons</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">land1</span>, <span class="va">land2</span>, <span class="va">cmps_score</span>, <span class="va">cmps_nseg</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">cp1</span>  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    land1 land2 cmps_score cmps_nseg</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    1-1   2-1       NULL        23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    1-2   2-1       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    1-3   2-1       NULL        21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    1-4   2-1       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    1-5   2-1       NULL        23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6    1-6   2-1       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7    1-1   2-2       NULL        23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    1-2   2-2       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9    1-3   2-2       NULL        21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10   1-4   2-2       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11   1-5   2-2       NULL        23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12   1-6   2-2       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13   1-1   2-3       NULL        23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14   1-2   2-3       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15   1-3   2-3       NULL        21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16   1-4   2-3       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17   1-5   2-3       NULL        23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18   1-6   2-3       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19   1-1   2-4       NULL        23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20   1-2   2-4       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21   1-3   2-4       NULL        21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22   1-4   2-4       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23   1-5   2-4       NULL        23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24   1-6   2-4       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25   1-1   2-5       NULL        23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26   1-2   2-5       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27   1-3   2-5       NULL        21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28   1-4   2-5       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29   1-5   2-5       NULL        23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30   1-6   2-5       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31   1-1   2-6       NULL        23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32   1-2   2-6       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33   1-3   2-6       NULL        21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34   1-4   2-6       NULL        22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35   1-5   2-6       NULL        23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36   1-6   2-6       NULL        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    1-1   2-1          2        23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    1-2   2-1          2        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    1-3   2-1          1        21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    1-4   2-1          2        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    1-5   2-1          2        23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    1-6   2-1         16        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7    1-1   2-2          3        23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8    1-2   2-2          1        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9    1-3   2-2          1        21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10   1-4   2-2          1        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11   1-5   2-2          2        23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12   1-6   2-2          3        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13   1-1   2-3          2        23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14   1-2   2-3         17        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15   1-3   2-3          3        21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16   1-4   2-3          1        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17   1-5   2-3          1        23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18   1-6   2-3          1        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19   1-1   2-4          2        23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20   1-2   2-4          1        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21   1-3   2-4         14        21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22   1-4   2-4          1        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23   1-5   2-4          1        23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24   1-6   2-4          2        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25   1-1   2-5          1        23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26   1-2   2-5          2        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27   1-3   2-5          1        21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28   1-4   2-5         10        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29   1-5   2-5          1        23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30   1-6   2-5          1        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31   1-1   2-6          2        23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32   1-2   2-6          3        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33   1-3   2-6          1        21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34   1-4   2-6          1        22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35   1-5   2-6         15        23</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36   1-6   2-6          1        22</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
@@ -221,7 +221,8 @@ International, December, #109964. https://doi.org/10.1016/j.forsciint.2019.10996
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer></div>

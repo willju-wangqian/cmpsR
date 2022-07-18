@@ -35,7 +35,6 @@ This function aligns two signatures and shows which basis segments find the cong
 registration position.
 }
 \examples{
-library(tidyverse)
 library(cmpsR)
 
 data("bullets")

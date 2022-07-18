@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">cmpsR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
       </span>
     </div>
 
@@ -43,7 +43,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -78,7 +78,13 @@
 
     
     
-<p>The <code>cmpsR</code> package is an implementation of the Congruent Matching Profile Segments (CMPS) method (Chen et al. 2019). In general, it can be used for objective comparison of striated tool marks, but in our examples, we mainly use it for bullet signatures comparison. The CMPS score is expected to be large if two signatures are similar. So it can also be considered as a feature that measures the similarity of two bullet signatures.</p>
+<p>The <code>cmpsR</code> package is an implementation of the Congruent
+Matching Profile Segments (CMPS) method (Chen et al. 2019). In general,
+it can be used for objective comparison of striated tool marks, but in
+our examples, we mainly use it for bullet signatures comparison. The
+CMPS score is expected to be large if two signatures are similar. So it
+can also be considered as a feature that measures the similarity of two
+bullet signatures.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -93,14 +99,40 @@
 <div class="section level2">
 <h2 id="example-and-summary-of-the-algorithm">Example and Summary of the Algorithm<a class="anchor" aria-label="anchor" href="#example-and-summary-of-the-algorithm"></a>
 </h2>
-<p>In this section we use a known match (KM) compasison (of two bullets) to illustrate the main ideas of CMPS algorithm and to showcase the <code>cmpsR</code> implementation. The <code>cmpsR</code> package includes a simple data set of 12 bullet signatures generated from two bullets (each bullet has 6 bullet signatures). These bullet data come from the James Hamby Consecutively Rifled Ruger Barrel Study (Brundage 1998; Hamby, Brundage, and Thorpe 2009; Hamby et al. 2019), and the two bullets included in <code>cmpsR</code> are just a subset of Hamby set 252. These bullet data in their original format can also be found in Chapter 3.5 of <a href="https://sctyner.github.io/OpenForSciR/bullets.html#case-study-1" class="external-link">Open Forensic Science in R</a>.</p>
+<p>In this section we use a known match (KM) compasison (of two bullets)
+to illustrate the main ideas of CMPS algorithm and to showcase the
+<code>cmpsR</code> implementation. The <code>cmpsR</code> package
+includes a simple data set of 12 bullet signatures generated from two
+bullets (each bullet has 6 bullet signatures). These bullet data come
+from the James Hamby Consecutively Rifled Ruger Barrel Study (Brundage
+1998; Hamby, Brundage, and Thorpe 2009; Hamby et al. 2019), and the two
+bullets included in <code>cmpsR</code> are just a subset of Hamby set
+252. These bullet data in their original format can also be found in
+Chapter 3.5 of <a href="https://sctyner.github.io/OpenForSciR/bullets.html#case-study-1" class="external-link">Open
+Forensic Science in R</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">cmpsR</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span></code></pre></div>
-<p>A comparison of two bullets is considered as a match if two bullets are fired from the same barrel (come from the same source). The gun barrel used in the Hamby study has 6 lands, and during the firing process striation marks will be engraved on the bullet by these lands. A bullet signature is a numerical representation of the striation marks engraved by a land. This is why each bullet can generate 6 bullet signatures. Two bullet signatures are a match if they are originally engraved by the same land in a gun barrel. Therefore, two bullets of a known-match comparison will have 36 pairwise bullet signature comparisons, and 6 of them are matching bullet signature comparisons while 30 of them are non-matching bullet signature comparisons.</p>
-<p>Here we plot the twelve bullet signatures of the two bullets. The bullet signatures are aligned so that the top figure and the bottom figure of the same column are a matching bullet signature comparison.</p>
+<p>A comparison of two bullets is considered as a match if two bullets
+are fired from the same barrel (come from the same source). The gun
+barrel used in the Hamby study has 6 lands, and during the firing
+process striation marks will be engraved on the bullet by these lands. A
+bullet signature is a numerical representation of the striation marks
+engraved by a land. This is why each bullet can generate 6 bullet
+signatures. Two bullet signatures are a match if they are originally
+engraved by the same land in a gun barrel. Therefore, two bullets of a
+known-match comparison will have 36 pairwise bullet signature
+comparisons, and 6 of them are matching bullet signature comparisons
+while 30 of them are non-matching bullet signature comparisons.</p>
+<p>Here we plot the twelve bullet signatures of the two bullets. The
+bullet signatures are aligned so that the top figure and the bottom
+figure of the same column are a matching bullet signature
+comparison.</p>
 <p><img src="figures/vignette-signature_plot-1.png" width="80%"></p>
-<p>To further illustrate the idea of the CMPS algorithm, let’s consider one matching bullet signature comparison: bullet signature of bullet 1 land 2 and bullet signature of bullet 2 land 3 (the second column), and compute the CMPS score of this comparison:</p>
+<p>To further illustrate the idea of the CMPS algorithm, let’s consider
+one matching bullet signature comparison: bullet signature of bullet 1
+land 2 and bullet signature of bullet 2 land 3 (the second column), and
+compute the CMPS score of this comparison:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">cmpsR</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"bullets"</span><span class="op">)</span>
@@ -123,15 +155,23 @@ A KM Comparison, x and y
 </h4>
 <p>The main idea of the CMPS method is that:</p>
 <ol style="list-style-type: decimal">
-<li>we take the first signature as the comparison signature (<code>x</code> or bullet signature of “2-3”) and cut it into consecutive and non-overlapping basis segments of the same length. In this case, we set the length of a basis segment to be 50 units, and we have 22 basis segments in total for bullet signature <code>x</code>.</li>
+<li>we take the first signature as the comparison signature
+(<code>x</code> or bullet signature of “2-3”) and cut it into
+consecutive and non-overlapping basis segments of the same length. In
+this case, we set the length of a basis segment to be 50 units, and we
+have 22 basis segments in total for bullet signature
+<code>x</code>.</li>
 </ol>
 <div class="figure" style="text-align: center">
 <img src="figures/vignette-plot_cut_x-1.png" alt="Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here" width="80%"><p class="caption">
-Cut x into consecutive and non-overlapping basis segments of the same length. Only 4 basis segments are shown here
+Cut x into consecutive and non-overlapping basis segments of the same
+length. Only 4 basis segments are shown here
 </p>
 </div>
 <ol start="2" style="list-style-type: decimal">
-<li>for each basis segment, we compute the cross-correlation function (ccf) between the basis segment and the reference signature (<code>y</code> or bullet signature of “1-2”)</li>
+<li>for each basis segment, we compute the cross-correlation function
+(ccf) between the basis segment and the reference signature
+(<code>y</code> or bullet signature of “1-2”)</li>
 </ol>
 <div class="figure" style="text-align: center">
 <img src="figures/vignette-plot_y_and_seg-1.png" alt="y and 7th basis segment" width="80%"><p class="caption">
@@ -144,58 +184,94 @@ the cross-correlation function (ccf) between y and segment 7
 </p>
 </div>
 <ul>
-<li>for the <code>ccf</code> curve, the <code>position</code> represents the shift of the segment. A negative value means a shift to the left, a positive value means a shift to the right, and 0 means no shift (the segment stays at its original position in the reference signature);</li>
-<li>we are interested in the peaks in the ccf curve and the positions of those peaks (as indicated by the red vertical line in the plot above). In other words, if we shift the segment, which position would give us the “best fit”?</li>
+<li>for the <code>ccf</code> curve, the <code>position</code> represents
+the shift of the segment. A negative value means a shift to the left, a
+positive value means a shift to the right, and 0 means no shift (the
+segment stays at its original position in the reference signature);</li>
+<li>we are interested in the peaks in the ccf curve and the positions of
+those peaks (as indicated by the red vertical line in the plot above).
+In other words, if we shift the segment, which position would give us
+the “best fit”?</li>
 </ul>
 <ol start="3" style="list-style-type: decimal">
-<li>If two signatures are from a KM comparison, most of the basis segments should agree with each other on the position of the best fit. Then these segments are called the “<strong>Congruent Matching Profile Segments (CMPS)</strong>”.</li>
+<li>If two signatures are from a KM comparison, most of the basis
+segments should agree with each other on the position of the best fit.
+Then these segments are called the “<strong>Congruent Matching Profile
+Segments (CMPS)</strong>”.</li>
 </ol>
-<p>Ideally, if two signatures are identical, we are expecting the position of the highest peak in the ccf curve remains the same across all ccf curves (we only show 7 segments here);</p>
+<p>Ideally, if two signatures are identical, we are expecting the
+position of the highest peak in the ccf curve remains the same across
+all ccf curves (we only show 7 segments here);</p>
 <div class="figure" style="text-align: center">
 <img src="figures/vignette-plot_x_itself-1.png" alt="ideal case: compare x to itself. The highest peak has value 1 and is marked by the blue dot" width="80%"><p class="caption">
-ideal case: compare x to itself. The highest peak has value 1 and is marked by the blue dot
+ideal case: compare x to itself. The highest peak has value 1 and is
+marked by the blue dot
 </p>
 </div>
-<p>But in the real case, the basis segments might not achieve a final agreement, but we have the majority;</p>
+<p>But in the real case, the basis segments might not achieve a final
+agreement, but we have the majority;</p>
 <div class="figure" style="text-align: center">
 <img src="figures/vignette-plot_real_xy-1.png" alt="real case: compare x to y. The 5 highest peaks are marked by the blue dots" width="80%"><p class="caption">
-real case: compare x to y. The 5 highest peaks are marked by the blue dots
+real case: compare x to y. The 5 highest peaks are marked by the blue
+dots
 </p>
 </div>
-<p>We mark the 5 highest peaks for each ccf curve because the position of the “highest peak” might not be the best one.</p>
+<p>We mark the 5 highest peaks for each ccf curve because the position
+of the “highest peak” might not be the best one.</p>
 <ol start="4" style="list-style-type: decimal">
-<li>each ccf curve votes for 5 candidate positions, then we ask two questions in order to obtain the CMPS number/score:</li>
+<li>each ccf curve votes for 5 candidate positions, then we ask two
+questions in order to obtain the CMPS number/score:</li>
 </ol>
 <ul>
-<li><p>which position receives the most votes? -&gt; the best position (indicated by the red vertical line)</p></li>
+<li><p>which position receives the most votes? -&gt; the best position
+(indicated by the red vertical line)</p></li>
 <li>
-<p>how many segments have voted for the best position? -&gt; CMPS score</p>
-<p>If we focus on these 7 segments only, and have a very short tolerance zone, the CMPS number is 6.</p>
-<p>(If we consider all 22 segments, and have a default tolerance zone (+/- 25 units), the CMPS number is 20.)</p>
+<p>how many segments have voted for the best position? -&gt; CMPS
+score</p>
+<p>If we focus on these 7 segments only, and have a very short tolerance
+zone, the CMPS number is 6.</p>
+<p>(If we consider all 22 segments, and have a default tolerance zone
+(+/- 25 units), the CMPS number is 20.)</p>
 </li>
 </ul>
 <ol start="5" style="list-style-type: decimal">
-<li>false positive: how can the segments vote more wisely? -&gt; Multi Segment Lengths Strategy</li>
+<li>false positive: how can the segments vote more wisely? -&gt; Multi
+Segment Lengths Strategy</li>
 </ol>
 <ul>
-<li><p>by increasing the segment length, one can reduce the number of “false positive” peaks.</p></li>
-<li><p>the first scale level is the original length of segment 7; for the second scale level, we double its length while keeping its center. That is, we include 25 more units from both the left and right side of the segment 7 to obtain a segment of 100 units length. For the third scale level, we double the segment length again to obtain a segment of length 200.</p></li>
+<li><p>by increasing the segment length, one can reduce the number of
+“false positive” peaks.</p></li>
+<li><p>the first scale level is the original length of segment 7; for
+the second scale level, we double its length while keeping its center.
+That is, we include 25 more units from both the left and right side of
+the segment 7 to obtain a segment of 100 units length. For the third
+scale level, we double the segment length again to obtain a segment of
+length 200.</p></li>
 </ul>
 <div class="figure" style="text-align: center">
 <img src="figures/vignette-plot_false_positive-1.png" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%"><p class="caption">
-Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves
+Multi Segment Lengths Strategy - increasing the segment length could
+decrease the number of false positive peaks in ccf curves
 </p>
 </div>
 <div class="figure" style="text-align: center">
 <img src="figures/vignette-plot_false_positive-2.png" alt="Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves" width="80%"><p class="caption">
-Multi Segment Lengths Strategy - increasing the segment length could decrease the number of false positive peaks in ccf curves
+Multi Segment Lengths Strategy - increasing the segment length could
+decrease the number of false positive peaks in ccf curves
 </p>
 </div>
 <ul>
 <li>
-<p>we choose five peaks at scale level 1; three peaks at scale level 2; one peak at scale level 3</p>
-<p>the peak shared by all three scale levels is a <strong>consistent correlation peak</strong> (ccp). And the position of the ccp is our best choice. Sometimes a ccp might not be found. Trying to identify a ccp for each basis segment is called a “multi segment lengths” strategy.</p>
-<p>The following plots (generated by <code><a href="../reference/cmps_segment_plot.html">cmpsR::cmps_segment_plot</a></code>) summarize the information of the two above plots. It shows that segment 7 finds a consistent correlation peak (ccp) at a position near 0 (position <code>-6</code>).</p>
+<p>we choose five peaks at scale level 1; three peaks at scale level
+2; one peak at scale level 3</p>
+<p>the peak shared by all three scale levels is a <strong>consistent
+correlation peak</strong> (ccp). And the position of the ccp is our best
+choice. Sometimes a ccp might not be found. Trying to identify a ccp for
+each basis segment is called a “multi segment lengths” strategy.</p>
+<p>The following plots (generated by
+<code><a href="../reference/cmps_segment_plot.html">cmpsR::cmps_segment_plot</a></code>) summarize the information of the
+two above plots. It shows that segment 7 finds a consistent correlation
+peak (ccp) at a position near 0 (position <code>-6</code>).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cmps</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, include <span class="op">=</span> <span class="st">"full_result"</span><span class="op">)</span>
 <span class="va">cmps_plot_list</span> <span class="op">&lt;-</span> <span class="fu">cmpsR</span><span class="fu">::</span><span class="fu"><a href="../reference/cmps_segment_plot.html">cmps_segment_plot</a></span><span class="op">(</span><span class="va">cmps</span>, seg_idx <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>
@@ -204,16 +280,25 @@ Multi Segment Lengths Strategy - increasing the segment length could decrease th
 <p><img src="figures/vignette-plot_ccf_seg7-1.png" width="80%"></p>
 </li>
 <li>
-<p>In this case, since segment 7 identifies a ccp, it casts a vote for position <code>-6</code>. Then we ask two questions:</p>
+<p>In this case, since segment 7 identifies a ccp, it casts a vote
+for position <code>-6</code>. Then we ask two questions:</p>
 <ul>
-<li>which position receives the most votes (within a tolerance zone specified by <code>Tx</code>)?</li>
-<li>how many segments have voted for this position? -&gt; CMPS score</li>
+<li>which position receives the most votes (within a tolerance zone
+specified by <code>Tx</code>)?</li>
+<li>how many segments have voted for this position? -&gt; CMPS
+score</li>
 </ul>
 </li>
-<li><p>by default, CMPS algorithm uses the multi-segment lengths strategy. Use <code><a href="../reference/extract_feature_cmps.html">?cmpsR::extract_feature_cmps</a></code> to learn more about the function, including its default settings.</p></li>
+<li><p>by default, CMPS algorithm uses the multi-segment lengths
+strategy. Use <code><a href="../reference/extract_feature_cmps.html">?cmpsR::extract_feature_cmps</a></code> to learn more
+about the function, including its default settings.</p></li>
 </ul>
 <ol start="6" style="list-style-type: decimal">
-<li>If we follow the procedure described above (using the multi-segment lengths strategy) and investigate all 22 basis segments, we can find that 18 of them have cast a vote for position <code>0</code> <span class="math inline">\(\pm 25\)</span> (since <code>Tx = 25</code> by default). Therefore, for this KM bullet signature comparison, the CMPS score is 18.</li>
+<li>If we follow the procedure described above (using the multi-segment
+lengths strategy) and investigate all 22 basis segments, we can find
+that 18 of them have cast a vote for position <code>0</code> <span class="math inline">\(\pm 25\)</span> (since <code>Tx = 25</code> by
+default). Therefore, for this KM bullet signature comparison, the CMPS
+score is 18.</li>
 </ol>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cmps</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_feature_cmps.html">extract_feature_cmps</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, seg_length <span class="op">=</span> <span class="fl">50</span>, Tx <span class="op">=</span> <span class="fl">25</span>, 
@@ -222,7 +307,8 @@ Multi Segment Lengths Strategy - increasing the segment length could decrease th
 <span class="co">#&gt; [1] 18</span></code></pre></div>
 <ul>
 <li>
-<p>Segment 6 doesn’t cast a vote. Take a look at the following plot to find out why.</p>
+<p>Segment 6 doesn’t cast a vote. Take a look at the following plot
+to find out why.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cmps_plot_list</span> <span class="op">&lt;-</span> <span class="fu">cmpsR</span><span class="fu">::</span><span class="fu"><a href="../reference/cmps_segment_plot.html">cmps_segment_plot</a></span><span class="op">(</span><span class="va">cmps</span>, seg_idx <span class="op">=</span> <span class="fl">6</span><span class="op">)</span>
 <span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">cmps_plot_list</span>, recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,
@@ -232,7 +318,8 @@ Multi Segment Lengths Strategy - increasing the segment length could decrease th
 </li>
 </ul>
 <ol start="7" style="list-style-type: decimal">
-<li>If we have a KNM (known non-match) comparison, e.g. compare bullet signature 2-3 with 1-3:</li>
+<li>If we have a KNM (known non-match) comparison, e.g. compare bullet
+signature 2-3 with 1-3:</li>
 </ol>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">land23</span> <span class="op">&lt;-</span> <span class="va">bullets</span><span class="op">$</span><span class="va">sigs</span><span class="op">[</span><span class="va">bullets</span><span class="op">$</span><span class="va">bulletland</span> <span class="op">==</span> <span class="st">"2-3"</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
@@ -246,7 +333,10 @@ Multi Segment Lengths Strategy - increasing the segment length could decrease th
 <div class="section level4">
 <h4 id="full-comparison-between-two-bullets">Full Comparison Between Two Bullets<a class="anchor" aria-label="anchor" href="#full-comparison-between-two-bullets"></a>
 </h4>
-<p><code><a href="../reference/extract_feature_cmps.html">extract_feature_cmps()</a></code> can also be used in a pipeline fashion. The following code performs a full comparison of two bullets. That is, it evaluates all 36 pairwise bullet signature comparisons and computes the CMPS scores.</p>
+<p><code><a href="../reference/extract_feature_cmps.html">extract_feature_cmps()</a></code> can also be used in a pipeline
+fashion. The following code performs a full comparison of two bullets.
+That is, it evaluates all 36 pairwise bullet signature comparisons and
+computes the CMPS scores.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">cmpsR</span><span class="op">)</span>
@@ -322,10 +412,22 @@ Multi Segment Lengths Strategy - increasing the segment length could decrease th
 <div class="section level2">
 <h2 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h2>
-<p>Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song, and Xuezeng Zhao. 2019. “Fired Bullet Signature Correlation Using the Congruent Matching Profile Segments (CMPS) Method.” Forensic Science International, December, #109964. <a href="https://doi.org/10.1016/j.forsciint.2019.109964" class="external-link uri">https://doi.org/10.1016/j.forsciint.2019.109964</a>.</p>
-<p>Brundage, David J. 1998. “The Identification of Consecutively Rifled Gun Barrels.” AFTE Journal 30 (3): 438–44.</p>
-<p>Hamby, James E., David J. Brundage, Nicholas D. K. Petraco, and James W. Thorpe. 2019. “A Worldwide Study of Bullets Fired From 10 Consecutively Rifled 9mm RUGER Pistol Barrels—Analysis of Examiner Error Rate.” Journal of Forensic Sciences 64 (2): 551–57. <a href="https://doi.org/10.1111/1556-4029.13916" class="external-link uri">https://doi.org/10.1111/1556-4029.13916</a>.</p>
-<p>Hamby, James E., David J. Brundage, and James W. Thorpe. 2009. “The Identification of Bullets Fired from 10 Consecutively Rifled 9mm Ruger Pistol Barrels: A Research Project Involving 507 Participants from 20 Countries.” AFTE Journal 41 (2): 99–110.</p>
+<p>Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song,
+and Xuezeng Zhao. 2019. “Fired Bullet Signature Correlation Using the
+Congruent Matching Profile Segments (CMPS) Method.” Forensic Science
+International, December, #109964.
+doi.org/10.1016/j.forsciint.2019.109964.</p>
+<p>Brundage, David J. 1998. “The Identification of Consecutively Rifled
+Gun Barrels.” AFTE Journal 30 (3): 438–44.</p>
+<p>Hamby, James E., David J. Brundage, Nicholas D. K. Petraco, and James
+W. Thorpe. 2019. “A Worldwide Study of Bullets Fired From 10
+Consecutively Rifled 9mm RUGER Pistol Barrels—Analysis of Examiner Error
+Rate.” Journal of Forensic Sciences 64 (2): 551–57.
+doi.org/10.1111/1556-4029.13916}.</p>
+<p>Hamby, James E., David J. Brundage, and James W. Thorpe. 2009. “The
+Identification of Bullets Fired from 10 Consecutively Rifled 9mm Ruger
+Pistol Barrels: A Research Project Involving 507 Participants from 20
+Countries.” AFTE Journal 41 (2): 99–110.</p>
 </div>
   </div>
 
@@ -346,7 +448,8 @@ Multi Segment Lengths Strategy - increasing the segment length could decrease th
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>
