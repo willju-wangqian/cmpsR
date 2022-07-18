@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# cmpsR <img src="man/figures/cmpsR_hex.png" width="160px" align="right" />
+# cmpsR <img src="docs/cmpsR_hex.png" width="160px" align="right" />
 
 <!-- badges: start -->
 

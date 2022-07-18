@@ -22,7 +22,7 @@ library(tidyverse)
 theme_set(theme_bw())
 ```
 
-# cmpsR <img src="man/figures/cmpsR_hex.png" width="160px" align="right" /> 
+# cmpsR <img src="docs/cmpsR_hex.png" width="160px" align="right" /> 
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/willju-wangqian/cmpsR/workflows/R-CMD-check/badge.svg)](https://github.com/willju-wangqian/cmpsR/actions)
