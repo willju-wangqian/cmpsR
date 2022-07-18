@@ -423,11 +423,11 @@ dframe %>% ggplot(aes(x = landA, y = landB, fill = cmps_score)) +
 
 ## Reference
 
-Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song, and Xuezeng Zhao. 2019. “Fired Bullet Signature Correlation Using the Congruent Matching Profile Segments (CMPS) Method.” Forensic Science International, December, #109964. https://doi.org/10.1016/j.forsciint.2019.109964.
+Chen, Zhe, Wei Chu, Johannes A Soons, Robert M Thompson, John Song, and Xuezeng Zhao. 2019. “Fired Bullet Signature Correlation Using the Congruent Matching Profile Segments (CMPS) Method.” Forensic Science International, December, #109964. doi.org/10.1016/j.forsciint.2019.109964.
 
 Brundage, David J. 1998. “The Identification of Consecutively Rifled Gun Barrels.” AFTE Journal 30 (3): 438–44.
 
-Hamby, James E., David J. Brundage, Nicholas D. K. Petraco, and James W. Thorpe. 2019. “A Worldwide Study of Bullets Fired From 10 Consecutively Rifled 9mm RUGER Pistol Barrels—Analysis of Examiner Error Rate.” Journal of Forensic Sciences 64 (2): 551–57. https://doi.org/10.1111/1556-4029.13916.
+Hamby, James E., David J. Brundage, Nicholas D. K. Petraco, and James W. Thorpe. 2019. “A Worldwide Study of Bullets Fired From 10 Consecutively Rifled 9mm RUGER Pistol Barrels—Analysis of Examiner Error Rate.” Journal of Forensic Sciences 64 (2): 551–57. doi.org/10.1111/1556-4029.13916}.
 
 Hamby, James E., David J. Brundage, and James W. Thorpe. 2009. “The Identification of Bullets Fired from 10 Consecutively Rifled 9mm Ruger Pistol Barrels: A Research Project Involving 507 Participants from 20 Countries.” AFTE Journal 41 (2): 99–110.
 

@@ -28,7 +28,6 @@
 #' @import dplyr
 #'
 #' @examples
-#' library(tidyverse)
 #' library(cmpsR)
 #' 
 #' data("bullets")
@@ -211,7 +210,6 @@ cmps_signature_plot <- function(cmps_result, add_background = TRUE) {
 #' @import ggplot2
 #'
 #' @examples
-#' library(tidyverse)
 #' library(cmpsR)
 #' library(ggpubr)
 #' 
