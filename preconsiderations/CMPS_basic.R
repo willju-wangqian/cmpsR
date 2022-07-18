@@ -26,6 +26,15 @@ urllist2 <- c("https://tsapps.nist.gov/NRBTD/Studies/BulletMeasurement/DownloadM
 b1 <- read_bullet(urllist = urllist1)
 b2 <- read_bullet(urllist = urllist2)
 
+for (i in 1:6) {
+  x3p_write(b1$x3p[[i]], file = paste0("example_x3p_br1_blt1_l", i, ".x3p"))
+}
+
+for (i in 1:6) {
+  x3p_write(b2$x3p[[i]], file = paste0("example_x3p_br1_blt2_l", i, ".x3p"))
+}
+
+
 b1$bullet <- 1
 b2$bullet <- 2
 b1$land <- 1:6
@@ -35,6 +44,14 @@ bullets <- rbind(b1, b2)
 bullets <- bullets %>% mutate(x3p = x3p %>% purrr::map(.f = x3p_m_to_mum)) %>% 
   mutate(x3p = x3p %>% purrr::map(.f = function(x) x %>% rotate_x3p(angle = -90) %>% 
                                     y_flip_x3p()))
+
+bullets$land
+
+for (i in 1:12) {
+  x3p_write(bullets$x3p[[i]], 
+            file = paste0("proc_example_x3p_br1_blt", bullets$bullet[i], "_l", bullets$land[i], ".x3p"))
+}
+
 
 bullets <- bullets %>% mutate(crosscut = x3p %>% purrr::map_dbl(.f = x3p_crosscut_optimize))
 
