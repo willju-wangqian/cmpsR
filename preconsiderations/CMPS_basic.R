@@ -44,8 +44,12 @@ bullets <- rbind(b1, b2)
 bullets <- bullets %>% mutate(x3p = x3p %>% purrr::map(.f = x3p_m_to_mum)) %>% 
   mutate(x3p = x3p %>% purrr::map(.f = function(x) x %>% rotate_x3p(angle = -90) %>% 
                                     y_flip_x3p()))
+# contrastive learning
 
 bullets$land
+
+x3ptools::x3p_image(bullets$x3p[[2]])
+x3ptools::x3p_image(bullets$x3p[[9]])
 
 for (i in 1:12) {
   x3p_write(bullets$x3p[[i]], 

@@ -47,6 +47,10 @@ get_ccr_peaks <- function(comp, segments, seg_outlength, nseg = 1, npeaks = 5){
   peaks <- local_max_cmps(ccr$ccf)
   
   od <- order(ccr$ccf[peaks], decreasing = TRUE)[1:npeaks]
+  # Oct. 20, 2022: 
+  # if the number of peaks is less than npeaks
+  # peaks will no longer be a vector with NA
+  od <- od[!is.na(od)]
   # adjust the position
   adj_pos <- ccr$lag - tmp_pos + 1
   
